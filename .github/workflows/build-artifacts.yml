@@ -27,7 +27,7 @@ env:
 
 jobs:
   build:
-    runs-on: [VRa]
+    runs-on: ["OCI", "owLSM"]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
