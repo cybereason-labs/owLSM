@@ -1,6 +1,3 @@
-# Cursor personal agents
-.cursor/agents/
-
 # Build artifacts
 build/
 *.o
