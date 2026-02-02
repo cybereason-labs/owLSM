@@ -1,0 +1,151 @@
+name: Build Artifacts
+
+on:
+  push:
+  workflow_dispatch:
+    inputs:
+      major:
+        description: 'Major version'
+        required: true
+        default: '1'
+        type: string
+      minor:
+        description: 'Minor version'
+        required: true
+        default: '0'
+        type: string
+      patch:
+        description: 'Patch version'
+        required: true
+        default: '0'
+        type: string
+
+env:
+  DOCKER_IMAGE: owlsm-ci-ubuntu
+  # Use inputs if workflow_dispatch, otherwise default to 1.0.0 for push triggers
+  VERSION: ${{ github.event.inputs.major || '1' }}.${{ github.event.inputs.minor || '0' }}.${{ github.event.inputs.patch || '0' }}
+
+jobs:
+  build:
+    runs-on: [VRa]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for revision info
+
+      - name: Get branch info
+        id: branch_info
+        run: |
+          BRANCH_NAME=${GITHUB_REF_NAME//\//-}  # Replace / with -
+          BRANCH_REVISION=$(git rev-parse --short HEAD)
+          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+          echo "branch_revision=$BRANCH_REVISION" >> $GITHUB_OUTPUT
+          echo "Branch: $BRANCH_NAME"
+          echo "Revision: $BRANCH_REVISION"
+
+      - name: Build Docker image
+        run: |
+          echo "Building Docker image: ${{ env.DOCKER_IMAGE }}"
+          docker build -t ${{ env.DOCKER_IMAGE }} .
+
+      # =================================================================
+      # Step 3: Run RulesGenerator unit tests inside container
+      # =================================================================
+      - name: Run RulesGenerator unit tests
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}:/workspace" \
+            -w /workspace \
+            ${{ env.DOCKER_IMAGE }} \
+            bash -c "
+              set -e
+              echo '==> Running RulesGenerator unit tests...'
+              cd Rules/RulesGenerator
+              uv venv venv
+              source venv/bin/activate
+              uv pip install -r requirements.txt
+              python3 -m pytest Tests/ -v
+              echo '==> RulesGenerator tests passed!'
+            "
+
+      # =================================================================
+      # Step 4: Build artifacts inside Docker container
+      # =================================================================
+      - name: Build artifacts
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}:/workspace" \
+            -w /workspace \
+            ${{ env.DOCKER_IMAGE }} \
+            bash -c "
+              set -e
+              echo '==> Building unit tests...'
+              make test -j\$(nproc)
+              
+              echo '==> Building main artifacts with VERSION=${{ env.VERSION }}...'
+              make -j\$(nproc) VERSION=${{ env.VERSION }}
+              
+              echo '==> Building automation resources...'
+              make automation
+              
+              echo '==> Build completed!'
+              ls -la ./build/
+            "
+
+      # =================================================================
+      # Step 5: Run unit tests from build directory
+      # =================================================================
+      - name: Run unit tests
+        run: |
+          echo "==> Running unit tests..."
+          sudo chmod +x ./build/unit_tests
+          # BPF programs require root or CAP_BPF to load
+          sudo ./build/unit_tests
+          echo "==> Unit tests passed!"
+
+      - name: Create release archive
+        id: archive
+        run: |
+          ARCHIVE_NAME="${{ env.VERSION }}-${{ steps.branch_info.outputs.branch_name }}-${{ steps.branch_info.outputs.branch_revision }}.zip"
+          echo "Creating archive: $ARCHIVE_NAME"
+          
+          # Create archive excluding unnecessary files
+          zip -r "$ARCHIVE_NAME" . \
+            -x "*.git*" \
+            -x "*.github*" \
+            -x "*.zip" \
+            -x "*.o" \
+            -x "Rules/RulesGenerator/venv/*" \
+            -x ".uv-cache/*" \
+            -x ".cache/*"
+          
+          echo "archive_name=$ARCHIVE_NAME" >> $GITHUB_OUTPUT
+          ls -lh "$ARCHIVE_NAME"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.VERSION }}-${{ steps.branch_info.outputs.branch_name }}-${{ steps.branch_info.outputs.branch_revision }}
+          path: ${{ steps.archive.outputs.archive_name }}
+          retention-days: 30
+
+      - name: Summary
+        run: |
+          echo "## Build Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Property | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Version | ${{ env.VERSION }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Branch | ${{ steps.branch_info.outputs.branch_name }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Revision | ${{ steps.branch_info.outputs.branch_revision }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Archive | ${{ steps.archive.outputs.archive_name }} |" >> $GITHUB_STEP_SUMMARY
+
+      - name: Cleanup workspace
+        if: always()
+        run: |
+          echo "==> Cleaning up workspace..." # test comment
+          docker rmi ${{ env.DOCKER_IMAGE }} || true
+          cd ${{ github.workspace }}
+          sudo git clean -ffdx
+          echo "==> Cleanup completed!"

@@ -1,0 +1,32 @@
+# Cursor personal agents
+.cursor/agents/
+
+# Build artifacts
+build/
+*.o
+*.bpf.o
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# automation 
+*.db
+*.log
+
+# secrets and environment variables
+.env
+.env.local
+.env.*.local
+*.pem

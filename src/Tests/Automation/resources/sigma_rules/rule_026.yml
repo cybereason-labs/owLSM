@@ -1,0 +1,23 @@
+# Rule 26 - Multi-event keywords test
+# Match examples:
+#   chmod 777 /tmp/multi_event_keyword_chmod
+#   rename /tmp/multi_event_keyword_rename_src to /tmp/multi_event_keyword_rename_dst
+#   /usr/bin/echo multi_event_keyword_exec_cmd test
+
+id: 26
+description: "Multi-event keywords - tests keyword expansion across different event types"
+action: "ALLOW_EVENT"
+events:
+    - CHMOD
+    - FILE_CREATE
+    - UNLINK
+    - RENAME
+    - EXEC
+detection:
+    keywords:
+        - '*multi_event_keyword_chmod*'
+        - '*multi_event_keyword_exec_cmd*'
+        - '*multi_event_keyword_rename_src*'
+
+    condition: keywords
+

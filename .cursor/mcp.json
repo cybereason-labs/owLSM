@@ -1,0 +1,27 @@
+{
+    "mcpServers": {
+      "pySigma Docs": {
+        "url": "https://gitmcp.io/SigmaHQ/pySigma?tab=readme-ov-file"
+      },
+      "sigma Docs": {
+        "url": "https://gitmcp.io/SigmaHQ/sigma?tab=readme-ov-file"
+      },
+      "sigma-specification Docs": {
+        "url": "https://gitmcp.io/SigmaHQ/sigma-specification?tab=readme-ov-file"
+      },
+      "libbpf Docs": {
+        "url": "https://gitmcp.io/libbpf/libbpf"
+      },
+      "mcp-language-server-docs": {
+        "url": "https://gitmcp.io/isaacphi/mcp-language-server"
+      },
+      "cpp-lsp": {
+        "command": "/root/go/bin/mcp-language-server",
+        "args": ["--workspace", "/home/ariels/owLSM", "--lsp", "clangd"]
+      },
+      "python-lsp": {
+        "command": "/root/go/bin/mcp-language-server",
+        "args": ["--workspace", "/home/ariels/owLSM/Rules/RulesGenerator", "--lsp", "pyright-langserver", "--", "--stdio"]
+      }
+    }
+  }

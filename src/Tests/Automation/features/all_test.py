@@ -1,0 +1,190 @@
+from pytest_bdd import scenario
+from common_steps.file_steps import *
+from common_steps.process_steps import *
+from common_steps.event_steps import *
+from common_steps.network_steps import *
+from common_steps.logger_steps import *
+
+@scenario('on_chmod_test.feature', 'allowed_chmod')
+def test_allowed_chmod():
+    pass
+
+@scenario('on_chmod_test.feature', 'blocked_chmod')
+def test_blocked_chmod():
+    pass
+
+@scenario('on_chmod_test.feature', 'blocked_and_kill_process_chmod')
+def test_blocked_and_kill_process_chmod():
+    pass
+
+@scenario('on_chmod_test.feature', 'blocked_and_kill_parent_chmod')
+def test_blocked_and_kill_parent_chmod():
+    pass
+
+@scenario('on_chmod_test.feature', 'blocked_chmod_directory')
+def test_blocked_chmod_directory():
+    pass
+
+@scenario('on_chmod_test.feature', 'complex_chmod_rule__match_one_event_dont_match_other_events_due_to_not_and_condition')
+def test_complex_chmod_rule__match_one_event_dont_match_other_events_due_to_not_and_condition():
+    pass
+
+@scenario('on_chmod_test.feature', 'two_rules_match_same_event')
+def test_two_rules_match_same_event():
+    pass
+
+@scenario('on_chmod_test.feature', 'escaped_wildcards_in_string')
+def test_escaped_wildcards_in_string():
+    pass
+
+@scenario('on_chmod_test.feature', 'all_wildcards_in_rule')
+def test_all_wildcards_in_rule():
+    pass
+
+@scenario('on_chmod_test.feature', 'out_of_range_versions')
+def test_out_of_range_versions():
+    pass
+
+@scenario('on_chown_test.feature', 'allowed_chown')
+def test_allowed_chown():
+    pass
+
+@scenario('on_chown_test.feature', 'blocked_chown')
+def test_blocked_chown():
+    pass
+
+@scenario('on_fork_test.feature', 'allowed_fork')
+def test_allowed_fork():
+    pass
+
+@scenario('on_exit_test.feature', 'allowed_exit')
+def test_allowed_exit():
+    pass
+
+@scenario('on_exec_test.feature', 'allowed_exec')
+def test_allowed_exec():
+    pass
+
+@scenario('on_exec_test.feature', 'blocked_exec')
+def test_blocked_exec():
+    pass
+
+@scenario('on_exec_test.feature', 'complex_exec_rule__match_one_event_dont_match_other_events_due_to_not_and_condition')
+def test_complex_exec_rule__match_one_event_dont_match_other_events_due_to_not_and_condition():
+    pass
+
+@scenario('on_file_create.feature', 'allowed_file_create')
+def test_allowed_file_create():
+    pass
+
+@scenario('on_file_create.feature', 'blocked_file_create')
+def test_blocked_file_create():
+    pass
+
+@scenario('on_write_test.feature', 'allowed_write')
+def test_allowed_write():
+    pass
+
+@scenario('on_write_test.feature', 'blocked_write')
+def test_blocked_write():
+    pass
+
+@scenario('on_read_test.feature', 'allowed_read')
+def test_allowed_read():
+    pass
+
+@scenario('on_read_test.feature', 'blocked_read')
+def test_blocked_read():
+    pass
+
+@scenario('on_unlink_test.feature', 'allowed_unlink')
+def test_allowed_unlink():
+    pass
+
+@scenario('on_unlink_test.feature', 'blocked_unlink')
+def test_blocked_unlink():
+    pass
+
+@scenario('on_rename_test.feature', 'allowed_rename')
+def test_allowed_rename():
+    pass
+
+@scenario('on_rename_test.feature', 'blocked_rename')
+def test_blocked_rename():
+    pass
+
+@scenario('on_file_create.feature', 'excluded_file_create')
+def test_excluded_file_create():
+    pass
+
+@scenario('stdio_types_test.feature', 'allowed_stdio_redirection')
+def test_allowed_stdio_redirection():
+    pass
+
+@scenario('life_cycle_test.feature', 'restart_owlsm_twice')
+def test_restart_owlsm_twice():
+    pass
+
+@scenario('life_cycle_test.feature', 'owlsm_cleans_maps')
+def test_owlsm_cleans_maps():
+    pass
+
+@scenario('ignored_events.feature', 'related_processes_are_ignored')
+def test_related_processes_are_ignored():
+    pass
+
+@scenario('ignored_events.feature', 'cached_write_event_reported_only_once')
+def test_cached_write_event_reported_only_once():
+    pass
+
+@scenario('ignored_events.feature', 'read_event_disabled_in_config')
+def test_read_event_disabled_in_config():
+    pass
+
+@scenario('logger_test.feature', 'owLSM_log_contains_starting_message')
+def test_owLSM_log_contains_starting_message():
+    pass
+
+@scenario('keywords_rules.feature', 'keyword_with_all_modifier')
+def test_keyword_with_all_modifier():
+    pass
+
+@scenario('keywords_rules.feature', 'multi_keyword_rule')
+def test_multi_keyword_rule():
+    pass
+
+@scenario('keywords_rules.feature', 'multi_event_keyword_rule')
+def test_multi_event_keyword_rule():
+    pass
+
+@scenario('on_tcp_test.feature', 'allowed_http_connection')
+def test_allowed_http_connection():
+    pass
+
+@scenario('on_tcp_test.feature', 'blocked_http_connection')
+def test_blocked_http_connection():
+    pass
+
+@scenario('on_tcp_test.feature', 'allowed_https_connection')
+def test_allowed_https_connection():
+    pass
+
+@scenario('on_tcp_test.feature', 'allowed_ssh_connection')
+def test_allowed_ssh_connection():
+    pass
+
+@scenario('on_tcp_test.feature', 'allowed_sftp_connection')
+def test_allowed_sftp_connection():
+    pass
+
+@scenario('on_tcp_test.feature', 'allowed_netcat_connection')
+def test_allowed_netcat_connection():
+    pass
+
+@scenario('on_tcp_test.feature', 'blocked_incoming_netcat_connection')
+def test_blocked_incoming_netcat_connection():
+    pass
+
+@scenario('on_tcp_test.feature', 'blocked_outgoing_netcat_connection')
+def test_blocked_outgoing_netcat_connection():
+    pass

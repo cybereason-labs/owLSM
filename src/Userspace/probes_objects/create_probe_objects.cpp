@@ -1,0 +1,59 @@
+#include "log_levels_enum.h"
+#include "rodata_maps_related_structs.h"
+#include "all_bpf.skel.h"
+#include "probes_objects/lsm_probe.hpp"
+#include "probes_objects/fentry_probe.hpp"
+#include "probes_objects/tracepoint_probe.hpp"
+#include "probes_objects/create_probe_objects.hpp"
+#include "globals/global_objects.hpp"
+
+namespace owlsm
+{
+    ProbeManager CreateProbeObjects::createProbeManager()
+    {
+        std::vector<std::shared_ptr<AbstractProbe>> probes = createProbes();
+        return ProbeManager(std::move(probes));
+    }
+
+    std::vector<std::shared_ptr<AbstractProbe>> CreateProbeObjects::createProbes()
+    {
+        std::vector<std::shared_ptr<AbstractProbe>> probes;
+        addBasicProbes(probes);
+        addFileMonitoringProbes(probes);
+        addNetworkMonitoringProbes(probes);
+        return probes;
+    }
+
+    void CreateProbeObjects::addBasicProbes(std::vector<std::shared_ptr<AbstractProbe>>& probes)
+    {
+        probes.reserve(4);
+        probes.push_back(std::make_shared<LsmProbe>(EXEC));
+        probes.push_back(std::make_shared<FentryProbe>(FORK));
+        probes.push_back(std::make_shared<FentryProbe>(EXIT));
+        probes.push_back(std::make_shared<TracepointProbe>());
+    }
+
+    void CreateProbeObjects::addFileMonitoringProbes(std::vector<std::shared_ptr<AbstractProbe>>& probes)
+    {
+        if(owlsm::globals::g_config.features.file_monitoring.enabled)
+        {
+            if(owlsm::globals::g_config.features.file_monitoring.events.chmod) { probes.push_back(std::make_shared<LsmProbe>(CHMOD)); }
+            if(owlsm::globals::g_config.features.file_monitoring.events.chown) { probes.push_back(std::make_shared<LsmProbe>(CHOWN)); }
+            if(owlsm::globals::g_config.features.file_monitoring.events.file_create) { probes.push_back(std::make_shared<LsmProbe>(FILE_CREATE)); }
+            if(owlsm::globals::g_config.features.file_monitoring.events.unlink) { probes.push_back(std::make_shared<LsmProbe>(UNLINK)); }
+            if(owlsm::globals::g_config.features.file_monitoring.events.rename) { probes.push_back(std::make_shared<LsmProbe>(RENAME)); }
+            if(owlsm::globals::g_config.features.file_monitoring.events.write) { probes.push_back(std::make_shared<LsmProbe>(WRITE)); }
+            if(owlsm::globals::g_config.features.file_monitoring.events.read) { probes.push_back(std::make_shared<LsmProbe>(READ)); }
+        }
+
+    }
+
+    void CreateProbeObjects::addNetworkMonitoringProbes(std::vector<std::shared_ptr<AbstractProbe>>& probes)
+    {
+        if (owlsm::globals::g_config.features.network_monitoring.enabled)
+        {
+            probes.push_back(std::make_shared<LsmProbe>(NETWORK));
+        }
+    }
+
+}
