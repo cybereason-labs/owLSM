@@ -3,8 +3,21 @@ We use the ***pytest bdd*** as the testing framework
 
 # Setup
 
-If you are in the docker, please exit it. The automation can't be run in the docker.
 ```bash
+# from the root directory 
+# start the docker
+docker build -t owlsm-ci-ubuntu20 .
+docker run -it --rm -v "$PWD":/workspace -w /workspace owlsm-ci-ubuntu20 bash
+
+# Build owLSM
+make -j$(nproc)
+
+# Build automation 
+make automation -j$(nproc)
+
+# exit docker
+exit
+
 # create a venv and install the requirements
 cd src/Tests/Automation
 uv venv venv

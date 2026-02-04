@@ -158,98 +158,102 @@
         "is_contains": true
       },
       "32": {
-        "value": "1338",
+        "value": "netcat",
         "is_contains": true
       },
       "33": {
-        "value": "bin/rm",
+        "value": "1338",
         "is_contains": true
       },
       "34": {
-        "value": "hard_link",
+        "value": "bin/rm",
         "is_contains": true
       },
       "35": {
-        "value": "bin/mv",
+        "value": "hard_link",
         "is_contains": true
       },
       "36": {
-        "value": "123.txt.old",
+        "value": "bin/mv",
         "is_contains": true
       },
       "37": {
-        "value": "/tmp/test_exclude_event",
+        "value": "123.txt.old",
         "is_contains": true
       },
       "38": {
+        "value": "/tmp/test_exclude_event",
+        "is_contains": true
+      },
+      "39": {
         "value": "test1",
         "is_contains": false
       },
-      "39": {
+      "40": {
         "value": "dir2",
         "is_contains": false
       },
-      "40": {
+      "41": {
         "value": "ordering_check",
         "is_contains": true
       },
-      "41": {
+      "42": {
         "value": "skip_first",
         "is_contains": true
       },
-      "42": {
+      "43": {
         "value": "/tmp/escaped*wildcards?test",
         "is_contains": false
       },
-      "43": {
+      "44": {
         "value": "wildcards",
         "is_contains": true
       },
-      "44": {
+      "45": {
         "value": "/tmp/test_",
         "is_contains": false
       },
-      "45": {
+      "46": {
         "value": "mod",
         "is_contains": false
       },
-      "46": {
+      "47": {
         "value": "automation.txt",
         "is_contains": false
       },
-      "47": {
+      "48": {
         "value": "777",
         "is_contains": true
       },
-      "48": {
+      "49": {
         "value": "test_keywords",
         "is_contains": false
       },
-      "49": {
+      "50": {
         "value": "l_modifier",
         "is_contains": false
       },
-      "50": {
+      "51": {
         "value": "/usr/bin/ch",
         "is_contains": false
       },
-      "51": {
+      "52": {
         "value": "keywords_modifier",
         "is_contains": false
       },
-      "52": {
+      "53": {
         "value": "multi_event_keyword_chmod",
         "is_contains": true
       },
-      "53": {
+      "54": {
         "value": "multi_event_keyword_exec_cmd",
         "is_contains": true
       },
-      "54": {
+      "55": {
         "value": "multi_event_keyword_rename_src",
         "is_contains": true
       },
-      "55": {
+      "56": {
         "value": "out_of_range_versions_test",
         "is_contains": false
       },
@@ -664,735 +668,741 @@
         "numerical_value": -1
       },
       "66": {
+        "field": "process.file.path",
+        "comparison_type": "contains",
+        "string_idx": 32,
+        "numerical_value": -1
+      },
+      "67": {
         "field": "network.direction",
         "comparison_type": "equal",
         "string_idx": -1,
         "numerical_value": 2
       },
-      "67": {
+      "68": {
         "field": "network.destination_port",
         "comparison_type": "equal",
         "string_idx": -1,
         "numerical_value": 1339
       },
-      "68": {
+      "69": {
         "field": "network.destination_ip",
         "comparison_type": "equal",
         "string_idx": -1,
         "numerical_value": 0
       },
-      "69": {
+      "70": {
         "field": "process.cmd",
         "comparison_type": "contains",
-        "string_idx": 32,
+        "string_idx": 33,
         "numerical_value": -1
       },
-      "70": {
+      "71": {
         "field": "network.direction",
         "comparison_type": "equal",
         "string_idx": -1,
         "numerical_value": 1
       },
-      "71": {
+      "72": {
         "field": "network.destination_port",
         "comparison_type": "equal",
         "string_idx": -1,
         "numerical_value": 1338
       },
-      "72": {
+      "73": {
         "field": "network.source_ip",
         "comparison_type": "equal",
         "string_idx": -1,
         "numerical_value": 1
       },
-      "73": {
+      "74": {
         "field": "network.destination_port",
         "comparison_type": "equal",
         "string_idx": -1,
         "numerical_value": 8001
       },
-      "74": {
-        "field": "process.file.path",
-        "comparison_type": "contains",
-        "string_idx": 33,
-        "numerical_value": -1
-      },
       "75": {
-        "field": "process.cmd",
+        "field": "process.file.path",
         "comparison_type": "contains",
         "string_idx": 34,
         "numerical_value": -1
       },
       "76": {
-        "field": "target.file.path",
+        "field": "process.cmd",
         "comparison_type": "contains",
-        "string_idx": 34,
+        "string_idx": 35,
         "numerical_value": -1
       },
       "77": {
-        "field": "process.file.path",
+        "field": "target.file.path",
         "comparison_type": "contains",
         "string_idx": 35,
         "numerical_value": -1
       },
       "78": {
-        "field": "process.cmd",
+        "field": "process.file.path",
         "comparison_type": "contains",
         "string_idx": 36,
         "numerical_value": -1
       },
       "79": {
+        "field": "process.cmd",
+        "comparison_type": "contains",
+        "string_idx": 37,
+        "numerical_value": -1
+      },
+      "80": {
         "field": "rename.source_file.path",
         "comparison_type": "contains",
         "string_idx": 17,
         "numerical_value": -1
       },
-      "80": {
-        "field": "rename.destination_file.path",
-        "comparison_type": "contains",
-        "string_idx": 36,
-        "numerical_value": -1
-      },
       "81": {
-        "field": "target.file.path",
+        "field": "rename.destination_file.path",
         "comparison_type": "contains",
         "string_idx": 37,
         "numerical_value": -1
       },
       "82": {
         "field": "target.file.path",
-        "comparison_type": "endswith",
+        "comparison_type": "contains",
         "string_idx": 38,
         "numerical_value": -1
       },
       "83": {
-        "field": "target.file.filename",
-        "comparison_type": "contains",
-        "string_idx": 17,
-        "numerical_value": -1
-      },
-      "84": {
         "field": "target.file.path",
         "comparison_type": "endswith",
         "string_idx": 39,
         "numerical_value": -1
       },
+      "84": {
+        "field": "target.file.filename",
+        "comparison_type": "contains",
+        "string_idx": 17,
+        "numerical_value": -1
+      },
       "85": {
+        "field": "target.file.path",
+        "comparison_type": "endswith",
+        "string_idx": 40,
+        "numerical_value": -1
+      },
+      "86": {
         "field": "target.file.type",
         "comparison_type": "equal",
         "string_idx": -1,
         "numerical_value": 1
       },
-      "86": {
-        "field": "target.file.path",
-        "comparison_type": "contains",
-        "string_idx": 40,
-        "numerical_value": -1
-      },
       "87": {
-        "field": "chmod.requested_mode",
-        "comparison_type": "equal",
-        "string_idx": -1,
-        "numerical_value": 448
-      },
-      "88": {
         "field": "target.file.path",
         "comparison_type": "contains",
         "string_idx": 41,
         "numerical_value": -1
       },
+      "88": {
+        "field": "chmod.requested_mode",
+        "comparison_type": "equal",
+        "string_idx": -1,
+        "numerical_value": 448
+      },
       "89": {
         "field": "target.file.path",
-        "comparison_type": "exactmatch",
+        "comparison_type": "contains",
         "string_idx": 42,
         "numerical_value": -1
       },
       "90": {
-        "field": "process.cmd",
-        "comparison_type": "contains",
+        "field": "target.file.path",
+        "comparison_type": "exactmatch",
         "string_idx": 43,
         "numerical_value": -1
       },
       "91": {
-        "field": "target.file.path",
-        "comparison_type": "startswith",
+        "field": "process.cmd",
+        "comparison_type": "contains",
         "string_idx": 44,
         "numerical_value": -1
       },
       "92": {
-        "field": "process.file.filename",
-        "comparison_type": "endswith",
+        "field": "target.file.path",
+        "comparison_type": "startswith",
         "string_idx": 45,
         "numerical_value": -1
       },
       "93": {
-        "field": "target.file.path",
+        "field": "process.file.filename",
         "comparison_type": "endswith",
         "string_idx": 46,
         "numerical_value": -1
       },
       "94": {
-        "field": "parent_process.cmd",
-        "comparison_type": "contains",
+        "field": "target.file.path",
+        "comparison_type": "endswith",
         "string_idx": 47,
         "numerical_value": -1
       },
       "95": {
-        "field": "parent_process.file.filename",
+        "field": "parent_process.cmd",
         "comparison_type": "contains",
-        "string_idx": 47,
+        "string_idx": 48,
         "numerical_value": -1
       },
       "96": {
-        "field": "parent_process.file.path",
+        "field": "parent_process.file.filename",
         "comparison_type": "contains",
-        "string_idx": 47,
+        "string_idx": 48,
         "numerical_value": -1
       },
       "97": {
-        "field": "process.cmd",
+        "field": "parent_process.file.path",
         "comparison_type": "contains",
-        "string_idx": 47,
+        "string_idx": 48,
         "numerical_value": -1
       },
       "98": {
-        "field": "process.file.filename",
+        "field": "process.cmd",
         "comparison_type": "contains",
-        "string_idx": 47,
+        "string_idx": 48,
         "numerical_value": -1
       },
       "99": {
-        "field": "process.file.path",
+        "field": "process.file.filename",
         "comparison_type": "contains",
-        "string_idx": 47,
+        "string_idx": 48,
         "numerical_value": -1
       },
       "100": {
-        "field": "target.file.filename",
+        "field": "process.file.path",
         "comparison_type": "contains",
-        "string_idx": 47,
+        "string_idx": 48,
         "numerical_value": -1
       },
       "101": {
-        "field": "target.file.path",
+        "field": "target.file.filename",
         "comparison_type": "contains",
-        "string_idx": 47,
+        "string_idx": 48,
         "numerical_value": -1
       },
       "102": {
-        "field": "parent_process.cmd",
-        "comparison_type": "startswith",
+        "field": "target.file.path",
+        "comparison_type": "contains",
         "string_idx": 48,
         "numerical_value": -1
       },
       "103": {
         "field": "parent_process.cmd",
-        "comparison_type": "endswith",
+        "comparison_type": "startswith",
         "string_idx": 49,
         "numerical_value": -1
       },
       "104": {
-        "field": "parent_process.file.filename",
-        "comparison_type": "startswith",
-        "string_idx": 48,
+        "field": "parent_process.cmd",
+        "comparison_type": "endswith",
+        "string_idx": 50,
         "numerical_value": -1
       },
       "105": {
         "field": "parent_process.file.filename",
-        "comparison_type": "endswith",
+        "comparison_type": "startswith",
         "string_idx": 49,
         "numerical_value": -1
       },
       "106": {
-        "field": "parent_process.file.path",
-        "comparison_type": "startswith",
-        "string_idx": 48,
+        "field": "parent_process.file.filename",
+        "comparison_type": "endswith",
+        "string_idx": 50,
         "numerical_value": -1
       },
       "107": {
         "field": "parent_process.file.path",
-        "comparison_type": "endswith",
+        "comparison_type": "startswith",
         "string_idx": 49,
         "numerical_value": -1
       },
       "108": {
-        "field": "process.cmd",
-        "comparison_type": "startswith",
-        "string_idx": 48,
+        "field": "parent_process.file.path",
+        "comparison_type": "endswith",
+        "string_idx": 50,
         "numerical_value": -1
       },
       "109": {
         "field": "process.cmd",
-        "comparison_type": "endswith",
+        "comparison_type": "startswith",
         "string_idx": 49,
         "numerical_value": -1
       },
       "110": {
-        "field": "process.file.filename",
-        "comparison_type": "startswith",
-        "string_idx": 48,
+        "field": "process.cmd",
+        "comparison_type": "endswith",
+        "string_idx": 50,
         "numerical_value": -1
       },
       "111": {
         "field": "process.file.filename",
-        "comparison_type": "endswith",
+        "comparison_type": "startswith",
         "string_idx": 49,
         "numerical_value": -1
       },
       "112": {
-        "field": "process.file.path",
-        "comparison_type": "startswith",
-        "string_idx": 48,
+        "field": "process.file.filename",
+        "comparison_type": "endswith",
+        "string_idx": 50,
         "numerical_value": -1
       },
       "113": {
         "field": "process.file.path",
-        "comparison_type": "endswith",
+        "comparison_type": "startswith",
         "string_idx": 49,
         "numerical_value": -1
       },
       "114": {
-        "field": "target.file.filename",
-        "comparison_type": "startswith",
-        "string_idx": 48,
+        "field": "process.file.path",
+        "comparison_type": "endswith",
+        "string_idx": 50,
         "numerical_value": -1
       },
       "115": {
         "field": "target.file.filename",
-        "comparison_type": "endswith",
+        "comparison_type": "startswith",
         "string_idx": 49,
         "numerical_value": -1
       },
       "116": {
-        "field": "target.file.path",
-        "comparison_type": "startswith",
-        "string_idx": 48,
+        "field": "target.file.filename",
+        "comparison_type": "endswith",
+        "string_idx": 50,
         "numerical_value": -1
       },
       "117": {
         "field": "target.file.path",
-        "comparison_type": "endswith",
+        "comparison_type": "startswith",
         "string_idx": 49,
         "numerical_value": -1
       },
       "118": {
-        "field": "parent_process.cmd",
-        "comparison_type": "exactmatch",
-        "string_idx": 0,
+        "field": "target.file.path",
+        "comparison_type": "endswith",
+        "string_idx": 50,
         "numerical_value": -1
       },
       "119": {
-        "field": "parent_process.file.filename",
+        "field": "parent_process.cmd",
         "comparison_type": "exactmatch",
         "string_idx": 0,
         "numerical_value": -1
       },
       "120": {
-        "field": "parent_process.file.path",
+        "field": "parent_process.file.filename",
         "comparison_type": "exactmatch",
         "string_idx": 0,
         "numerical_value": -1
       },
       "121": {
-        "field": "process.cmd",
+        "field": "parent_process.file.path",
         "comparison_type": "exactmatch",
         "string_idx": 0,
         "numerical_value": -1
       },
       "122": {
-        "field": "process.file.filename",
+        "field": "process.cmd",
         "comparison_type": "exactmatch",
         "string_idx": 0,
         "numerical_value": -1
       },
       "123": {
-        "field": "process.file.path",
+        "field": "process.file.filename",
         "comparison_type": "exactmatch",
         "string_idx": 0,
         "numerical_value": -1
       },
       "124": {
-        "field": "target.file.filename",
+        "field": "process.file.path",
         "comparison_type": "exactmatch",
         "string_idx": 0,
         "numerical_value": -1
       },
       "125": {
-        "field": "target.file.path",
+        "field": "target.file.filename",
         "comparison_type": "exactmatch",
         "string_idx": 0,
         "numerical_value": -1
       },
       "126": {
-        "field": "parent_process.cmd",
-        "comparison_type": "startswith",
-        "string_idx": 50,
+        "field": "target.file.path",
+        "comparison_type": "exactmatch",
+        "string_idx": 0,
         "numerical_value": -1
       },
       "127": {
-        "field": "parent_process.file.filename",
+        "field": "parent_process.cmd",
         "comparison_type": "startswith",
-        "string_idx": 50,
+        "string_idx": 51,
         "numerical_value": -1
       },
       "128": {
-        "field": "parent_process.file.path",
+        "field": "parent_process.file.filename",
         "comparison_type": "startswith",
-        "string_idx": 50,
+        "string_idx": 51,
         "numerical_value": -1
       },
       "129": {
-        "field": "process.cmd",
+        "field": "parent_process.file.path",
         "comparison_type": "startswith",
-        "string_idx": 50,
+        "string_idx": 51,
         "numerical_value": -1
       },
       "130": {
-        "field": "process.file.filename",
+        "field": "process.cmd",
         "comparison_type": "startswith",
-        "string_idx": 50,
+        "string_idx": 51,
         "numerical_value": -1
       },
       "131": {
-        "field": "process.file.path",
+        "field": "process.file.filename",
         "comparison_type": "startswith",
-        "string_idx": 50,
+        "string_idx": 51,
         "numerical_value": -1
       },
       "132": {
-        "field": "target.file.filename",
+        "field": "process.file.path",
         "comparison_type": "startswith",
-        "string_idx": 50,
+        "string_idx": 51,
         "numerical_value": -1
       },
       "133": {
-        "field": "target.file.path",
+        "field": "target.file.filename",
         "comparison_type": "startswith",
-        "string_idx": 50,
+        "string_idx": 51,
         "numerical_value": -1
       },
       "134": {
-        "field": "parent_process.cmd",
-        "comparison_type": "endswith",
+        "field": "target.file.path",
+        "comparison_type": "startswith",
         "string_idx": 51,
         "numerical_value": -1
       },
       "135": {
-        "field": "parent_process.file.filename",
+        "field": "parent_process.cmd",
         "comparison_type": "endswith",
-        "string_idx": 51,
+        "string_idx": 52,
         "numerical_value": -1
       },
       "136": {
-        "field": "parent_process.file.path",
+        "field": "parent_process.file.filename",
         "comparison_type": "endswith",
-        "string_idx": 51,
+        "string_idx": 52,
         "numerical_value": -1
       },
       "137": {
-        "field": "process.cmd",
+        "field": "parent_process.file.path",
         "comparison_type": "endswith",
-        "string_idx": 51,
+        "string_idx": 52,
         "numerical_value": -1
       },
       "138": {
-        "field": "process.file.filename",
+        "field": "process.cmd",
         "comparison_type": "endswith",
-        "string_idx": 51,
+        "string_idx": 52,
         "numerical_value": -1
       },
       "139": {
-        "field": "process.file.path",
+        "field": "process.file.filename",
         "comparison_type": "endswith",
-        "string_idx": 51,
+        "string_idx": 52,
         "numerical_value": -1
       },
       "140": {
-        "field": "target.file.filename",
+        "field": "process.file.path",
         "comparison_type": "endswith",
-        "string_idx": 51,
+        "string_idx": 52,
         "numerical_value": -1
       },
       "141": {
-        "field": "target.file.path",
+        "field": "target.file.filename",
         "comparison_type": "endswith",
-        "string_idx": 51,
+        "string_idx": 52,
         "numerical_value": -1
       },
       "142": {
-        "field": "parent_process.cmd",
-        "comparison_type": "contains",
+        "field": "target.file.path",
+        "comparison_type": "endswith",
         "string_idx": 52,
         "numerical_value": -1
       },
       "143": {
-        "field": "parent_process.file.filename",
+        "field": "parent_process.cmd",
         "comparison_type": "contains",
-        "string_idx": 52,
+        "string_idx": 53,
         "numerical_value": -1
       },
       "144": {
-        "field": "parent_process.file.path",
+        "field": "parent_process.file.filename",
         "comparison_type": "contains",
-        "string_idx": 52,
+        "string_idx": 53,
         "numerical_value": -1
       },
       "145": {
-        "field": "process.cmd",
+        "field": "parent_process.file.path",
         "comparison_type": "contains",
-        "string_idx": 52,
+        "string_idx": 53,
         "numerical_value": -1
       },
       "146": {
-        "field": "process.file.filename",
+        "field": "process.cmd",
         "comparison_type": "contains",
-        "string_idx": 52,
+        "string_idx": 53,
         "numerical_value": -1
       },
       "147": {
-        "field": "process.file.path",
+        "field": "process.file.filename",
         "comparison_type": "contains",
-        "string_idx": 52,
+        "string_idx": 53,
         "numerical_value": -1
       },
       "148": {
-        "field": "target.file.filename",
+        "field": "process.file.path",
         "comparison_type": "contains",
-        "string_idx": 52,
+        "string_idx": 53,
         "numerical_value": -1
       },
       "149": {
-        "field": "target.file.path",
+        "field": "target.file.filename",
         "comparison_type": "contains",
-        "string_idx": 52,
+        "string_idx": 53,
         "numerical_value": -1
       },
       "150": {
-        "field": "parent_process.cmd",
+        "field": "target.file.path",
         "comparison_type": "contains",
         "string_idx": 53,
         "numerical_value": -1
       },
       "151": {
-        "field": "parent_process.file.filename",
-        "comparison_type": "contains",
-        "string_idx": 53,
-        "numerical_value": -1
-      },
-      "152": {
-        "field": "parent_process.file.path",
-        "comparison_type": "contains",
-        "string_idx": 53,
-        "numerical_value": -1
-      },
-      "153": {
-        "field": "process.cmd",
-        "comparison_type": "contains",
-        "string_idx": 53,
-        "numerical_value": -1
-      },
-      "154": {
-        "field": "process.file.filename",
-        "comparison_type": "contains",
-        "string_idx": 53,
-        "numerical_value": -1
-      },
-      "155": {
-        "field": "process.file.path",
-        "comparison_type": "contains",
-        "string_idx": 53,
-        "numerical_value": -1
-      },
-      "156": {
-        "field": "target.file.filename",
-        "comparison_type": "contains",
-        "string_idx": 53,
-        "numerical_value": -1
-      },
-      "157": {
-        "field": "target.file.path",
-        "comparison_type": "contains",
-        "string_idx": 53,
-        "numerical_value": -1
-      },
-      "158": {
         "field": "parent_process.cmd",
         "comparison_type": "contains",
         "string_idx": 54,
         "numerical_value": -1
       },
-      "159": {
+      "152": {
         "field": "parent_process.file.filename",
         "comparison_type": "contains",
         "string_idx": 54,
         "numerical_value": -1
       },
-      "160": {
+      "153": {
         "field": "parent_process.file.path",
         "comparison_type": "contains",
         "string_idx": 54,
         "numerical_value": -1
       },
-      "161": {
+      "154": {
         "field": "process.cmd",
         "comparison_type": "contains",
         "string_idx": 54,
         "numerical_value": -1
       },
-      "162": {
+      "155": {
         "field": "process.file.filename",
         "comparison_type": "contains",
         "string_idx": 54,
         "numerical_value": -1
       },
-      "163": {
+      "156": {
         "field": "process.file.path",
         "comparison_type": "contains",
         "string_idx": 54,
         "numerical_value": -1
       },
-      "164": {
+      "157": {
         "field": "target.file.filename",
         "comparison_type": "contains",
         "string_idx": 54,
         "numerical_value": -1
       },
-      "165": {
+      "158": {
         "field": "target.file.path",
         "comparison_type": "contains",
         "string_idx": 54,
         "numerical_value": -1
       },
-      "166": {
-        "field": "rename.destination_file.filename",
+      "159": {
+        "field": "parent_process.cmd",
         "comparison_type": "contains",
-        "string_idx": 52,
+        "string_idx": 55,
+        "numerical_value": -1
+      },
+      "160": {
+        "field": "parent_process.file.filename",
+        "comparison_type": "contains",
+        "string_idx": 55,
+        "numerical_value": -1
+      },
+      "161": {
+        "field": "parent_process.file.path",
+        "comparison_type": "contains",
+        "string_idx": 55,
+        "numerical_value": -1
+      },
+      "162": {
+        "field": "process.cmd",
+        "comparison_type": "contains",
+        "string_idx": 55,
+        "numerical_value": -1
+      },
+      "163": {
+        "field": "process.file.filename",
+        "comparison_type": "contains",
+        "string_idx": 55,
+        "numerical_value": -1
+      },
+      "164": {
+        "field": "process.file.path",
+        "comparison_type": "contains",
+        "string_idx": 55,
+        "numerical_value": -1
+      },
+      "165": {
+        "field": "target.file.filename",
+        "comparison_type": "contains",
+        "string_idx": 55,
+        "numerical_value": -1
+      },
+      "166": {
+        "field": "target.file.path",
+        "comparison_type": "contains",
+        "string_idx": 55,
         "numerical_value": -1
       },
       "167": {
-        "field": "rename.destination_file.path",
+        "field": "rename.destination_file.filename",
         "comparison_type": "contains",
-        "string_idx": 52,
+        "string_idx": 53,
         "numerical_value": -1
       },
       "168": {
-        "field": "rename.source_file.filename",
+        "field": "rename.destination_file.path",
         "comparison_type": "contains",
-        "string_idx": 52,
+        "string_idx": 53,
         "numerical_value": -1
       },
       "169": {
-        "field": "rename.source_file.path",
+        "field": "rename.source_file.filename",
         "comparison_type": "contains",
-        "string_idx": 52,
+        "string_idx": 53,
         "numerical_value": -1
       },
       "170": {
-        "field": "rename.destination_file.filename",
+        "field": "rename.source_file.path",
         "comparison_type": "contains",
         "string_idx": 53,
         "numerical_value": -1
       },
       "171": {
-        "field": "rename.destination_file.path",
-        "comparison_type": "contains",
-        "string_idx": 53,
-        "numerical_value": -1
-      },
-      "172": {
-        "field": "rename.source_file.filename",
-        "comparison_type": "contains",
-        "string_idx": 53,
-        "numerical_value": -1
-      },
-      "173": {
-        "field": "rename.source_file.path",
-        "comparison_type": "contains",
-        "string_idx": 53,
-        "numerical_value": -1
-      },
-      "174": {
         "field": "rename.destination_file.filename",
         "comparison_type": "contains",
         "string_idx": 54,
         "numerical_value": -1
       },
-      "175": {
+      "172": {
         "field": "rename.destination_file.path",
         "comparison_type": "contains",
         "string_idx": 54,
         "numerical_value": -1
       },
-      "176": {
+      "173": {
         "field": "rename.source_file.filename",
         "comparison_type": "contains",
         "string_idx": 54,
         "numerical_value": -1
       },
-      "177": {
+      "174": {
         "field": "rename.source_file.path",
         "comparison_type": "contains",
         "string_idx": 54,
         "numerical_value": -1
       },
-      "178": {
-        "field": "target.process.cmd",
+      "175": {
+        "field": "rename.destination_file.filename",
         "comparison_type": "contains",
-        "string_idx": 52,
+        "string_idx": 55,
+        "numerical_value": -1
+      },
+      "176": {
+        "field": "rename.destination_file.path",
+        "comparison_type": "contains",
+        "string_idx": 55,
+        "numerical_value": -1
+      },
+      "177": {
+        "field": "rename.source_file.filename",
+        "comparison_type": "contains",
+        "string_idx": 55,
+        "numerical_value": -1
+      },
+      "178": {
+        "field": "rename.source_file.path",
+        "comparison_type": "contains",
+        "string_idx": 55,
         "numerical_value": -1
       },
       "179": {
-        "field": "target.process.file.filename",
+        "field": "target.process.cmd",
         "comparison_type": "contains",
-        "string_idx": 52,
+        "string_idx": 53,
         "numerical_value": -1
       },
       "180": {
-        "field": "target.process.file.path",
+        "field": "target.process.file.filename",
         "comparison_type": "contains",
-        "string_idx": 52,
+        "string_idx": 53,
         "numerical_value": -1
       },
       "181": {
-        "field": "target.process.cmd",
+        "field": "target.process.file.path",
         "comparison_type": "contains",
         "string_idx": 53,
         "numerical_value": -1
       },
       "182": {
-        "field": "target.process.file.filename",
-        "comparison_type": "contains",
-        "string_idx": 53,
-        "numerical_value": -1
-      },
-      "183": {
-        "field": "target.process.file.path",
-        "comparison_type": "contains",
-        "string_idx": 53,
-        "numerical_value": -1
-      },
-      "184": {
         "field": "target.process.cmd",
         "comparison_type": "contains",
         "string_idx": 54,
         "numerical_value": -1
       },
-      "185": {
+      "183": {
         "field": "target.process.file.filename",
         "comparison_type": "contains",
         "string_idx": 54,
         "numerical_value": -1
       },
-      "186": {
+      "184": {
         "field": "target.process.file.path",
         "comparison_type": "contains",
         "string_idx": 54,
         "numerical_value": -1
       },
+      "185": {
+        "field": "target.process.cmd",
+        "comparison_type": "contains",
+        "string_idx": 55,
+        "numerical_value": -1
+      },
+      "186": {
+        "field": "target.process.file.filename",
+        "comparison_type": "contains",
+        "string_idx": 55,
+        "numerical_value": -1
+      },
       "187": {
+        "field": "target.process.file.path",
+        "comparison_type": "contains",
+        "string_idx": 55,
+        "numerical_value": -1
+      },
+      "188": {
         "field": "target.file.path",
         "comparison_type": "endswith",
-        "string_idx": 55,
+        "string_idx": 56,
         "numerical_value": -1
       },
       "188": {
@@ -2172,12 +2182,19 @@
             "predicate_idx": 66
           },
           {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
             "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 67
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 68
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 69
           },
           {
             "operator_type": "OPERATOR_AND"
@@ -2207,7 +2224,10 @@
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
-            "predicate_idx": 69
+            "predicate_idx": 66
+          },
+          {
+            "operator_type": "OPERATOR_OR"
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
@@ -2220,6 +2240,10 @@
           {
             "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 72
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 73
           },
           {
             "operator_type": "OPERATOR_AND"
@@ -2249,11 +2273,11 @@
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
-            "predicate_idx": 70
+            "predicate_idx": 71
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
-            "predicate_idx": 73
+            "predicate_idx": 74
           },
           {
             "operator_type": "OPERATOR_AND"
@@ -2273,15 +2297,15 @@
         "tokens": [
           {
             "operator_type": "OPERATOR_PREDICATE",
-            "predicate_idx": 74
-          },
-          {
-            "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 75
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 76
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 77
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
@@ -2308,10 +2332,6 @@
         "tokens": [
           {
             "operator_type": "OPERATOR_PREDICATE",
-            "predicate_idx": 77
-          },
-          {
-            "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 78
           },
           {
@@ -2321,6 +2341,10 @@
           {
             "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 80
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 81
           },
           {
             "operator_type": "OPERATOR_AND"
@@ -2351,7 +2375,7 @@
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
-            "predicate_idx": 81
+            "predicate_idx": 82
           },
           {
             "operator_type": "OPERATOR_AND"
@@ -2371,11 +2395,11 @@
         "tokens": [
           {
             "operator_type": "OPERATOR_PREDICATE",
-            "predicate_idx": 82
+            "predicate_idx": 83
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
-            "predicate_idx": 83
+            "predicate_idx": 84
           },
           {
             "operator_type": "OPERATOR_AND"
@@ -2400,11 +2424,11 @@
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
-            "predicate_idx": 84
+            "predicate_idx": 85
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
-            "predicate_idx": 85
+            "predicate_idx": 86
           },
           {
             "operator_type": "OPERATOR_AND"
@@ -2433,15 +2457,15 @@
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
-            "predicate_idx": 86
-          },
-          {
-            "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 87
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 88
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 89
           },
           {
             "operator_type": "OPERATOR_NOT"
@@ -2471,11 +2495,11 @@
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
-            "predicate_idx": 86
+            "predicate_idx": 87
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
-            "predicate_idx": 87
+            "predicate_idx": 88
           },
           {
             "operator_type": "OPERATOR_AND"
@@ -2495,7 +2519,7 @@
         "tokens": [
           {
             "operator_type": "OPERATOR_PREDICATE",
-            "predicate_idx": 89
+            "predicate_idx": 90
           }
         ]
       },
@@ -2509,10 +2533,6 @@
         "tokens": [
           {
             "operator_type": "OPERATOR_PREDICATE",
-            "predicate_idx": 90
-          },
-          {
-            "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 91
           },
           {
@@ -2521,11 +2541,15 @@
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 93
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 8
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
-            "predicate_idx": 93
+            "predicate_idx": 94
           },
           {
             "operator_type": "OPERATOR_AND"
@@ -2549,10 +2573,6 @@
           "CHMOD"
         ],
         "tokens": [
-          {
-            "operator_type": "OPERATOR_PREDICATE",
-            "predicate_idx": 94
-          },
           {
             "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 95
@@ -2582,110 +2602,114 @@
             "predicate_idx": 101
           },
           {
-            "operator_type": "OPERATOR_OR"
-          },
-          {
-            "operator_type": "OPERATOR_OR"
-          },
-          {
-            "operator_type": "OPERATOR_OR"
-          },
-          {
-            "operator_type": "OPERATOR_OR"
-          },
-          {
-            "operator_type": "OPERATOR_OR"
-          },
-          {
-            "operator_type": "OPERATOR_OR"
-          },
-          {
-            "operator_type": "OPERATOR_OR"
-          },
-          {
             "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 102
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 103
           },
           {
-            "operator_type": "OPERATOR_AND"
-          },
-          {
             "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 104
+          },
+          {
+            "operator_type": "OPERATOR_AND"
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 105
           },
           {
-            "operator_type": "OPERATOR_AND"
-          },
-          {
             "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 106
+          },
+          {
+            "operator_type": "OPERATOR_AND"
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 107
           },
           {
-            "operator_type": "OPERATOR_AND"
-          },
-          {
             "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 108
+          },
+          {
+            "operator_type": "OPERATOR_AND"
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 109
           },
           {
-            "operator_type": "OPERATOR_AND"
-          },
-          {
             "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 110
+          },
+          {
+            "operator_type": "OPERATOR_AND"
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 111
           },
           {
-            "operator_type": "OPERATOR_AND"
-          },
-          {
             "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 112
+          },
+          {
+            "operator_type": "OPERATOR_AND"
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 113
           },
           {
-            "operator_type": "OPERATOR_AND"
-          },
-          {
             "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 114
+          },
+          {
+            "operator_type": "OPERATOR_AND"
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 115
           },
           {
-            "operator_type": "OPERATOR_AND"
-          },
-          {
             "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 116
           },
           {
+            "operator_type": "OPERATOR_AND"
+          },
+          {
             "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 117
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 118
           },
           {
             "operator_type": "OPERATOR_AND"
@@ -2726,10 +2750,6 @@
         "tokens": [
           {
             "operator_type": "OPERATOR_PREDICATE",
-            "predicate_idx": 118
-          },
-          {
-            "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 119
           },
           {
@@ -2757,29 +2777,29 @@
             "predicate_idx": 125
           },
           {
-            "operator_type": "OPERATOR_OR"
-          },
-          {
-            "operator_type": "OPERATOR_OR"
-          },
-          {
-            "operator_type": "OPERATOR_OR"
-          },
-          {
-            "operator_type": "OPERATOR_OR"
-          },
-          {
-            "operator_type": "OPERATOR_OR"
-          },
-          {
-            "operator_type": "OPERATOR_OR"
-          },
-          {
-            "operator_type": "OPERATOR_OR"
-          },
-          {
             "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 126
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
@@ -2810,29 +2830,29 @@
             "predicate_idx": 133
           },
           {
-            "operator_type": "OPERATOR_OR"
-          },
-          {
-            "operator_type": "OPERATOR_OR"
-          },
-          {
-            "operator_type": "OPERATOR_OR"
-          },
-          {
-            "operator_type": "OPERATOR_OR"
-          },
-          {
-            "operator_type": "OPERATOR_OR"
-          },
-          {
-            "operator_type": "OPERATOR_OR"
-          },
-          {
-            "operator_type": "OPERATOR_OR"
-          },
-          {
             "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 134
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
@@ -2861,6 +2881,10 @@
           {
             "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 141
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 142
           },
           {
             "operator_type": "OPERATOR_OR"
@@ -2899,10 +2923,6 @@
           "CHMOD"
         ],
         "tokens": [
-          {
-            "operator_type": "OPERATOR_PREDICATE",
-            "predicate_idx": 142
-          },
           {
             "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 143
@@ -2994,6 +3014,10 @@
           {
             "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 165
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 166
           },
           {
             "operator_type": "OPERATOR_OR"
@@ -3076,10 +3100,6 @@
         "tokens": [
           {
             "operator_type": "OPERATOR_PREDICATE",
-            "predicate_idx": 142
-          },
-          {
-            "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 143
           },
           {
@@ -3169,6 +3189,10 @@
           {
             "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 165
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 166
           },
           {
             "operator_type": "OPERATOR_OR"
@@ -3251,10 +3275,6 @@
         "tokens": [
           {
             "operator_type": "OPERATOR_PREDICATE",
-            "predicate_idx": 142
-          },
-          {
-            "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 143
           },
           {
@@ -3346,6 +3366,10 @@
             "predicate_idx": 165
           },
           {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 166
+          },
+          {
             "operator_type": "OPERATOR_OR"
           },
           {
@@ -3426,10 +3450,6 @@
         "tokens": [
           {
             "operator_type": "OPERATOR_PREDICATE",
-            "predicate_idx": 142
-          },
-          {
-            "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 143
           },
           {
@@ -3450,7 +3470,7 @@
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
-            "predicate_idx": 166
+            "predicate_idx": 148
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
@@ -3466,7 +3486,7 @@
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
-            "predicate_idx": 150
+            "predicate_idx": 170
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
@@ -3490,7 +3510,7 @@
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
-            "predicate_idx": 170
+            "predicate_idx": 156
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
@@ -3506,7 +3526,7 @@
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
-            "predicate_idx": 158
+            "predicate_idx": 174
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
@@ -3530,7 +3550,7 @@
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
-            "predicate_idx": 174
+            "predicate_idx": 164
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
@@ -3543,6 +3563,10 @@
           {
             "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 177
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 178
           },
           {
             "operator_type": "OPERATOR_OR"
@@ -3643,10 +3667,6 @@
         "tokens": [
           {
             "operator_type": "OPERATOR_PREDICATE",
-            "predicate_idx": 142
-          },
-          {
-            "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 143
           },
           {
@@ -3667,7 +3687,7 @@
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
-            "predicate_idx": 178
+            "predicate_idx": 148
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
@@ -3679,7 +3699,7 @@
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
-            "predicate_idx": 150
+            "predicate_idx": 181
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
@@ -3703,7 +3723,7 @@
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
-            "predicate_idx": 181
+            "predicate_idx": 156
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
@@ -3715,7 +3735,7 @@
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
-            "predicate_idx": 158
+            "predicate_idx": 184
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
@@ -3739,7 +3759,7 @@
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
-            "predicate_idx": 184
+            "predicate_idx": 164
           },
           {
             "operator_type": "OPERATOR_PREDICATE",
@@ -3748,6 +3768,10 @@
           {
             "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 186
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 187
           },
           {
             "operator_type": "OPERATOR_OR"
@@ -3839,7 +3863,7 @@
         "tokens": [
           {
             "operator_type": "OPERATOR_PREDICATE",
-            "predicate_idx": 187
+            "predicate_idx": 188
           }
         ],
         "min_version": "99.99.99"
