@@ -7,11 +7,11 @@ Scenario: related_processes_are_ignored
     And I run the resource "related_process" with arguments "25 /tmp/related_process.log" async and save pid
     Then I start owLSM and ignore the resource pid
     And I dont find the event in output in "25" seconds:
-        | process.pid              | <resource_pid>             |
+        | process.pid           | <resource_pid>           |
     And I dont find the event in output in "5" seconds:
-        | process.ppid             | <resource_pid>             |
+        | process.ppid          | <resource_pid>           |
     And I dont find the event in output in "5" seconds:
-        | data.file.path           | /tmp/related_process.log   |
+        | data.target.file.path | /tmp/related_process.log |
     And I ensure the file "/tmp/related_process.log" does not exist
 
 
@@ -23,8 +23,8 @@ Scenario: cached_write_event_reported_only_once
     And I try to append to the file "/tmp/cached_write" the content "c"
     And file size of "/tmp/cached_write" is "3" bytes
     Then I find the event in output exactly "1" times in "12" seconds:
-        | type            | WRITE               |
-        | data.file.path  | /tmp/cached_write   |
+        | type                  | WRITE             |
+        | data.target.file.path | /tmp/cached_write |
 
 
 Scenario: read_event_disabled_in_config
@@ -38,8 +38,8 @@ Scenario: read_event_disabled_in_config
     And I run the command "/usr/bin/cat /tmp/read_event_disabled" sync 
     And I try to append to the file "/tmp/read_event_disabled" the content "b"
     Then I find the event in output in "20" seconds:
-        | type           | WRITE                    |
-        | data.file.path | /tmp/read_event_disabled |
+        | type                  | WRITE                    |
+        | data.target.file.path | /tmp/read_event_disabled |
     And I dont find the event in output in "3" seconds:
         | type | READ  |
     And I stop the owLSM process
