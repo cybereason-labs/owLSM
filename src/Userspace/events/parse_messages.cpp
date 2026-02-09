@@ -54,12 +54,47 @@ void to_json(nlohmann::json& j, const StdioFileDescriptorsAtProcessCreation& s)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Owner, uid, gid)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(File, inode, dev, path, owner, mode, type, suid, sgid, last_modified_seconds, nlink, filename)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Process, pid, ppid, ruid, rgid, euid, egid, suid, cgroup_id, start_time, ptrace_flags, file, cmd, stdio_file_descriptors_at_process_creation)
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ChownEventData, file, requested_owner_uid, requested_owner_gid)
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ChmodEventData, file, requested_mode)
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ExecEventData, new_process)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ExitEventData, exit_code, signal)
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(GenericFileEventData, file)
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(RenameEventData, flags, source_file, destination_file)
+
+void to_json(nlohmann::json& j, const GenericFileEventData& e)
+{
+    j = nlohmann::json{{"target", {{"file", e.file}}}};
+}
+
+void to_json(nlohmann::json& j, const ChownEventData& e)
+{
+    j = nlohmann::json{
+        {"target", {{"file", e.file}}},
+        {"chown", {
+            {"requested_owner_uid", e.requested_owner_uid},
+            {"requested_owner_gid", e.requested_owner_gid}
+        }}
+    };
+}
+
+void to_json(nlohmann::json& j, const ChmodEventData& e)
+{
+    j = nlohmann::json{
+        {"target", {{"file", e.file}}},
+        {"chmod", {{"requested_mode", e.requested_mode}}}
+    };
+}
+
+void to_json(nlohmann::json& j, const ExecEventData& e)
+{
+    j = nlohmann::json{{"target", {{"process", e.new_process}}}};
+}
+
+void to_json(nlohmann::json& j, const RenameEventData& e)
+{
+    j = nlohmann::json{
+        {"flags", e.flags},
+        {"rename", {
+            {"source_file", e.source_file},
+            {"destination_file", e.destination_file}
+        }}
+    };
+}
 
 void to_json(nlohmann::json& j, const ForkEventData&)
 {
@@ -68,34 +103,33 @@ void to_json(nlohmann::json& j, const ForkEventData&)
 
 void to_json(nlohmann::json& j, const NetworkEventData& e)
 {
-    j = nlohmann::json{
-        {"direction", to_string(e.direction)},
-        {"protocol", e.protocol},
-        {"ip_type", e.ip_type},
-        {"source_port", e.source_port},
-        {"destination_port", e.destination_port}
-    };
+    std::string source_ip;
+    std::string destination_ip;
 
     if (e.ip_type == AF_INET)
     {
         const auto& ipv4 = std::get<Ipv4Addresses>(e.addresses);
-        j["addresses"] = {
-            {"ipv4", {
-                {"source_ip", ipv4_to_string(ipv4.source_ip)},
-                {"destination_ip", ipv4_to_string(ipv4.destination_ip)}
-            }}
-        };
+        source_ip = ipv4_to_string(ipv4.source_ip);
+        destination_ip = ipv4_to_string(ipv4.destination_ip);
     }
     else
     {
         const auto& ipv6 = std::get<Ipv6Addresses>(e.addresses);
-        j["addresses"] = {
-            {"ipv6", {
-                {"source_ip", ipv6_to_string(ipv6.source_ip)}, 
-                {"destination_ip", ipv6_to_string(ipv6.destination_ip)}
-            }}
-        };
+        source_ip = ipv6_to_string(ipv6.source_ip);
+        destination_ip = ipv6_to_string(ipv6.destination_ip);
     }
+
+    j = nlohmann::json{
+        {"network", {
+            {"direction", to_string(e.direction)},
+            {"source_ip", source_ip},
+            {"destination_ip", destination_ip},
+            {"source_port", e.source_port},
+            {"destination_port", e.destination_port},
+            {"protocol", e.protocol},
+            {"ip_type", e.ip_type}
+        }}
+    };
 }
 
 void to_json(nlohmann::json& j, const Event& ev)

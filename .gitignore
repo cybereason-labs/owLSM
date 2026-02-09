@@ -21,6 +21,7 @@ Thumbs.db
 # automation 
 *.db
 *.log
+*.sqlite
 
 # secrets and environment variables
 .env

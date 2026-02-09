@@ -7,13 +7,13 @@ Scenario: allowed_write
     And I try to write to the file "/tmp/test1" the content "aabb"
     And file size of "/tmp/test1" is "4" bytes
     Then I find the event in output in "30" seconds:
-        | process.pid              | <automation_pid>               |
-        | action                   | ALLOW_EVENT                    |
-        | type                     | WRITE                          |
-        | process.file.path        | <automation_binary_path>       |
-        | data.file.path           | /tmp/test1                     |
-        | data.file.mode           | 511                            |
-        | data.file.type           | REGULAR_FILE                   |
+        | process.pid           | <automation_pid>         |
+        | action                | ALLOW_EVENT              |
+        | type                  | WRITE                    |
+        | process.file.path     | <automation_binary_path> |
+        | data.target.file.path | /tmp/test1               |
+        | data.target.file.mode | 511                      |
+        | data.target.file.type | REGULAR_FILE             |
         
 
 Scenario: blocked_write
@@ -24,9 +24,9 @@ Scenario: blocked_write
     And I try to write to the file "/tmp/blocked_write" the content "aabb"
     And file size of "/tmp/blocked_write" is "0" bytes
     Then I find the event in output in "30" seconds:
-        | process.pid              | <automation_pid>               |
-        | action                   | BLOCK_EVENT                    |
-        | type                     | WRITE                          |
-        | process.file.path        | <automation_binary_path>       |
-        | data.file.path           | /tmp/blocked_write             |
-        | matched_rule_id          | 10                             |
+        | process.pid           | <automation_pid>         |
+        | action                | BLOCK_EVENT              |
+        | type                  | WRITE                    |
+        | process.file.path     | <automation_binary_path> |
+        | data.target.file.path | /tmp/blocked_write       |
+        | matched_rule_id       | 10                       |
