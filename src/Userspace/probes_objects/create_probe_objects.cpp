@@ -44,6 +44,8 @@ namespace owlsm
             if(owlsm::globals::g_config.features.file_monitoring.events.rename) { probes.push_back(std::make_shared<LsmProbe>(RENAME)); }
             if(owlsm::globals::g_config.features.file_monitoring.events.write) { probes.push_back(std::make_shared<LsmProbe>(WRITE)); }
             if(owlsm::globals::g_config.features.file_monitoring.events.read) { probes.push_back(std::make_shared<LsmProbe>(READ)); }
+            if(owlsm::globals::g_config.features.file_monitoring.events.mkdir) { probes.push_back(std::make_shared<LsmProbe>(MKDIR)); }
+            if(owlsm::globals::g_config.features.file_monitoring.events.rmdir) { probes.push_back(std::make_shared<LsmProbe>(RMDIR)); }
         }
 
     }

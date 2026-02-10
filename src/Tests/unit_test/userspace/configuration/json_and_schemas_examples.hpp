@@ -107,6 +107,12 @@ constexpr std::string_view REAL_SCHEMA_4 = R"(
                                 },
                                 "read": {
                                     "type": "boolean"
+                                },
+                                "mkdir": {
+                                    "type": "boolean"
+                                },
+                                "rmdir": {
+                                    "type": "boolean"
                                 }
                             }
                         }
@@ -350,7 +356,9 @@ constexpr std::string_view REAL_SCHEMA_4 = R"(
                             "READ",
                             "UNLINK",
                             "RENAME",
-                            "NETWORK"
+                            "NETWORK",
+                            "MKDIR",
+                            "RMDIR"
                         ]
                     }
                 },
@@ -395,7 +403,9 @@ constexpr std::string_view REAL_JSON_5 = R"(
                 "unlink": false,
                 "rename": true,
                 "write": true,
-                "read": true
+                "read": true,
+                "mkdir": true,
+                "rmdir": true
             }
         },
         "network_monitoring": {

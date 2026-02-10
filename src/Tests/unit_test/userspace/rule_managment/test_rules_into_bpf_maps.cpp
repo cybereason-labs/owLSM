@@ -110,4 +110,6 @@ TEST_F(RulesIntoBpfMapsTest, event_type_to_string_all_types)
     EXPECT_EQ(RulesIntoBpfMapsTest::event_type_to_string(UNLINK), "unlink_rules");
     EXPECT_EQ(RulesIntoBpfMapsTest::event_type_to_string(RENAME), "rename_rules");
     EXPECT_EQ(RulesIntoBpfMapsTest::event_type_to_string(NETWORK), "network_rules");
+    EXPECT_EQ(RulesIntoBpfMapsTest::event_type_to_string(MKDIR), "mkdir_rules");
+    EXPECT_EQ(RulesIntoBpfMapsTest::event_type_to_string(RMDIR), "rmdir_rules");
 }

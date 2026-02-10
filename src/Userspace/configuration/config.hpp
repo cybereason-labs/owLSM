@@ -22,6 +22,8 @@ struct FileMonitoringEventsConfig
     bool rename = true;
     bool write = true;
     bool read = true;
+    bool mkdir = true;
+    bool rmdir = true;
 };
 
 struct FileMonitoringConfig 

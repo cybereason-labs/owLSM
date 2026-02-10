@@ -157,7 +157,7 @@ class TestFullPipelineIntegration:
         postfix_ctx = convert_to_postfix(ast_ctx)
         data = serialize_context(postfix_ctx)
         
-        assert len(data["rules"]) == 28
+        assert len(data["rules"]) == 30
         
         for rule in data["rules"]:
             assert "id" in rule

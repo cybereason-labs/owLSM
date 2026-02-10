@@ -480,7 +480,7 @@ class TestParseRulesIntegration:
         rules = load_sigma_rules(valid_rules_dir)
         ctx = parse_rules(rules)
         
-        assert len(ctx.rules) == 28
+        assert len(ctx.rules) == 30
         assert len(ctx.id_to_string) > 0
         assert len(ctx.id_to_predicate) > 0
     

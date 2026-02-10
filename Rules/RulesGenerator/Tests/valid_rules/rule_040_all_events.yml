@@ -10,6 +10,8 @@ events:
     - FILE_CREATE
     - EXEC
     - RENAME
+    - MKDIR
+    - RMDIR
 detection:
     selection_suspicious_process:
         process.file.path|contains:

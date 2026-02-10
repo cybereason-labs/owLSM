@@ -20,7 +20,9 @@ enum event_type {
     READ,
     UNLINK,
     RENAME,
-    NETWORK
+    NETWORK,
+    MKDIR,
+    RMDIR
 };
 
 
@@ -136,6 +138,10 @@ typedef struct write_event_t read_event_t;
 
 typedef struct file_create_event_t unlink_event_t;
 
+typedef struct file_create_event_t mkdir_event_t;
+
+typedef struct file_create_event_t rmdir_event_t;
+
 struct rename_event_t
 {
     unsigned int flags;
@@ -181,6 +187,8 @@ struct event_t
         unlink_event_t unlink;
         struct rename_event_t rename;
         struct network_event_t network;
+        mkdir_event_t mkdir;
+        rmdir_event_t rmdir;
     } data;
 };
 

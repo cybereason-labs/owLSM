@@ -32,6 +32,8 @@ BPF_SRC        := common_maps.bpf.c \
                   Programs/syscall_monitoring/on_exit.bpf.c \
                   Programs/syscall_monitoring/on_syscall.bpf.c \
                   Programs/syscall_monitoring/on_file_create.bpf.c \
+                  Programs/syscall_monitoring/on_mkdir.bpf.c \
+                  Programs/syscall_monitoring/on_rmdir.bpf.c \
                   Programs/syscall_monitoring/on_write.bpf.c \
                   Programs/syscall_monitoring/on_read.bpf.c \
                   Programs/syscall_monitoring/on_unlink.bpf.c \

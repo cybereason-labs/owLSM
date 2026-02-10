@@ -89,6 +89,8 @@ namespace owlsm::config {
         get_if_present(j, "rename", o.rename);
         get_if_present(j, "write", o.write);
         get_if_present(j, "read", o.read);
+        get_if_present(j, "mkdir", o.mkdir);
+        get_if_present(j, "rmdir", o.rmdir);
     }
 
     void ConfigParser::fromJson(const nlohmann::json& j, UserspaceConfig& o)

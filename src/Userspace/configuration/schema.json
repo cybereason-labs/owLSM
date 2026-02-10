@@ -39,6 +39,12 @@
                                 },
                                 "read": {
                                     "type": "boolean"
+                                },
+                                "mkdir": {
+                                    "type": "boolean"
+                                },
+                                "rmdir": {
+                                    "type": "boolean"
                                 }
                             }
                         }
@@ -282,7 +288,9 @@
                             "READ",
                             "UNLINK",
                             "RENAME",
-                            "NETWORK"
+                            "NETWORK",
+                            "MKDIR",
+                            "RMDIR"
                         ]
                     }
                 },

@@ -107,7 +107,7 @@ class TestLoadValidRules:
     
     def test_load_all_rules(self, valid_rules_dir):
         rules = load_sigma_rules(valid_rules_dir)
-        assert len(rules) == 28
+        assert len(rules) == 30
     
     def test_rule_ids_are_unique(self, valid_rules_dir):
         rules = load_sigma_rules(valid_rules_dir)
@@ -117,7 +117,7 @@ class TestLoadValidRules:
     def test_expected_ids_present(self, valid_rules_dir):
         rules = load_sigma_rules(valid_rules_dir)
         ids = {r.id for r in rules}
-        expected = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 20, 21, 22, 23, 24, 25, 26, 27, 30, 31, 32, 40}
+        expected = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 20, 21, 22, 23, 24, 25, 26, 27, 30, 31, 32, 40, 41, 42}
         assert ids == expected
     
     def test_rule_1_details(self, valid_rules_dir):

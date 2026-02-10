@@ -9,7 +9,9 @@
                 "unlink": true,
                 "rename": true,
                 "write": true,
-                "read": true
+                "read": true,
+                "mkdir": true,
+                "rmdir": true
             }
         },
         "network_monitoring": {

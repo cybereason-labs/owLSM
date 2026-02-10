@@ -50,12 +50,15 @@ def create_directory(path: str) -> bool:
         return False
 
 
-def recreate_directory(path: str) -> bool:
+def recreate_directory(path: str, mode: int = 0o777) -> bool:
     try:
         if os.path.exists(path):
             shutil.rmtree(path)
             file_db.remove(path)
-        return create_directory(path)
+        os.mkdir(path, mode)
+        logger.log_info(f"Successfully created directory: {path} with mode: {oct(mode)}")
+        file_db.add(path)
+        return True
     except Exception as e:
         logger.log_error(f"Failed to recreate directory: {path}. Error: {e}")
         return False

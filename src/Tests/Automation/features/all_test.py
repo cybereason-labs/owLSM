@@ -117,6 +117,34 @@ def test_blocked_rename():
 def test_excluded_file_create():
     pass
 
+@scenario('on_mkdir.feature', 'allowed_mkdir')
+def test_allowed_mkdir():
+    pass
+
+@scenario('on_mkdir.feature', 'blocked_mkdir')
+def test_blocked_mkdir():
+    pass
+
+@scenario('on_mkdir.feature', 'excluded_mkdir')
+def test_excluded_mkdir():
+    pass
+
+@scenario('on_rmdir.feature', 'allowed_rmdir')
+def test_allowed_rmdir():
+    pass
+
+@scenario('on_rmdir.feature', 'blocked_rmdir')
+def test_blocked_rmdir():
+    pass
+
+@scenario('on_rmdir.feature', 'excluded_rmdir')
+def test_excluded_rmdir():
+    pass
+
+@scenario('on_mkdir.feature', 'mkdir_and_rmdir_directory_tree')
+def test_mkdir_and_rmdir_directory_tree():
+    pass
+
 @scenario('stdio_types_test.feature', 'allowed_stdio_redirection')
 def test_allowed_stdio_redirection():
     pass

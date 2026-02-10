@@ -101,6 +101,8 @@ private:
             case UNLINK:      return "unlink_rules";
             case RENAME:      return "rename_rules";
             case NETWORK:     return "network_rules";
+            case MKDIR:       return "mkdir_rules";
+            case RMDIR:       return "rmdir_rules";
             default:          return "unknown_rules";
         }
     }
