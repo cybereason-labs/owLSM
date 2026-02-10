@@ -247,6 +247,8 @@ statfunc int eval_target_file(const struct event_t *current_event, struct predic
     switch (current_event->type)
     {
         case FILE_CREATE: return eval_file(&current_event->data.file_create.file, pred, pred->field);
+        case MKDIR: return eval_file(&current_event->data.mkdir.file, pred, pred->field);
+        case RMDIR: return eval_file(&current_event->data.rmdir.file, pred, pred->field);
         case CHOWN: return eval_file(&current_event->data.chown.file, pred, pred->field);
         case CHMOD: return eval_file(&current_event->data.chmod.file, pred, pred->field);
         case READ: return eval_file(&current_event->data.read.file, pred, pred->field);

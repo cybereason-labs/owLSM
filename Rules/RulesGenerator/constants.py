@@ -23,6 +23,8 @@ VALID_EVENT_TYPES: set = {
     "EXEC",
     "RENAME",
     "NETWORK",
+    "MKDIR",
+    "RMDIR",
 }
 
 FILE_TYPE_ENUM: dict = _config["file_types"]

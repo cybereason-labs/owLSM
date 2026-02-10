@@ -204,7 +204,7 @@ class TestFullPipelineIntegration:
         ast_ctx = parse_rules(rules)
         postfix_ctx = convert_to_postfix(ast_ctx)
         
-        assert len(postfix_ctx.rules) == 28
+        assert len(postfix_ctx.rules) == 30
         
         for rule in postfix_ctx.rules:
             assert len(rule.tokens) > 0

@@ -9,7 +9,9 @@
         "unlink": true,
         "rename": true,
         "write": true,
-        "read": true
+        "read": true,
+        "mkdir": true,
+        "rmdir": true
       }
     },
     "network_monitoring": {
@@ -250,6 +252,18 @@
       "55": {
         "value": "out_of_range_versions_test",
         "is_contains": false
+      },
+      "56": {
+        "value": "/tmp/test_exclude_mkdir_event",
+        "is_contains": true
+      },
+      "57": {
+        "value": "_blocked_rmdir_test_",
+        "is_contains": true
+      },
+      "58": {
+        "value": "/tmp/test_exclude_rmdir_event",
+        "is_contains": true
       }
     },
     "id_to_predicate": {
@@ -1379,6 +1393,24 @@
         "field": "target.file.path",
         "comparison_type": "endswith",
         "string_idx": 55,
+        "numerical_value": -1
+      },
+      "188": {
+        "field": "target.file.path",
+        "comparison_type": "contains",
+        "string_idx": 56,
+        "numerical_value": -1
+      },
+      "189": {
+        "field": "target.file.path",
+        "comparison_type": "contains",
+        "string_idx": 57,
+        "numerical_value": -1
+      },
+      "190": {
+        "field": "target.file.path",
+        "comparison_type": "contains",
+        "string_idx": 58,
         "numerical_value": -1
       }
     },
@@ -3811,6 +3843,132 @@
           }
         ],
         "min_version": "99.99.99"
+      },
+      {
+        "id": 28,
+        "description": "Test rule 28 - MKDIR block with special characters in path",
+        "action": "BLOCK_EVENT",
+        "applied_events": [
+          "MKDIR"
+        ],
+        "tokens": [
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 52
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 21
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 56
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 85
+          },
+          {
+            "operator_type": "OPERATOR_AND"
+          },
+          {
+            "operator_type": "OPERATOR_AND"
+          },
+          {
+            "operator_type": "OPERATOR_AND"
+          }
+        ]
+      },
+      {
+        "id": 29,
+        "description": "Test rule 29 - MKDIR exclude event for test directories",
+        "action": "EXCLUDE_EVENT",
+        "applied_events": [
+          "MKDIR"
+        ],
+        "tokens": [
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 52
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 21
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 188
+          },
+          {
+            "operator_type": "OPERATOR_AND"
+          },
+          {
+            "operator_type": "OPERATOR_AND"
+          }
+        ]
+      },
+      {
+        "id": 30,
+        "description": "Test rule 30 - RMDIR block with special characters in path",
+        "action": "BLOCK_EVENT",
+        "applied_events": [
+          "RMDIR"
+        ],
+        "tokens": [
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 52
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 21
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 189
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 85
+          },
+          {
+            "operator_type": "OPERATOR_AND"
+          },
+          {
+            "operator_type": "OPERATOR_AND"
+          },
+          {
+            "operator_type": "OPERATOR_AND"
+          }
+        ]
+      },
+      {
+        "id": 31,
+        "description": "Test rule 31 - RMDIR exclude event for test directories",
+        "action": "EXCLUDE_EVENT",
+        "applied_events": [
+          "RMDIR"
+        ],
+        "tokens": [
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 52
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 21
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 190
+          },
+          {
+            "operator_type": "OPERATOR_AND"
+          },
+          {
+            "operator_type": "OPERATOR_AND"
+          }
+        ]
       }
     ]
   }

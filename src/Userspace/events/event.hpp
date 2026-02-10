@@ -257,6 +257,8 @@ struct Event
         case UNLINK: data = GenericFileEventData(ev.data.unlink); break;
         case RENAME: data = RenameEventData(ev.data.rename); break;
         case NETWORK: data = NetworkEventData(ev.data.network); break;
+        case MKDIR: data = GenericFileEventData(ev.data.mkdir); break;
+        case RMDIR: data = GenericFileEventData(ev.data.rmdir); break;
         }
     }
 };

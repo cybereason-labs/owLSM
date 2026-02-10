@@ -18,6 +18,8 @@ namespace owlsm
             case READ:          bpf_program__set_autoattach(m_skel->progs.read_hook_2, false);        break;
             case UNLINK:        bpf_program__set_autoattach(m_skel->progs.unlink_hook_2, false);      break;
             case RENAME:        bpf_program__set_autoattach(m_skel->progs.rename_hook_2, false);      break;
+            case MKDIR:         bpf_program__set_autoattach(m_skel->progs.mkdir_hook_2, false);      break;
+            case RMDIR:         bpf_program__set_autoattach(m_skel->progs.rmdir_hook_2, false);      break;
             case NETWORK:
             {
                 bpf_program__set_autoattach(m_skel->progs.connect_hook_2, false);
@@ -41,6 +43,8 @@ namespace owlsm
             case READ:          addProgramToArray(m_skel->progs.read_hook_2, m_skel->maps.read_prog_array);     break;
             case UNLINK:        addProgramToArray(m_skel->progs.unlink_hook_2, m_skel->maps.unlink_prog_array); break;
             case RENAME:        addProgramToArray(m_skel->progs.rename_hook_2, m_skel->maps.rename_prog_array); break;
+            case MKDIR:         addProgramToArray(m_skel->progs.mkdir_hook_2, m_skel->maps.mkdir_prog_array); break;
+            case RMDIR:         addProgramToArray(m_skel->progs.rmdir_hook_2, m_skel->maps.rmdir_prog_array); break;
             case NETWORK:
             {
                 addProgramToArray(m_skel->progs.connect_hook_2, m_skel->maps.connect_prog_array);
@@ -63,6 +67,8 @@ namespace owlsm
             case READ:        attachProbe(m_skel->progs.read_hook, &m_skel->links.read_hook);     break;
             case UNLINK:      attachProbe(m_skel->progs.unlink_hook, &m_skel->links.unlink_hook); break;
             case RENAME:      attachProbe(m_skel->progs.rename_hook, &m_skel->links.rename_hook); break;
+            case MKDIR:       attachProbe(m_skel->progs.mkdir_hook, &m_skel->links.mkdir_hook); break;
+            case RMDIR:       attachProbe(m_skel->progs.rmdir_hook, &m_skel->links.rmdir_hook); break;
             case EXEC:
             {
                 attachProbe(m_skel->progs.bprm_creds_for_exec,&m_skel->links.bprm_creds_for_exec);

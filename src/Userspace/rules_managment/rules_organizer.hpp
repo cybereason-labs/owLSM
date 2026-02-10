@@ -24,7 +24,7 @@ public:
         config::Rule end_rule = {};
         end_rule.id = __INT_MAX__;
         end_rule.action = ALLOW_EVENT;
-        end_rule.applied_events = {EXEC, FILE_CREATE, CHOWN, CHMOD, WRITE, READ, UNLINK, RENAME, NETWORK};
+        end_rule.applied_events = {EXEC, FILE_CREATE, CHOWN, CHMOD, WRITE, READ, UNLINK, RENAME, NETWORK, MKDIR, RMDIR};
         end_rule.is_end_of_rules = true;
         rules.push_back(end_rule);
     }
@@ -111,6 +111,8 @@ private:
             remove_event_type(organized, CHMOD);
             remove_event_type(organized, CHOWN);
             remove_event_type(organized, FILE_CREATE);
+            remove_event_type(organized, MKDIR);
+            remove_event_type(organized, RMDIR);
             remove_event_type(organized, UNLINK);
             remove_event_type(organized, RENAME);
             remove_event_type(organized, WRITE);
@@ -129,6 +131,14 @@ private:
             if(!globals::g_config.features.file_monitoring.events.file_create) 
             { 
                 remove_event_type(organized, FILE_CREATE); 
+            }
+            if(!globals::g_config.features.file_monitoring.events.mkdir) 
+            { 
+                remove_event_type(organized, MKDIR); 
+            }
+            if(!globals::g_config.features.file_monitoring.events.rmdir) 
+            { 
+                remove_event_type(organized, RMDIR); 
             }
             if(!globals::g_config.features.file_monitoring.events.unlink) 
             { 

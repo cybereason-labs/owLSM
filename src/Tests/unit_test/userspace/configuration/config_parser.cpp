@@ -89,6 +89,8 @@ TEST_F(ConfigParserTest, default_values_are_set)
     EXPECT_TRUE(config.features.file_monitoring.events.rename);
     EXPECT_TRUE(config.features.file_monitoring.events.write);
     EXPECT_TRUE(config.features.file_monitoring.events.read);
+    EXPECT_TRUE(config.features.file_monitoring.events.mkdir);
+    EXPECT_TRUE(config.features.file_monitoring.events.rmdir);
     EXPECT_TRUE(config.features.network_monitoring.enabled);
     EXPECT_EQ(config.userspace.max_events_queue_size, 10000);
     EXPECT_EQ(config.userspace.output_type, owlsm::config::OutputType::JSON);

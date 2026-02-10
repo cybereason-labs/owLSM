@@ -96,6 +96,40 @@ statfunc void reset_tail_counter()
       } file_create_rules SEC(".maps");
 #endif // FILE_CREATE_EVENT
 
+#ifdef RMDIR_EVENT
+    struct {
+        __uint(type, BPF_MAP_TYPE_PROG_ARRAY);
+        __uint(max_entries, 1);
+        __type(key,   u32);
+        __type(value, u32);
+    } rmdir_prog_array SEC(".maps");
+
+    struct {
+        __uint(type,       BPF_MAP_TYPE_ARRAY);
+        __uint(max_entries, MAX_RULES_PER_MAP_PLUS1);
+        __type(key,        u32);
+        __type(value,      struct rule_t);
+        __uint(pinning,    LIBBPF_PIN_BY_NAME);
+      } rmdir_rules SEC(".maps");
+#endif // RMDIR_EVENT
+
+#ifdef MKDIR_EVENT
+    struct {
+        __uint(type, BPF_MAP_TYPE_PROG_ARRAY);
+        __uint(max_entries, 1);
+        __type(key,   u32);
+        __type(value, u32);
+    } mkdir_prog_array SEC(".maps");
+
+    struct {
+        __uint(type,       BPF_MAP_TYPE_ARRAY);
+        __uint(max_entries, MAX_RULES_PER_MAP_PLUS1);
+        __type(key,        u32);
+        __type(value,      struct rule_t);
+        __uint(pinning,    LIBBPF_PIN_BY_NAME);
+      } mkdir_rules SEC(".maps");
+#endif // MKDIR_EVENT
+
 #ifdef WRITE_EVENT
     struct {
         __uint(type, BPF_MAP_TYPE_PROG_ARRAY);
@@ -267,6 +301,10 @@ statfunc int generic_tail_call()
     bpf_for_each_map_elem(&exec_rules, event_rule_matcher_callback, &current_event, 0);
 #elif defined FILE_CREATE_EVENT
     bpf_for_each_map_elem(&file_create_rules, event_rule_matcher_callback, &current_event, 0);
+#elif defined MKDIR_EVENT
+    bpf_for_each_map_elem(&mkdir_rules, event_rule_matcher_callback, &current_event, 0);
+#elif defined RMDIR_EVENT
+    bpf_for_each_map_elem(&rmdir_rules, event_rule_matcher_callback, &current_event, 0);
 #elif defined WRITE_EVENT
     bpf_for_each_map_elem(&write_rules, event_rule_matcher_callback, &current_event, 0);
 #elif defined READ_EVENT

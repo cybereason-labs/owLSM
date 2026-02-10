@@ -35,6 +35,39 @@ def ensure_directory_not_exists(dirpath):
     assert remove_directory(dirpath), f"Failed to remove directory: {dirpath}"
 
 
+@given(parsers.parse('I ensure new directory "{dirpath}" is created'))
+@when(parsers.parse('I ensure new directory "{dirpath}" is created'))
+@then(parsers.parse('I ensure new directory "{dirpath}" is created'))
+def ensure_new_directory_created(dirpath):
+    assert recreate_directory(dirpath), f"Failed to create directory: {dirpath}"
+
+
+@given(parsers.parse('I ensure new directory "{dirpath}" is created with mode "{mode}"'))
+@when(parsers.parse('I ensure new directory "{dirpath}" is created with mode "{mode}"'))
+@then(parsers.parse('I ensure new directory "{dirpath}" is created with mode "{mode}"'))
+def ensure_new_directory_created_with_mode(dirpath, mode):
+    mode_int = int(mode, 8)
+    assert recreate_directory(dirpath, mode_int), f"Failed to create directory: {dirpath} with mode: {mode}"
+
+
+@given(parsers.parse('I fail to create directory "{dirpath}"'))
+@when(parsers.parse('I fail to create directory "{dirpath}"'))
+@then(parsers.parse('I fail to create directory "{dirpath}"'))
+def ensure_directory_not_created(dirpath):
+    assert not create_directory(dirpath), f"Expected directory to not be created: {dirpath}"
+
+
+@given(parsers.parse('I fail to remove directory "{dirpath}"'))
+@when(parsers.parse('I fail to remove directory "{dirpath}"'))
+@then(parsers.parse('I fail to remove directory "{dirpath}"'))
+def ensure_directory_not_removed(dirpath):
+    try:
+        os.rmdir(dirpath)
+        assert False, f"Expected directory removal to be blocked: {dirpath}"
+    except OSError:
+        pass
+
+
 @given(parsers.parse('I fail to create file "{filepath}"'))
 @when(parsers.parse('I fail to create file "{filepath}"'))
 @then(parsers.parse('I fail to create file "{filepath}"'))

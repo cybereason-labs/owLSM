@@ -52,6 +52,8 @@ private:
             remove_rules_by_type(rules, CHMOD);
             remove_rules_by_type(rules, CHOWN);
             remove_rules_by_type(rules, FILE_CREATE);
+            remove_rules_by_type(rules, MKDIR);
+            remove_rules_by_type(rules, RMDIR);
             remove_rules_by_type(rules, UNLINK);
             remove_rules_by_type(rules, RENAME);
             remove_rules_by_type(rules, WRITE);
@@ -60,6 +62,8 @@ private:
         if(!globals::g_config.features.file_monitoring.events.chmod) { remove_rules_by_type(rules, CHMOD); }
         if(!globals::g_config.features.file_monitoring.events.chown) { remove_rules_by_type(rules, CHOWN); }
         if(!globals::g_config.features.file_monitoring.events.file_create) { remove_rules_by_type(rules, FILE_CREATE); }
+        if(!globals::g_config.features.file_monitoring.events.mkdir) { remove_rules_by_type(rules, MKDIR); }
+        if(!globals::g_config.features.file_monitoring.events.rmdir) { remove_rules_by_type(rules, RMDIR); }
         if(!globals::g_config.features.file_monitoring.events.unlink) { remove_rules_by_type(rules, UNLINK); }
         if(!globals::g_config.features.file_monitoring.events.rename) { remove_rules_by_type(rules, RENAME); }
         if(!globals::g_config.features.file_monitoring.events.write) { remove_rules_by_type(rules, WRITE); }
