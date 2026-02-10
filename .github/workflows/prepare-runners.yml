@@ -1,0 +1,61 @@
+name: Prepare Runners
+
+# =============================================================================
+# Provisions OCI compute instances from custom images and registers them
+# as self-hosted GitHub Actions runners using Terraform.
+# Designed to be called before the Automation Tests workflow.
+#
+# OCI credentials are pre-baked in the runner image at /home/ghrunner/.oci/
+# (config file + private API key). Terraform uses them automatically.
+# =============================================================================
+
+on:
+  workflow_dispatch:
+    inputs:
+      destroy_only:
+        description: "Only destroy existing runners (skip creation)"
+        required: false
+        default: false
+        type: boolean
+  workflow_call:
+    inputs:
+      destroy_only:
+        description: "Only destroy existing runners (skip creation)"
+        required: false
+        default: false
+        type: boolean
+    secrets:
+      GH_RUNNER_PAT:
+        required: true
+      SSH_PUBLIC_KEY:
+        required: true
+    outputs:
+      runners_ready:
+        description: "Whether runners were successfully provisioned"
+        value: ${{ jobs.provision-runners.outputs.runners_ready }}
+
+env:
+  TF_VAR_github_pat: ${{ secrets.GH_RUNNER_PAT }}
+  TF_VAR_ssh_public_key: ${{ secrets.SSH_PUBLIC_KEY }}
+  TF_VAR_github_repo_url: ${{ github.server_url }}/${{ github.repository }}
+  TF_VAR_run_id: ${{ github.run_id }}
+  TF_WORKING_DIR: terraform
+
+jobs:
+  provision-runners:
+    name: Provision OCI Runner VMs
+    runs-on: ["OCI", "owLSM"]
+    outputs:
+      runners_ready: ${{ steps.apply.outputs.runners_ready }}
+
+    steps:
+      # =====================================================================
+      # Setup
+      # =====================================================================
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Calculate expected runner count
+        id: runner_count
+        run: |
+          echo "Test run"
