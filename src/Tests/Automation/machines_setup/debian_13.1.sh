@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Ubuntu 22.04 LTS Complete Setup Script
+# Debian 13.1 (Trixie) Complete Setup Script
 # Run as root
 
 set -e  # Exit on error
 
 echo "=========================================="
-echo "Starting Ubuntu 22.04 LTS System Setup"
+echo "Starting Debian 13.1 (Trixie) System Setup"
 echo "=========================================="
 
 if [ "$(id -u)" -ne 0 ]; then
@@ -15,16 +15,16 @@ if [ "$(id -u)" -ne 0 ]; then
 fi
 
 # Update system
-echo "[1/9] Updating system packages..."
+echo "[1/8] Updating system packages..."
 apt-get update
 apt-get upgrade -y
 
-# Install sudo first if not present
-echo "[2/9] Installing sudo and base utilities..."
-apt-get install -y sudo iptables grep software-properties-common
+# Install base utilities
+echo "[2/8] Installing sudo and base utilities..."
+apt-get install -y sudo iptables grep
 
 # Configure users
-echo "[3/9] Configuring users..."
+echo "[3/8] Configuring users..."
 # Set root password
 echo "root:Password1" | chpasswd
 
@@ -54,7 +54,7 @@ if ! grep -q "^%sudo" /etc/sudoers 2>/dev/null; then
 fi
 
 # Configure SSH
-echo "[4/9] Configuring SSH..."
+echo "[4/8] Configuring SSH..."
 # Install openssh-server if not present
 if ! command -v sshd >/dev/null 2>&1; then
     apt-get install -y openssh-server
@@ -75,10 +75,7 @@ rm -fRd /etc/ssh/sshd_config.d/*
 systemctl restart sshd 2>/dev/null || systemctl restart ssh 2>/dev/null || true
 
 # Configure firewall
-echo "[5/9] Configuring firewall services..."
-# Disable UFW (Ubuntu's firewall)
-ufw disable 2>/dev/null || true
-
+echo "[5/8] Configuring firewall services..."
 # Disable firewalld if installed
 if systemctl list-unit-files 2>/dev/null | grep -q firewalld; then
     systemctl stop firewalld 2>/dev/null || true
@@ -112,7 +109,7 @@ iptables-save > /etc/iptables/rules.v4 2>/dev/null || true
 ip6tables-save > /etc/iptables/rules.v6 2>/dev/null || true
 
 # Install required packages
-echo "[6/9] Installing required packages..."
+echo "[6/8] Installing required packages..."
 apt-get install -y \
     ncdu \
     netcat-openbsd \
@@ -134,39 +131,28 @@ apt-get install -y \
     bash \
     zsh \
     fish \
-    dash 
+    dash
 
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# Install Python 3.12 from deadsnakes PPA (not available in Ubuntu 22.04 default repos)
-echo "[7/9] Installing Python 3.12 from deadsnakes PPA..."
-add-apt-repository -y ppa:deadsnakes/ppa
-apt-get update
-apt-get install -y python3.12 python3.12-venv python3.12-dev
+# Install Python
+echo "[7/8] Installing Python (system default: 3.13)..."
+# Debian 13 (Trixie) ships Python 3.13 as the system Python.
+apt-get install -y python3 python3-venv python3-dev python3-pip
 
-# Set python (not python3!) to point to 3.12
-# NOTE: Do NOT override python3 — it must stay as the system Python (3.10) or
-# apt and other system tools will break (apt_pkg is a C extension built for 3.10).
-update-alternatives --install /usr/bin/python python /usr/bin/python3.12 1
-
-# Install pip for Python 3.12
-echo "Installing pip 24.0..."
-curl -sS https://bootstrap.pypa.io/get-pip.py | python3.12
-
-# Upgrade to pip 24.0 (try with --break-system-packages first, fall back without)
-python3.12 -m pip install --upgrade pip==24.0 --break-system-packages 2>/dev/null || \
-python3.12 -m pip install --upgrade pip==24.0
+# Set python to point to python3
+update-alternatives --install /usr/bin/python python /usr/bin/python3 1
 
 # Install Docker
-echo "[8/9] Installing Docker..."
+echo "[8/8] Installing Docker..."
 # Add Docker's official GPG key
 install -m 0755 -d /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
 chmod a+r /etc/apt/keyrings/docker.asc
 
 # Add Docker repository
 echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
   $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
   tee /etc/apt/sources.list.d/docker.list > /dev/null
 
@@ -184,35 +170,10 @@ usermod -aG docker admin
 # Test Docker
 echo "Testing Docker installation..."
 if docker run hello-world; then
-    echo "✓ Docker test successful"
+    echo "Docker test successful"
 else
-    echo "✗ Docker test failed"
+    echo "Docker test failed"
 fi
-
-# Configure BPF LSM support
-echo "[9/9] Configuring BPF LSM support..."
-
-# 1) Check if BPF LSM is already enabled at runtime
-if grep -q "bpf" /sys/kernel/security/lsm 2>/dev/null; then
-    echo "BPF LSM already enabled."
-else
-    # 2) Check if config file already exists
-    if [ -f /etc/default/grub.d/99-enable-bpf.cfg ]; then
-        echo "Error: /etc/default/grub.d/99-enable-bpf.cfg already exists but BPF LSM is not enabled."
-        echo "Please reboot or investigate the issue."
-        exit 1
-    fi
-    
-    # 3) Create the drop-in config
-    echo 'GRUB_CMDLINE_LINUX_DEFAULT="${GRUB_CMDLINE_LINUX_DEFAULT} lsm=lockdown,yama,integrity,apparmor,bpf"' > /etc/default/grub.d/99-enable-bpf.cfg
-    
-    # Update grub
-    update-grub
-    
-    # 4) Inform user
-    echo "BPF LSM configured. A reboot is required for changes to take effect."
-fi
-
 
 echo "=========================================="
 echo "Setup Complete!"
