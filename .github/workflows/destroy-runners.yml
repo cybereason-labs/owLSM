@@ -1,9 +1,9 @@
-name: Prepare Runners
+name: Destroy Runners
 
 # =============================================================================
-# Provisions OCI compute instances from custom images and registers them
-# as self-hosted GitHub Actions runners using Terraform.
-# Designed to be called before the Automation Tests workflow.
+# Destroys OCI runner VMs via Terraform and deregisters offline runners
+# from GitHub. Designed to be triggered manually or called by other workflows
+# for cleanup after automation tests.
 #
 # OCI credentials are pre-baked in the runner image at /home/ghrunner/.oci/
 # (config file + private API key). Terraform uses them automatically.
@@ -17,10 +17,6 @@ on:
         required: true
       SSH_PUBLIC_KEY:
         required: true
-    outputs:
-      runners_ready:
-        description: "Whether runners were successfully provisioned"
-        value: ${{ jobs.provision-runners.outputs.runners_ready }}
 
 env:
   TF_VAR_github_pat: ${{ secrets.GH_RUNNER_PAT }}
@@ -30,11 +26,9 @@ env:
   TF_WORKING_DIR: terraform
 
 jobs:
-  provision-runners:
-    name: Provision OCI Runner VMs
+  destroy-runners:
+    name: Destroy OCI Runner VMs
     runs-on: ["OCI", "owLSM"]
-    outputs:
-      runners_ready: ${{ steps.apply.outputs.runners_ready }}
 
     steps:
       # =====================================================================
@@ -43,13 +37,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Calculate expected runner count
-        id: runner_count
-        run: |
-          COUNT=$(jq '.runners | length' ${{ env.TF_WORKING_DIR }}/runners.auto.tfvars.json)
-          echo "count=$COUNT" >> $GITHUB_OUTPUT
-          echo "Expected runners: $COUNT"
-
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
@@ -57,60 +44,36 @@ jobs:
           terraform_wrapper: false
 
       # =====================================================================
-      # Terraform Init
+      # Terraform Init & Destroy
       # =====================================================================
       - name: Terraform Init
         working-directory: ${{ env.TF_WORKING_DIR }}
         run: terraform init
 
-      # =====================================================================
-      # Plan & Apply
-      # =====================================================================
-      - name: Terraform Plan
+      - name: Terraform Destroy
         working-directory: ${{ env.TF_WORKING_DIR }}
-        run: terraform plan -out=tfplan
-
-      - name: Terraform Apply
-        id: apply
-        working-directory: ${{ env.TF_WORKING_DIR }}
-        run: |
-          terraform apply -auto-approve tfplan
-          echo "runners_ready=true" >> $GITHUB_OUTPUT
+        run: terraform destroy -auto-approve
 
       # =====================================================================
-      # Wait for Runners to Register
+      # Deregister offline runners from GitHub
       # =====================================================================
-      - name: Wait for runners to become available
-        if: steps.apply.outputs.runners_ready == 'true'
+      - name: Deregister offline runners from GitHub
         env:
           GH_TOKEN: ${{ secrets.GH_RUNNER_PAT }}
         run: |
-          ${{ env.TF_WORKING_DIR }}/scripts/wait-for-runners.sh \
+          ${{ env.TF_WORKING_DIR }}/scripts/deregister-runners.sh \
             "${{ github.repository }}" \
-            "run-${{ github.run_id }}" \
-            "${{ steps.runner_count.outputs.count }}"
+            "owLSM-automation"
 
       # =====================================================================
       # Summary
       # =====================================================================
       - name: Summary
         if: always()
-        working-directory: ${{ env.TF_WORKING_DIR }}
         run: |
-          echo "## Prepare Runners Summary" >> $GITHUB_STEP_SUMMARY
+          echo "## Destroy Runners Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Action:** Provision runners" >> $GITHUB_STEP_SUMMARY
-
-          # Try to get IPs from Terraform output
-          if terraform output -json runner_public_ips 2>/dev/null; then
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "### Runner IPs" >> $GITHUB_STEP_SUMMARY
-            echo '```' >> $GITHUB_STEP_SUMMARY
-            terraform output -json runner_public_ips >> $GITHUB_STEP_SUMMARY
-            echo '```' >> $GITHUB_STEP_SUMMARY
-          fi
-
-          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Action:** Destroy runners and deregister from GitHub" >> $GITHUB_STEP_SUMMARY
           echo "**Repository:** ${{ github.repository }}" >> $GITHUB_STEP_SUMMARY
           echo "**Triggered by:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
           echo "**Run ID:** ${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
