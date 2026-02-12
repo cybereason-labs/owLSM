@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 attrs==25.4.0
 certifi==2026.1.4
 charset-normalizer==3.4.4
@@ -17,6 +18,10 @@ parse-type==0.6.6
 pluggy==1.6.0
 pyparsing==3.3.2
 pysigma==1.0.1
+=======
+pyyaml==6.0.3
+pysigma==1.1.0
+>>>>>>> 6fb4ae5 (ubutnu 18 docker file passes all tests)
 pytest==8.3.2
 pytest-bdd==7.1
 pyyaml==6.0.3
