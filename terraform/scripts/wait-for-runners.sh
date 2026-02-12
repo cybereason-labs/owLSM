@@ -55,9 +55,15 @@ while [ $ELAPSED -lt $MAX_WAIT ]; do
 
     # Get names of online runners matching our label
     ONLINE_NAMES=$(echo "$MERGED" | jq -r \
-        "[.[] | select(.status == \"online\") | select(any(.labels[]; .name == \"$RUN_LABEL\"))] | .[].name")
+        "[.[] | select(.status == \"online\") | select(any(.labels[]; .name == \"$RUN_LABEL\"))] | .[].name" \
+        2>/dev/null) || ONLINE_NAMES=""
 
-    ONLINE_COUNT=$(echo "$ONLINE_NAMES" | grep -c . 2>/dev/null || echo "0")
+    # Count non-empty lines (grep -c returns exit 1 on no match, which can corrupt the value)
+    if [ -z "$ONLINE_NAMES" ]; then
+        ONLINE_COUNT=0
+    else
+        ONLINE_COUNT=$(echo "$ONLINE_NAMES" | wc -l | tr -d ' ')
+    fi
 
     # Print newly appeared online runners
     if [ -n "$ONLINE_NAMES" ]; then
