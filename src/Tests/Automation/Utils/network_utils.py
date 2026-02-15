@@ -147,7 +147,7 @@ class Test_Netcat_Server(Base_Test_Server):
     def __init__(self, port, expected_connection, timeout):
         super().__init__(port, expected_connection, timeout)
 
-        netcat = run_command_async(f"{system_globals.networking_globals.NETCAT_PATH} -l -p {self.port} -w {self.timeout}")
+        netcat = run_command_async(f"{system_globals.networking_globals.NETCAT_PATH} -l {self.port} -w {self.timeout}")
         if netcat is None:
             error_message = f"[SRV] Failed to start netcat server"
             logger.log_error(error_message)
