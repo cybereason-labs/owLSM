@@ -8,7 +8,9 @@ events:
     - NETWORK
 detection:
     selection_process:
-        process.file.path|contains: "nc"
+        process.file.path|contains:
+            - "nc"
+            - "netcat"
         process.cmd|contains: "1338"
     selection_network:
         network.direction: "INCOMING"

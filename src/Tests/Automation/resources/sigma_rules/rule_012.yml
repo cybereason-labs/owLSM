@@ -9,7 +9,9 @@ events:
 detection:
     selection_process:
         process.pid|gt: 100
-        process.file.path|contains: "nc"
+        process.file.path|contains:
+            - "nc"
+            - "netcat"
     selection_network:
         network.direction: "OUTGOING"
         network.destination_port: 1339
