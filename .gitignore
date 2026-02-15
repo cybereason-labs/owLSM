@@ -22,6 +22,7 @@ Thumbs.db
 *.db
 *.log
 *.sqlite
+src/Tests/Automation/owlsm/*
 
 # secrets and environment variables
 .env

@@ -38,4 +38,4 @@ Test Adapter Converter
 # Important logs
 **automation.log** - The automation log. This is created by the automatioan.  
 **owLSM_output.log** - The owLSM events log. owLSM prints the events to stdout and the automation redirects it to this file.  
-**owlsm.log** - owLSM logger creates this file and writes directly to it.  
+**owlsm.log** - owLSM logger creates this file next to the binary and writes directly to it.  

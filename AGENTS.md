@@ -32,6 +32,7 @@ owLSM/
 ├── Rules/
 │   ├── RuleExamples/            # Example security rules in YAML
 │   └── RulesGenerator/          # Python rule compiler (YAML → JSON)
+├── scripts/                     # Setup, Build and packaging scripts
 ├── src/
 │   ├── Kernel/                  # eBPF programs (*.bpf.c, *.bpf.h)
 │   ├── Userspace/               # C++ userspace loader and manager
@@ -63,11 +64,12 @@ docker run -it --rm -v "$PWD":/workspace -w /workspace owlsm-ci-ubuntu20 bash
 
 | Command | Description |
 |---------|-------------|
-| `make -j$(nproc)` | Build kernel + userspace → `build/owlsm` |
+| `make -j$(nproc)` | Build and package owlsm → `build/owlsm/` (bin, lib, resources, rules_generator) |
 | `make kernel -j$(nproc)` | Build only eBPF programs |
 | `make userspace -j$(nproc)` | Build only userspace (requires kernel) |
-| `make test -j$(nproc)` | Build unit tests → `build/unit_tests` |
-| `make automation` | Build automation test resources |
+| `make test -j$(nproc)` | Build and package unit tests → `build/unit_tests/` (bin, lib) |
+| `make tarball -j$(nproc)` | Create release tarball (depends on all) |
+| `make automation -j$(nproc)` | Build + setup automation tests (depends on all) |
 | `make clean` | Clean all build artifacts |
 | `make DEBUG=1 -j$(nproc)` | Debug build |
 
@@ -75,7 +77,7 @@ docker run -it --rm -v "$PWD":/workspace -w /workspace owlsm-ci-ubuntu20 bash
 
 ```bash
 # Exit container first, then run on host (requires root/CAP_BPF)
-sudo ./build/owlsm
+sudo ./build/owlsm/bin/owlsm
 ```
 
 ---

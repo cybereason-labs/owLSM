@@ -61,13 +61,13 @@ make test -j$(nproc)
 
 ```bash
 # On HOST (not in container) - requires root for eBPF loading
-sudo ./build/unit_tests
+sudo ./build/unit_tests/bin/unit_tests
 
 # Run specific test
-sudo ./build/unit_tests --gtest_filter="TestSuiteName.TestName"
+sudo ./build/unit_tests/bin/unit_tests --gtest_filter="TestSuiteName.TestName"
 
 # List all tests
-./build/unit_tests --gtest_list_tests
+./build/unit_tests/bin/unit_tests --gtest_list_tests
 ```
 
 ---

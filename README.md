@@ -43,14 +43,16 @@ exit
 
 Do this outside the docker
 ```bash
+cd build/owlsm/bin
+
 # run without config 
-./build/owlsm 
+./owlsm 
 
 # run with config 
-./build/owlsm -c /config/path.json
+./owlsm -c /config/path.json
 
 # run with config and excluded pid's (usually we want to exclude parent processes)
-./build/owlsm -c /path/to/config.json -e 123 -e 456
+./owlsm -c /path/to/config.json -e 123 -e 456
 ```
 
 ## Config and rules
@@ -59,8 +61,10 @@ See [Rules/README.md](Rules/README.md)
 ## Run Unit Tests
 
 ```bash
+cd build/unit_tests/bin
+
 # Run the unit tests
-./build/unit_tests
+./unit_tests
 ```
 
 ## Automation Tests (Integration Testing)
