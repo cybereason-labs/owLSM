@@ -55,7 +55,7 @@ else
 endif
 
 # ---- Linker Flags --------------------------------------------
-LDFLAGS        := -pthread -static-libstdc++ -static-libgcc
+LDFLAGS        := -pthread -static-libstdc++ -static-libgcc -Wl,-rpath,'$$ORIGIN/../lib' -Wl,--enable-new-dtags
 
 ifdef DEBUG
     # Debug: no additional hardening flags
@@ -63,8 +63,7 @@ else
     LDFLAGS    += -Wl,-z,relro,-z,now -pie
 endif
 
-LDLIBS         :=  -Wl,-Bstatic -lbpf \
-                    -Wl,-Bdynamic -lelf -lz -lgtest
+LDLIBS         := -lbpf -lelf -lz -lgtest
 
 # ---- EBPF Files ----------------------------------------------
 LOCAL_BPF_SRC  := $(wildcard $(KERNEL_TESTS_DIR)/*.bpf.c)

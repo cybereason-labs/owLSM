@@ -55,7 +55,7 @@ class SystemGlobals:
         
         self.AUTOMATION_ROOT_DIR = Path(__file__).resolve().parent.parent
         self.LOG_PATH = self.AUTOMATION_ROOT_DIR / "automation.log"
-        self.OWLSM_PATH = self.AUTOMATION_ROOT_DIR / "owlsm"
+        self.OWLSM_PATH = self.AUTOMATION_ROOT_DIR / "owlsm" / "bin" / "owlsm"
         self.RESOURCES_PATH = self.AUTOMATION_ROOT_DIR / "resources"
         self.OWLSM_PROCESS_OBJECT = None
         self.OWLSM_SETUP_TIME_IN_SECONDS = 20
@@ -65,7 +65,7 @@ class SystemGlobals:
         self.NO_SUDO_PASSWORD = self.NO_SUDO_USER_NAME
         self.OWLSM_OUTPUT_LOG = self.AUTOMATION_ROOT_DIR / "owLSM_output.log"
         self.OWLSM_OUTPUT_LOG_FD = None
-        self.OWLSM_LOGGER_LOG = self.AUTOMATION_ROOT_DIR / "owlsm.log"
+        self.OWLSM_LOGGER_LOG = self.AUTOMATION_ROOT_DIR / "owlsm" / "bin" / "owlsm.log"
         self.TESTS_START_TIME = datetime.now().strftime("%d-%m-%Y-%H:%M:%S")
         self.LOG_STORAGE_PATH = "/tmp/automation_logs/"
         self.networking_globals = self.NetworkingGlobals()

@@ -58,8 +58,8 @@ Automation/
 
 ### Log Files
 - `automation.log` - Test framework logs
-- `owLSM_output.log` - owLSM stdout (events)
-- `owlsm.log` - owLSM internal logger output
+- `owLSM_output.log` - owLSM stdout (events) redirected to a file.
+- `owlsm.log` - owLSM internal logger output (created next to the binary)
 
 ---
 

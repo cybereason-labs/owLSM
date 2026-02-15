@@ -28,7 +28,7 @@ else
 endif
 
 # ---- Linker Flags --------------------------------------------
-LDFLAGS        := -pthread
+LDFLAGS        := -pthread -Wl,-rpath,'$$ORIGIN/../lib' -Wl,--enable-new-dtags
 
 ifdef DEBUG
     # Debug: no additional hardening flags
@@ -36,8 +36,7 @@ else
     LDFLAGS    += -Wl,-z,relro,-z,now -pie
 endif
 
-LDLIBS         := -Wl,-Bstatic -lbpf -lz -lssl -lcrypto \
-                  -Wl,-Bdynamic -lz -lzstd -lpthread -lelf 
+LDLIBS         := -lbpf -lelf -lz -lzstd -lssl -lcrypto
 
 # ---- Source Files --------------------------------------------
 # Find all .cpp files recursively, ensuring main.cpp is first

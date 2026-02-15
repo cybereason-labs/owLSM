@@ -25,19 +25,23 @@ TEST_DIR       := $(SRC_DIR)/Tests
 UNIT_TEST_DIR  := $(TEST_DIR)/unit_test
 AUTOMATION_DIR := $(TEST_DIR)/Automation
 AUTOMATION_RESOURCES_DIR := $(AUTOMATION_DIR)/resources
+SCRIPTS_DIR    := scripts
 
 # ---- Binary Paths --------------------------------------------
 USER_BIN       := $(USERSPACE_DIR)/owlsm
 TEST_BIN       := $(UNIT_TEST_DIR)/unit_tests
 
+# ---- Install Paths -------------------------------------------
+INSTALL_DIR    := $(BUILD_DIR)/owlsm
+TEST_INSTALL_DIR := $(BUILD_DIR)/unit_tests
+
 # ---- Phony Targets -------------------------------------------
-.PHONY: all clean test automation help
+.PHONY: all clean test tarball automation help kernel userspace
 .DEFAULT_GOAL := all
 
 # ---- Build Targets -------------------------------------------
 all: kernel userspace
-	@mkdir -p $(BUILD_DIR)
-	@cp -a $(USER_BIN) $(BUILD_DIR)/
+	@python3 $(SCRIPTS_DIR)/package.py owlsm
 
 kernel:
 	@echo "==> Building Kernel (eBPF)..."
@@ -50,14 +54,19 @@ userspace: kernel
 test:
 	@echo "==> Building unit tests..."
 	@$(MAKE) -C $(UNIT_TEST_DIR)
-	@mkdir -p $(BUILD_DIR)
-	@cp -a $(TEST_BIN) $(BUILD_DIR)/
+	@python3 $(SCRIPTS_DIR)/package.py unit_tests
+
+tarball: all
+	@echo "==> Creating tarball..."
+	@tar -czf $(BUILD_DIR)/owlsm-$(VERSION).tar.gz -C $(BUILD_DIR) owlsm
+	@echo "==> Tarball created: $(BUILD_DIR)/owlsm-$(VERSION).tar.gz"
 
 automation:
 	@echo "==> Building automation resources..."
 	@$(MAKE) -C $(AUTOMATION_RESOURCES_DIR)
-	@cp -a $(USER_BIN) $(AUTOMATION_DIR)/owlsm
-	
+	@rm -rf $(AUTOMATION_DIR)/owlsm
+	@cp -a $(INSTALL_DIR) $(AUTOMATION_DIR)/owlsm
+
 clean:
 	@echo "==> Cleaning Kernel..."
 	@$(MAKE) -C $(KERNEL_DIR) clean
@@ -73,11 +82,12 @@ help:
 	@echo "OWLSM Build System"
 	@echo ""
 	@echo "Targets:"
-	@echo "  all        - Build kernel and userspace (default), copies to build/"
+	@echo "  all        - Build and package owlsm (default) → build/owlsm/"
 	@echo "  kernel     - Build eBPF kernel code"
 	@echo "  userspace  - Build userspace binary"
-	@echo "  test       - Build unit tests (copies to build/)"
-	@echo "  automation - Build automation resources only"
+	@echo "  test       - Build and package unit tests → build/unit_tests/"
+	@echo "  tarball    - Create release tarball (depends on all)"
+	@echo "  automation - Build and setup automation tests"
 	@echo "  clean      - Clean all build artifacts"
 	@echo "  help       - Show this help message"
 	@echo ""
@@ -86,7 +96,8 @@ help:
 	@echo "  VERSION    - Version string X.Y.Z (default: $(VERSION))"
 	@echo ""
 	@echo "Examples:"
-	@echo "  make                  # Release build"
-	@echo "  make DEBUG=1          # Debug build"
-	@echo "  make VERSION=2.0.0    # Custom version"
-	@echo "  make test DEBUG=1     # Debug unit tests"
+	@echo "  make -j\$$(nproc)              # Release build"
+	@echo "  make DEBUG=1 -j\$$(nproc)      # Debug build"
+	@echo "  make tarball VERSION=2.0.0    # Release tarball"
+	@echo "  make test -j\$$(nproc)         # Build + package unit tests"
+	@echo "  make automation -j\$$(nproc)   # Build + setup automation"
