@@ -79,11 +79,12 @@ jobs:
             ${{ env.DOCKER_IMAGE }} \
             bash -c "
               set -e
-              echo '==> Building unit tests...'
-              make test -j\$(nproc)
               
               echo '==> Building main artifacts with VERSION=${{ env.VERSION }}...'
               make -j\$(nproc) VERSION=${{ env.VERSION }}
+
+              echo '==> Building unit tests...'
+              make test -j\$(nproc)
               
               echo '==> Building automation resources...'
               make automation
@@ -106,27 +107,31 @@ jobs:
       - name: Create release archive
         id: archive
         run: |
-          ARCHIVE_NAME="${{ env.VERSION }}-${{ steps.branch_info.outputs.branch_name }}-${{ steps.branch_info.outputs.branch_revision }}.zip"
-          echo "Creating archive: $ARCHIVE_NAME"
-          
-          # Create archive excluding unnecessary files
-          zip -r "$ARCHIVE_NAME" . \
-            -x "*.git*" \
-            -x "*.github*" \
-            -x "*.zip" \
-            -x "*.o" \
-            -x "Rules/RulesGenerator/venv/*" \
-            -x ".uv-cache/*" \
-            -x ".cache/*"
-          
-          echo "archive_name=$ARCHIVE_NAME" >> $GITHUB_OUTPUT
-          ls -lh "$ARCHIVE_NAME"
+          ARTIFACT_NAME="${{ env.VERSION }}-${{ steps.branch_info.outputs.branch_name }}-${{ steps.branch_info.outputs.branch_revision }}"
+          ARCHIVE_FILE="/tmp/${ARTIFACT_NAME}.tar.gz"
+          echo "Creating archive: $ARCHIVE_FILE"
+
+          # tar --dereference resolves symlinks into real files/directories,
+          # avoiding file/directory conflicts that upload-artifact's zip creates
+          tar czf "$ARCHIVE_FILE" \
+            --dereference \
+            --exclude='.git*' \
+            --exclude='.github*' \
+            --exclude='*.o' \
+            --exclude='venv' \
+            --exclude='.uv-cache' \
+            --exclude='.cache' \
+            .
+
+          echo "artifact_name=$ARTIFACT_NAME" >> $GITHUB_OUTPUT
+          echo "archive_file=$ARCHIVE_FILE" >> $GITHUB_OUTPUT
+          ls -lh "$ARCHIVE_FILE"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.VERSION }}-${{ steps.branch_info.outputs.branch_name }}-${{ steps.branch_info.outputs.branch_revision }}
-          path: ${{ steps.archive.outputs.archive_name }}
+          name: ${{ steps.archive.outputs.artifact_name }}
+          path: ${{ steps.archive.outputs.archive_file }}
           retention-days: 30
 
       - name: Summary
@@ -138,7 +143,7 @@ jobs:
           echo "| Version | ${{ env.VERSION }} |" >> $GITHUB_STEP_SUMMARY
           echo "| Branch | ${{ steps.branch_info.outputs.branch_name }} |" >> $GITHUB_STEP_SUMMARY
           echo "| Revision | ${{ steps.branch_info.outputs.branch_revision }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Archive | ${{ steps.archive.outputs.archive_name }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Artifact | ${{ steps.archive.outputs.artifact_name }} |" >> $GITHUB_STEP_SUMMARY
 
       - name: Cleanup workspace
         if: always()
