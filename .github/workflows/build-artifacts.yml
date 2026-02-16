@@ -98,9 +98,9 @@ jobs:
       - name: Run unit tests
         run: |
           echo "==> Running unit tests..."
-          sudo chmod +x ./build/unit_tests
+          sudo chmod +x ./build/unit_tests/bin/unit_tests
           # BPF programs require root or CAP_BPF to load
-          sudo ./build/unit_tests
+          sudo ./build/unit_tests/bin/unit_tests
           echo "==> Unit tests passed!"
 
       - name: Create release archive
