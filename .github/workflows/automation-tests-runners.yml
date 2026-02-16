@@ -1,4 +1,4 @@
-name: Prepare Runners
+name: Automation Tests Runners
 
 # =============================================================================
 # Provisions OCI compute instances from custom images and registers them
@@ -11,7 +11,26 @@ name: Prepare Runners
 
 on:
   workflow_dispatch:
+    inputs:
+      artifact-name:
+        description: "Name of the build artifact to download for automation tests"
+        required: true
+        type: string
+      destroy_runners:
+        description: 'Destroy ephemeral runner VMs for automation tests'
+        type: boolean
+        default: true
+      automation-tests-command-args:
+        description: "Command to run automation tests"
+        required: true
+        type: string
+        default: "features/ --junitxml=$AUTOMATION_ROOT_DIR/results.xml -v -s"
   workflow_call:
+    inputs:
+      artifact-name:
+        description: "Name of the build artifact to download for automation tests"
+        required: true
+        type: string
     secrets:
       GH_RUNNER_PAT:
         required: true
@@ -35,6 +54,7 @@ jobs:
     runs-on: ["OCI", "owLSM"]
     outputs:
       runners_ready: ${{ steps.apply.outputs.runners_ready }}
+      runner_labels: ${{ steps.runner_count.outputs.labels }}
 
     steps:
       # =====================================================================
@@ -43,12 +63,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Calculate expected runner count
+      - name: Calculate expected runner count and labels
         id: runner_count
         run: |
-          COUNT=$(jq '.runners | length' ${{ env.TF_WORKING_DIR }}/runners.auto.tfvars.json)
+          TFVARS="${{ env.TF_WORKING_DIR }}/runners.auto.tfvars.json"
+          COUNT=$(jq '.runners | length' "$TFVARS")
+          LABELS=$(jq -c '[.runners[].display_name]' "$TFVARS")
           echo "count=$COUNT" >> $GITHUB_OUTPUT
+          echo "labels=$LABELS" >> $GITHUB_OUTPUT
           echo "Expected runners: $COUNT"
+          echo "Runner labels: $LABELS"
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -121,3 +145,39 @@ jobs:
           cd ${{ github.workspace }}
           sudo git clean -ffdx
           echo "==> Cleanup completed!"
+
+  # =====================================================================
+  # Run Automation Tests on Each Provisioned Runner (dynamic matrix)
+  # =====================================================================
+  # Matrix is generated from display_name values in
+  # terraform/runners.auto.tfvars.json
+  # =====================================================================
+
+  run-automation-tests:
+    name: "Automation Tests (${{ matrix.runner-label }})"
+    needs: provision-runners
+    if: needs.provision-runners.outputs.runners_ready == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        runner-label: ${{ fromJSON(needs.provision-runners.outputs.runner_labels) }}
+    uses: ./.github/workflows/automation-tests.yml
+    with:
+      runner-label: ${{ matrix.runner-label }}
+      artifact-name: ${{ inputs.artifact-name }}
+      automation-tests-command-args: ${{ inputs.automation-tests-command-args }}
+    secrets:
+      GH_RUNNER_PAT: ${{ secrets.GH_RUNNER_PAT }}
+
+  # =====================================================================
+  # Destroy Ephemeral Runners via Terraform
+  # =====================================================================
+
+  destroy-runners:
+    name: Destroy OCI Runner VMs
+    needs: [provision-runners, run-automation-tests]
+    if: always() && inputs.destroy_runners == true
+    uses: ./.github/workflows/destroy-runners.yml
+    secrets:
+      GH_RUNNER_PAT: ${{ secrets.GH_RUNNER_PAT }}
+      SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
