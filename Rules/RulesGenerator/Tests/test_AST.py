@@ -627,8 +627,8 @@ class TestKeywordBackend:
         assert parsed.applied_events == ["CHMOD"]
         # Should be OR of multiple predicates (one per string field)
         assert parsed.condition_expr.operator_type == "OR"
-        # CHMOD has 8 string fields (process.*, parent_process.*, target.file.*)
-        assert len(parsed.condition_expr.children) == 8
+        # CHMOD has 10 string fields (process.*, parent_process.* incl. shell_command, target.file.*)
+        assert len(parsed.condition_expr.children) == 10
     
     def test_keyword_multiple_events_creates_separate_rules(self):
         """Keyword with multiple events should create separate ParsedRules."""
@@ -648,11 +648,11 @@ class TestKeywordBackend:
         assert parsed_list[0].applied_events == ["CHMOD"]
         assert parsed_list[1].applied_events == ["EXEC"]
         
-        # CHMOD has 8 string fields, EXEC has 9 string fields
+        # CHMOD has 10 string fields, EXEC has 12 string fields (incl. shell_command)
         chmod_children = len(parsed_list[0].condition_expr.children)
         exec_children = len(parsed_list[1].condition_expr.children)
-        assert chmod_children == 8
-        assert exec_children == 9
+        assert chmod_children == 10
+        assert exec_children == 12
     
     def test_keyword_with_all_modifier_creates_and(self):
         """Keyword with |all modifier should create AND of OR predicates."""
@@ -749,8 +749,8 @@ class TestKeywordBackend:
         
         assert len(parsed_list) == 1
         parsed = parsed_list[0]
-        # RENAME has 6 common + 4 rename = 10 string fields
-        assert len(parsed.condition_expr.children) == 10
+        # RENAME has 8 common + 4 rename = 12 string fields (incl. shell_command)
+        assert len(parsed.condition_expr.children) == 12
     
     def test_keyword_exec_event_fields(self):
         """Keyword with EXEC event should include target.process fields."""
@@ -764,8 +764,8 @@ class TestKeywordBackend:
         
         assert len(parsed_list) == 1
         parsed = parsed_list[0]
-        # EXEC has 6 common + 3 target.process = 9 string fields
-        assert len(parsed.condition_expr.children) == 9
+        # EXEC has 8 common + 4 target.process = 12 string fields (incl. shell_command)
+        assert len(parsed.condition_expr.children) == 12
 
 
 class TestGetStringFieldsForEvent:
@@ -776,9 +776,11 @@ class TestGetStringFieldsForEvent:
         for event_type in ["CHMOD", "EXEC", "RENAME", "CHOWN", "LINK", "SYMLINK"]:
             fields = get_string_fields_for_event(event_type)
             assert "process.cmd" in fields
+            assert "process.shell_command" in fields
             assert "process.file.path" in fields
             assert "process.file.filename" in fields
             assert "parent_process.cmd" in fields
+            assert "parent_process.shell_command" in fields
             assert "parent_process.file.path" in fields
             assert "parent_process.file.filename" in fields
     
@@ -792,6 +794,7 @@ class TestGetStringFieldsForEvent:
         """EXEC event should include target.process string fields."""
         fields = get_string_fields_for_event("EXEC")
         assert "target.process.cmd" in fields
+        assert "target.process.shell_command" in fields
         assert "target.process.file.path" in fields
         assert "target.process.file.filename" in fields
     
@@ -820,6 +823,7 @@ class TestGetStringFieldsForEvent:
     def test_unknown_event_returns_only_common(self):
         """Unknown event type should return only common fields."""
         fields = get_string_fields_for_event("UNKNOWN_EVENT")
-        assert len(fields) == 6  # 6 common string fields
+        assert len(fields) == 8  # 8 common string fields (incl. shell_command)
         assert "process.cmd" in fields
+        assert "process.shell_command" in fields
         assert "target.file.path" not in fields

@@ -1,5 +1,6 @@
 #include "fill_event_structs.bpf.h"
 #include "pids_to_ignore.bpf.h"
+#include "active_shells.bpf.h"
 
 SEC("fentry/do_exit")
 int BPF_PROG(exit_hook, long code)
@@ -24,14 +25,14 @@ int BPF_PROG(exit_hook, long code)
     if(is_current_pid_related())
     {
         remove_current_pid_from_related_pids();
-        return 0;
+        return ALLOW; 
     }
     pid = tgid;
     struct event_t *event = allocate_event_with_basic_stats();
     if (!event)
     {
         REPORT_ERROR(GENERIC_ERROR, "allocate_event_with_basic_stats failed pid: %d", pid);
-        goto do_exit_end;
+        return ALLOW;
     }
 
     event->type = EXIT;
@@ -40,11 +41,12 @@ int BPF_PROG(exit_hook, long code)
     fill_event_parent_process_from_cache(&event->process, &event->parent_process);
 
     add_process_to_dead_proccesses_lru(&event->process);
-    bpf_ringbuf_submit(event, 0);
-
-do_exit_end:
+    delete_shell_command_from_dead_process(event->process.unique_process_id);
     delete_process_from_alive_process_cache(pid);
-    return 0;
+    delete_pid_from_active_shell_pids(pid);
+    
+    bpf_ringbuf_submit(event, 0);
+    return ALLOW; 
 }
 
 char LICENSE[] SEC("license") = "GPL";

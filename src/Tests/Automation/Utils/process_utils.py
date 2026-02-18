@@ -2,9 +2,85 @@ import subprocess
 import os
 import signal
 import psutil
+import pexpect
+import time
+from typing import List, Union
 from Utils.logger_utils import logger
 from state_db.process_db import process_db
 from globals.system_related_globals import system_globals
+
+def spawn_persistent_shell(shell_path: str) -> tuple:
+    try:
+        child = pexpect.spawn(shell_path, timeout=10, encoding='utf-8')
+        shell_pid = child.pid
+        if shell_pid is not None:
+            process_db.add(shell_pid, get_pid_start_time(shell_pid))
+        
+        logger.log_info(f"Spawned persistent shell: {shell_path}, shell_pid={shell_pid}")
+        return child, shell_pid
+        
+    except Exception as e:
+        logger.log_error(f"Failed to spawn persistent shell: {shell_path}. Error: {e}")
+        return None, None
+
+
+def send_command_to_shell(child, command: str, timeout: float = 0.5) -> bool:
+    try:
+        logger.log_info(f"Sending command to persistent shell (pid={child.pid}): '{command}'")
+        child.sendline(command)
+        time.sleep(timeout)
+        return True
+        
+    except pexpect.TIMEOUT as e:
+        logger.log_error(f"Timeout sending command to shell: '{command}'. Error: {e}")
+        return False
+        
+    except Exception as e:
+        logger.log_error(f"Failed to send command to shell: '{command}'. Error: {e}")
+        return False
+
+
+def close_persistent_shell(child) -> bool:
+    try:
+        logger.log_info(f"Closing persistent shell (pid={child.pid})")
+        child.sendline('exit')
+        child.expect(pexpect.EOF, timeout=3)
+        child.wait()
+        return True
+        
+    except Exception as e:
+        logger.log_error(f"Failed to close persistent shell: {e}")
+        if child:
+            child.terminate(force=True)
+        return False
+
+
+def run_shell_commands_sync(shell_path: str, commands: Union[str, List[str]], timeout: float = 0.5) -> tuple:
+    if isinstance(commands, str):
+        commands = [commands]
+    
+    child, shell_pid = spawn_persistent_shell(shell_path)
+    if child is None:
+        return False, None
+    
+    try:
+        for cmd in commands:
+            if not send_command_to_shell(child, cmd, timeout=timeout):
+                return False, shell_pid
+        
+        close_persistent_shell(child)
+        
+        logger.log_info(
+            f"Shell session completed: shell={shell_path}, shell_pid={shell_pid}, "
+            f"commands={commands}, exit_code={child.exitstatus}"
+        )
+        return True, shell_pid
+        
+    except Exception as e:
+        logger.log_error(f"Failed to run shell commands: shell={shell_path}, commands={commands}. Error: {e}")
+        if child:
+            child.terminate(force=True)
+        return False, shell_pid
 
 def run_command_sync(command: str, timeout: int = None, stdout_fd=None, stderr_fd=None, stdin_data=None, expect_exit_code=None, user: str = None) -> bool:
     return_value = False

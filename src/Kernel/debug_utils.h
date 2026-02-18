@@ -46,6 +46,7 @@ statfunc void print_process_t(const struct process_t *p)
 
     print_file_t(&p->file);
     bpf_printk("cmd=%s",  p->cmd.value);
+    bpf_printk("shell_command=%s",  p->shell_command.value);
 }
 
 statfunc void print_chown_event_t(struct chown_event_t *chown_event)

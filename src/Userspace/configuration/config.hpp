@@ -37,10 +37,16 @@ struct NetworkMonitoringConfig
     bool enabled = true;
 };
 
+struct ShellCommandsMonitoringConfig
+{
+    bool enabled = true;
+};
+
 struct FeaturesConfig 
 {
     FileMonitoringConfig file_monitoring;
     NetworkMonitoringConfig network_monitoring;
+    ShellCommandsMonitoringConfig shell_commands_monitoring;
 };
 
 struct UserspaceConfig 

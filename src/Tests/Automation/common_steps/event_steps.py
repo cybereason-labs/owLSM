@@ -59,6 +59,10 @@ def process_dynamic_placeholders(data, scenario_context=None):
                 replacement = system_globals.networking_globals.NETCAT_PATH
                 result = result.replace(placeholder, replacement)
                 logger.log_info(f"Replaced placeholder '{placeholder}' with '{replacement}'")
+            if match == "shell_pid":
+                replacement = str(scenario_context[global_strings.SHELL_PID])
+                result = result.replace(placeholder, replacement)
+                logger.log_info(f"Replaced placeholder '{placeholder}' with '{replacement}'")
             else:
                 logger.log_warning(f"Unknown placeholder: {placeholder}")
                 

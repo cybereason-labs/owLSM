@@ -58,6 +58,15 @@
                             "type": "boolean"
                         }
                     }
+                },
+                "shell_commands_monitoring": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean"
+                        }
+                    }
                 }
             }
         },

@@ -159,3 +159,62 @@ def I_start_owlsm_and_ignore_the_resource_pid(scenario_context):
     resource_pid = scenario_context[global_strings.RESOURCE_PID]
     logger.log_info(f"from scenario_context[{global_strings.RESOURCE_PID}] we got {resource_pid}")
     start_owlsm_process(f"{system_globals.OWLSM_PATH} -c {system_globals.RESOURCES_PATH / 'config.json'} -e {resource_pid}")
+
+
+@given(parsers.parse('I run shell command "{command}" with shell "{shell_path}" and timeout "{timeout}" and save shell pid'))
+@when(parsers.parse('I run shell command "{command}" with shell "{shell_path}" and timeout "{timeout}" and save shell pid'))
+@then(parsers.parse('I run shell command "{command}" with shell "{shell_path}" and timeout "{timeout}" and save shell pid'))
+def I_run_shell_command_with_shell_timeout_and_save_shell_pid(command, shell_path, timeout, scenario_context):
+    success, shell_pid = run_shell_commands_sync(shell_path, command, timeout=int(timeout))
+    assert success, f"Failed to run shell command: {command} with shell: {shell_path} (timeout: {timeout}s)"
+    scenario_context[global_strings.SHELL_PID] = shell_pid
+    logger.log_info(f"Saved scenario_context[{global_strings.SHELL_PID}] is {scenario_context[global_strings.SHELL_PID]}")
+
+@given(parsers.parse('I run shell command "{command}" with shell "{shell_path}" and save shell pid'))
+@when(parsers.parse('I run shell command "{command}" with shell "{shell_path}" and save shell pid'))
+@then(parsers.parse('I run shell command "{command}" with shell "{shell_path}" and save shell pid'))
+def I_run_shell_command_with_shell_and_save_shell_pid(command, shell_path, scenario_context):
+    success, shell_pid = run_shell_commands_sync(shell_path, command)
+    assert success, f"Failed to run shell command: {command} with shell: {shell_path}"
+    scenario_context[global_strings.SHELL_PID] = shell_pid
+    logger.log_info(f"Saved scenario_context[{global_strings.SHELL_PID}] is {scenario_context[global_strings.SHELL_PID]}")
+
+
+@given(parsers.parse('I run shell commands with shell "{shell_path}" and save shell pid:'))
+@when(parsers.parse('I run shell commands with shell "{shell_path}" and save shell pid:'))
+@then(parsers.parse('I run shell commands with shell "{shell_path}" and save shell pid:'))
+def I_run_shell_commands_with_shell_and_save_shell_pid(shell_path, datatable, scenario_context):
+    commands = [row[0].strip() for row in datatable]
+    success, shell_pid = run_shell_commands_sync(shell_path, commands)
+    assert success, f"Failed to run shell commands: {commands} with shell: {shell_path}"
+    scenario_context[global_strings.SHELL_PID] = shell_pid
+    logger.log_info(f"Saved scenario_context[{global_strings.SHELL_PID}] is {scenario_context[global_strings.SHELL_PID]}")
+
+
+@given(parsers.parse('I spawn a persistent shell "{shell_path}" and save it'))
+@when(parsers.parse('I spawn a persistent shell "{shell_path}" and save it'))
+@then(parsers.parse('I spawn a persistent shell "{shell_path}" and save it'))
+def I_spawn_persistent_shell_and_save_it(shell_path, scenario_context):
+    child, shell_pid = spawn_persistent_shell(shell_path)
+    assert child is not None, f"Failed to spawn persistent shell: {shell_path}"
+    scenario_context[global_strings.PERSISTENT_SHELL] = child
+    scenario_context[global_strings.SHELL_PID] = shell_pid
+    logger.log_info(f"Spawned persistent shell: {shell_path}, saved to scenario_context[{global_strings.PERSISTENT_SHELL}], pid={shell_pid}")
+
+
+@given(parsers.parse('I send command "{command}" to the persistent shell'))
+@when(parsers.parse('I send command "{command}" to the persistent shell'))
+@then(parsers.parse('I send command "{command}" to the persistent shell'))
+def I_send_command_to_persistent_shell(command, scenario_context):
+    child = scenario_context.get(global_strings.PERSISTENT_SHELL)
+    assert child is not None, "No persistent shell found in scenario_context"
+    success = send_command_to_shell(child, command)
+    assert success, f"Failed to send command to persistent shell: {command}"
+
+
+@given(parsers.parse('I sleep for "{seconds}" seconds'))
+@when(parsers.parse('I sleep for "{seconds}" seconds'))
+@then(parsers.parse('I sleep for "{seconds}" seconds'))
+def I_sleep_for_seconds(seconds):
+    time.sleep(int(seconds))
+    logger.log_info(f"Slept for {seconds} seconds")

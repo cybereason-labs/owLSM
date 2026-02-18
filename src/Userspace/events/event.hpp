@@ -92,13 +92,14 @@ struct Process
     File file;
     CommandLine cmd;
     StdioFileDescriptorsAtProcessCreation stdio_file_descriptors_at_process_creation;
+    CommandLine shell_command;
 
     Process() = default;
     explicit Process(const process_t& p)
         : pid(p.pid) , ppid(p.ppid) , unique_process_id(p.unique_process_id) , unique_ppid_id(p.unique_ppid_id)
         , ruid(p.ruid) , rgid(p.rgid) , euid(p.euid) , egid(p.egid) , suid(p.suid) , cgroup_id(p.cgroup_id)
         , start_time(p.start_time) , ptrace_flags(p.ptrace_flags) , file(p.file) , cmd(p.cmd)
-        , stdio_file_descriptors_at_process_creation(p.stdio_file_descriptors_at_process_creation) {}
+        , stdio_file_descriptors_at_process_creation(p.stdio_file_descriptors_at_process_creation) , shell_command(p.shell_command) {}
 };
 
 struct ChownEventData

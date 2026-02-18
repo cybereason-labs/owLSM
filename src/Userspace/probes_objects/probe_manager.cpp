@@ -10,6 +10,7 @@
 #include "globals/global_objects.hpp"
 #include "ringbuffers_messages_handlers.hpp"
 #include "system_setup.hpp"
+#include "globals/global_numbers.hpp"
 
 #include <stdexcept>
 
@@ -115,7 +116,7 @@ namespace owlsm
         {
             throw std::runtime_error("clock_gettime. errno " + std::to_string(errno));
         }
-        unsigned long long prog_start_ns = (unsigned long long)ts.tv_sec * 1000000000ULL + ts.tv_nsec;
+        unsigned long long prog_start_ns = (unsigned long long)ts.tv_sec * globals::NANOSECONDS_IN_SECOND + ts.tv_nsec;
 
         unsigned int key = 0;
         int map_fd = bpf_map__fd(m_skel->maps.ebpf_program_start_time);
@@ -143,4 +144,13 @@ namespace owlsm
         }
     }
 
+    void ProbeManager::addAndAttachProbe(std::shared_ptr<AbstractProbe> probe)
+    {
+        probe->setSkel(m_skel);
+        probe->bpfOpen();
+        probe->bpfLoad();
+        probe->bpfAttach();
+        std::lock_guard<std::mutex> lock(m_probes_mutex);
+        m_probes.push_back(std::move(probe));
+    }
 }

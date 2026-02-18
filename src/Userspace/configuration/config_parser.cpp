@@ -67,9 +67,15 @@ namespace owlsm::config {
     {
         if (auto it = j.find("file_monitoring"); it != j.end()) { fromJson(*it, o.file_monitoring); }
         if (auto it = j.find("network_monitoring"); it != j.end()) { fromJson(*it, o.network_monitoring); }
+        if (auto it = j.find("shell_commands_monitoring"); it != j.end()) { fromJson(*it, o.shell_commands_monitoring); }
     }
 
     void ConfigParser::fromJson(const nlohmann::json& j, NetworkMonitoringConfig& o)
+    {
+        get_if_present(j, "enabled", o.enabled);
+    }
+
+    void ConfigParser::fromJson(const nlohmann::json& j, ShellCommandsMonitoringConfig& o)
     {
         get_if_present(j, "enabled", o.enabled);
     }

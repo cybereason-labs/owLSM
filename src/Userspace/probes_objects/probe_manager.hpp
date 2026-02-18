@@ -4,6 +4,8 @@
 #include "configuration/rule.hpp"
 #include "events_structs.h"
 
+#include <mutex>
+
 namespace owlsm
 {
 class ProbeManager : public AbstractProbe
@@ -12,13 +14,25 @@ public:
     ProbeManager(std::vector<std::shared_ptr<AbstractProbe>>&& probes) 
         : AbstractProbe(probe_type::PROBE_MANAGER), m_probes(std::move(probes)) {}
     
+    ProbeManager() : AbstractProbe(probe_type::PROBE_MANAGER) {}
     virtual ~ProbeManager() override = default;
+
+    ProbeManager& operator=(const ProbeManager& other)
+    {
+        if (this != &other)
+        {
+            AbstractProbe::operator=(other);
+            m_probes = other.m_probes;
+        }
+        return *this;
+    }
     
     void bpfOpen(const std::unordered_map<enum event_type, std::vector<std::shared_ptr<config::Rule>>>& organized_rules);
     void bpfLoad(const std::vector<unsigned int>& excluded_pids);
     virtual void bpfAttach() override;
     virtual void bpfDetach() override;
     virtual void bpfDestroy() override;
+    void addAndAttachProbe(std::shared_ptr<AbstractProbe> probe);
 
 private:
     void startRingbuffers();
@@ -29,5 +43,6 @@ private:
     using AbstractProbe::bpfLoad;
 
     std::vector<std::shared_ptr<AbstractProbe>> m_probes;
+    std::mutex m_probes_mutex;
 };
 }

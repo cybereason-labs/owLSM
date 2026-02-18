@@ -12,6 +12,8 @@ class GlobalStrings:
             return
         
         self.RESOURCE_PID = "resource_pid"
+        self.SHELL_PID = "shell_pid"
+        self.PERSISTENT_SHELL = "persistent_shell"
 
 
 

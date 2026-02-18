@@ -38,6 +38,7 @@ CPPFLAGS       := -DOWLSM_VERSION_STR=\"$(VERSION)\" \
                   -I$(USERSPACE_TESTS_DIR) \
                   -I$(SHARED_HDR_DIR) \
                   -I$(KERNEL_HDR_DIR) \
+                  -I$(KERNEL_HDR_DIR)/Programs/syscall_monitoring \
                   -I$(USERSPACE_SRC_DIR) \
                   -I$(USERSPACE_SRC_DIR)/configuration \
                   -I$(USERSPACE_SRC_DIR)/globals \
@@ -63,7 +64,7 @@ else
     LDFLAGS    += -Wl,-z,relro,-z,now -pie
 endif
 
-LDLIBS         := -lbpf -lelf -lz -lgtest
+LDLIBS         := -lbpf -lelf -lz -lgtest -lsqlite3 -ldw
 
 # ---- EBPF Files ----------------------------------------------
 LOCAL_BPF_SRC  := $(wildcard $(KERNEL_TESTS_DIR)/*.bpf.c)
@@ -92,7 +93,16 @@ USERSPACE_IMPL_SRC := $(USERSPACE_SRC_DIR)/logger.cpp \
                       $(USERSPACE_SRC_DIR)/configuration/rules_parser.cpp \
                       $(USERSPACE_SRC_DIR)/rules_managment/rule_converter.cpp \
                       $(USERSPACE_SRC_DIR)/rules_managment/rules_into_bpf_maps.cpp \
-                      $(USERSPACE_SRC_DIR)/globals/global_objects.cpp
+                      $(USERSPACE_SRC_DIR)/probes_objects/probe_manager.cpp \
+                      $(USERSPACE_SRC_DIR)/ringbuffers_messages_handlers.cpp \
+                      $(USERSPACE_SRC_DIR)/events/parse_messages.cpp \
+                      $(USERSPACE_SRC_DIR)/globals/global_objects.cpp \
+                      $(USERSPACE_SRC_DIR)/globals/global_strings.cpp \
+                      $(USERSPACE_SRC_DIR)/shell_detection/shells_db.cpp \
+                      $(USERSPACE_SRC_DIR)/shell_detection/shells_finder.cpp \
+                      $(USERSPACE_SRC_DIR)/shell_detection/shell_binary_info_extractor.cpp \
+                      $(USERSPACE_SRC_DIR)/async_event_work/shell_async_worker.cpp \
+                      $(USERSPACE_SRC_DIR)/probes_objects/uprobe_probe.cpp
 
 # All source and object files
 ALL_TEST_SRC   := $(KERNEL_TEST_SRC) $(USERSPACE_TEST_SRC) $(USERSPACE_IMPL_SRC) $(MAIN_SRC)

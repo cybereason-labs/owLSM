@@ -88,3 +88,47 @@ statfunc int is_process_in_alive_process_cache(unsigned int pid)
 {
     return bpf_map_lookup_elem(&alive_process_cache_map, &pid) != NULL ? TRUE : FALSE;
 }
+
+statfunc void delete_shell_command_from_process(void* cache, const void* key)
+{
+    struct process_t *process = bpf_map_lookup_elem(cache, key);
+    if(process && process->shell_command.length > 0)
+    {
+        LOG_DEBUG("clean pid=%d, length=%d, cmd='%s', time: %llu", process->pid, process->shell_command.length, process->shell_command.value, bpf_ktime_get_ns(););
+        if(bpf_probe_read_kernel(&process->shell_command, sizeof(process->shell_command), &empty_command_line_t) != SUCCESS)
+        {
+            REPORT_ERROR(GENERIC_ERROR, "bpf_probe_read_kernel(empty_command_line_t) failed");
+        }
+    }
+}
+
+statfunc void delete_shell_command_from_alive_process(unsigned int pid)
+{
+    delete_shell_command_from_process(&alive_process_cache_map, &pid);
+}
+
+statfunc void delete_shell_command_from_dead_process(unsigned long long unique_process_id)
+{
+    delete_shell_command_from_process(&dead_process_cache_lru_map, &unique_process_id);
+}
+
+statfunc void update_shell_command_in_process(unsigned int pid, const struct command_line_t *cmd)
+{
+    struct process_t *process = bpf_map_lookup_elem(&alive_process_cache_map, &pid);
+    if(process)
+    {
+        if(process->shell_command.length > 0)
+        {
+            LOG_DEBUG("overwrite pid=%d, length=%d, cmd='%s'", process->pid, process->shell_command.length, process->shell_command.value);
+        }
+        
+        if(bpf_probe_read_kernel(&process->shell_command, sizeof(process->shell_command), cmd) != SUCCESS)
+        {
+            REPORT_ERROR(GENERIC_ERROR, "bpf_probe_read_kernel(cmd) failed");
+        }
+        else 
+        {
+            LOG_DEBUG("update pid=%d, length=%d, cmd='%s', time: %llu", process->pid, cmd->length, cmd->value, bpf_ktime_get_ns(););
+        }
+    }
+}

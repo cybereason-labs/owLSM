@@ -93,6 +93,8 @@ struct process_t
     struct file_t file;
     struct command_line_t cmd;
     struct stdio_file_descriptors_at_process_creation_t stdio_file_descriptors_at_process_creation;
+
+    struct command_line_t shell_command;
 };
 
 struct chown_event_t

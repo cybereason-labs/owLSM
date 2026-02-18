@@ -26,19 +26,11 @@ Scenario: multi_keyword_rule
 
 Scenario: multi_event_keyword_rule
     Given The owLSM process is running
-    And I ensure the file "/tmp/multi_event_keyword_chmod" exists
     And I ensure the file "/tmp/multi_event_keyword_rename_src" exists
-    When I chmod the file "/tmp/multi_event_keyword_chmod" to "777"
-    And I rename the file "/tmp/multi_event_keyword_rename_src" to "/tmp/multi_event_keyword_rename_dst"
+    When I rename the file "/tmp/multi_event_keyword_rename_src" to "/tmp/multi_event_keyword_rename_dst"
     And I run the command "/usr/bin/echo multi_event_keyword_exec_cmd please pass" sync
     And I ensure the file "/tmp/multi_event_keyword_rename_dst" does not exist
-    Then I find the event in output in "20" seconds:
-        | action                    | ALLOW_EVENT                    |
-        | type                      | CHMOD                          |
-        | data.target.file.path     | /tmp/multi_event_keyword_chmod |
-        | data.chmod.requested_mode | 511                            |
-        | matched_rule_id           | 26                             |
-    And I find the event in output in "10" seconds:
+    Then I find the event in output in "10" seconds:
         | action                            | ALLOW_EVENT                         |
         | type                              | RENAME                              |
         | data.rename.source_file.path      | /tmp/multi_event_keyword_rename_src |

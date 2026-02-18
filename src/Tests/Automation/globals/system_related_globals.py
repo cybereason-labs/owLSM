@@ -57,6 +57,7 @@ class SystemGlobals:
         self.LOG_PATH = self.AUTOMATION_ROOT_DIR / "automation.log"
         self.OWLSM_PATH = self.AUTOMATION_ROOT_DIR / "owlsm" / "bin" / "owlsm"
         self.RESOURCES_PATH = self.AUTOMATION_ROOT_DIR / "resources"
+        self.OWLSM_DB_PATH = self.AUTOMATION_ROOT_DIR / "owlsm" / "resources" / "owlsm.db"
         self.OWLSM_PROCESS_OBJECT = None
         self.OWLSM_SETUP_TIME_IN_SECONDS = 20
         self.USER_NAME = "automation_test_user"

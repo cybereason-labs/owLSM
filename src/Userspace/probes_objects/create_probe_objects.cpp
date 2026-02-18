@@ -4,6 +4,7 @@
 #include "probes_objects/lsm_probe.hpp"
 #include "probes_objects/fentry_probe.hpp"
 #include "probes_objects/tracepoint_probe.hpp"
+#include "probes_objects/uprobe_probe.hpp"
 #include "probes_objects/create_probe_objects.hpp"
 #include "globals/global_objects.hpp"
 
@@ -21,6 +22,7 @@ namespace owlsm
         addBasicProbes(probes);
         addFileMonitoringProbes(probes);
         addNetworkMonitoringProbes(probes);
+        addShellCommandsMonitoringProbes(probes);
         return probes;
     }
 
@@ -55,6 +57,20 @@ namespace owlsm
         if (owlsm::globals::g_config.features.network_monitoring.enabled)
         {
             probes.push_back(std::make_shared<LsmProbe>(NETWORK));
+        }
+    }
+
+    void CreateProbeObjects::addShellCommandsMonitoringProbes(std::vector<std::shared_ptr<AbstractProbe>>& probes)
+    {
+        if (!owlsm::globals::g_config.features.shell_commands_monitoring.enabled)
+        {
+            return;
+        }
+
+        const auto shells = owlsm::globals::g_shells_db.getAll();
+        for (const auto& shell : shells)
+        {
+            probes.push_back(std::make_shared<UprobeProbe>(shell.path, shell.shell_type));
         }
     }
 

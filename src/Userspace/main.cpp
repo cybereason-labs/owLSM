@@ -8,14 +8,16 @@
 #include "posix_signal_handler.hpp"
 #include "rules_managment/rules_organizer.hpp"
 #include "configuration/schema.inc"
+#include "shell_detection/shells_finder.hpp"
 
 #include <unistd.h>
 #include <filesystem>
 #include <iostream>
 
-owlsm::ProbeManager safeSetup(int argc, char *argv[]);
-owlsm::ProbeManager setup(int argc, char *argv[]);
-void cleanup(owlsm::ProbeManager& probe_manager);
+void safeSetup(int argc, char *argv[]);
+void setup(int argc, char *argv[]);
+void cleanup();
+void setupShellDetection();
 
 int main(int argc, char *argv[])
 {
@@ -26,17 +28,17 @@ int main(int argc, char *argv[])
     }
 
     owlsm::PosixSignalHandler signal_handler;
-    owlsm::ProbeManager probe_manager = safeSetup(argc, argv);
+    safeSetup(argc, argv);
     signal_handler.waitForExitSignal();
-    cleanup(probe_manager);
+    cleanup();
     return 0;
 }
 
-owlsm::ProbeManager safeSetup(int argc, char *argv[])
+void safeSetup(int argc, char *argv[])
 {
     try 
     {
-        return setup(argc, argv);
+        setup(argc, argv);
     }
     catch (const std::exception& e)
     {
@@ -50,9 +52,9 @@ owlsm::ProbeManager safeSetup(int argc, char *argv[])
     }
 }
 
-owlsm::ProbeManager setup(int argc, char *argv[])
+void setup(int argc, char *argv[])
 {
-    owlsm::Logger::initialize(std::filesystem::canonical("/proc/self/exe").parent_path() / owlsm::globals::LOG_FILE_NAME, LOG_LEVEL_DEBUG);
+    owlsm::Logger::initialize(owlsm::globals::CURRENT_PROCESS_DIR + "/" + owlsm::globals::LOG_FILE_NAME, LOG_LEVEL_DEBUG);
     LOG_INFO("Starting OWLSM. Version: " + std::string(OWLSM_VERSION_STR));
 
     owlsm::CmdParser cmd_parser(argc, argv);
@@ -69,19 +71,44 @@ owlsm::ProbeManager setup(int argc, char *argv[])
     auto organized_rules = owlsm::RulesOrganizer::organize_rules(owlsm::globals::g_config.rules_config.rules);
 
     owlsm::SystemSetup::start();
-    owlsm::ProbeManager probe_manager = owlsm::CreateProbeObjects::createProbeManager();
-    probe_manager.bpfOpen(organized_rules);
+    setupShellDetection();
+    owlsm::globals::g_probe_manager = owlsm::CreateProbeObjects::createProbeManager();
+    owlsm::globals::g_probe_manager.bpfOpen(organized_rules);
     auto excluded_pids = cmd_parser.getPids();
     excluded_pids.push_back(getpid());
-    probe_manager.bpfLoad(excluded_pids);
-    probe_manager.bpfAttach();
+    owlsm::globals::g_probe_manager.bpfLoad(excluded_pids);
+    owlsm::globals::g_probe_manager.bpfAttach();
 
-    return probe_manager;
 }
 
-void cleanup(owlsm::ProbeManager& probe_manager)
+void setupShellDetection()
 {
-    probe_manager.bpfDetach();
-    probe_manager.bpfDestroy();
+    if (!owlsm::globals::g_config.features.shell_commands_monitoring.enabled)
+    {
+        return;
+    }
+
+    const auto shells = owlsm::ShellsFinder::getUniqueShellsFromEtcShells();
+    if (shells.empty())
+    {
+        LOG_WARN("No shells found on the system");
+        return;
+    }
+
+    owlsm::globals::g_shells_db.init(owlsm::globals::DB_PATH);
+
+    for (const auto& shell : shells)
+    {
+        owlsm::globals::g_shells_db.set(shell);
+        LOG_INFO("Added shell to database: " << shell.path);
+    }
+
+    LOG_INFO("Shell detection initialized with " << shells.size() << " shells");
+}
+
+void cleanup()
+{
+    owlsm::globals::g_probe_manager.bpfDetach();
+    owlsm::globals::g_probe_manager.bpfDestroy();
     owlsm::Logger::shutdown();
 }

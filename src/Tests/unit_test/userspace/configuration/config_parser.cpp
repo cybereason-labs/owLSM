@@ -92,6 +92,7 @@ TEST_F(ConfigParserTest, default_values_are_set)
     EXPECT_TRUE(config.features.file_monitoring.events.mkdir);
     EXPECT_TRUE(config.features.file_monitoring.events.rmdir);
     EXPECT_TRUE(config.features.network_monitoring.enabled);
+    EXPECT_TRUE(config.features.shell_commands_monitoring.enabled);
     EXPECT_EQ(config.userspace.max_events_queue_size, 10000);
     EXPECT_EQ(config.userspace.output_type, owlsm::config::OutputType::JSON);
     EXPECT_EQ(config.userspace.log_level, LOG_LEVEL_ERROR);
@@ -112,6 +113,7 @@ TEST_F(ConfigParserTest, real_config_is_parsed_correctly)
     EXPECT_TRUE(config.features.file_monitoring.events.chmod);
     EXPECT_TRUE(config.features.file_monitoring.events.read);
     EXPECT_TRUE(config.features.network_monitoring.enabled);
+    EXPECT_TRUE(config.features.shell_commands_monitoring.enabled);
 
     // Check userspace and kernel config
     EXPECT_EQ(config.userspace.max_events_queue_size, 55);

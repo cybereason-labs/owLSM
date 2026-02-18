@@ -126,6 +126,15 @@ constexpr std::string_view REAL_SCHEMA_4 = R"(
                             "type": "boolean"
                         }
                     }
+                },
+                "shell_commands_monitoring": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean"
+                        }
+                    }
                 }
             }
         },
@@ -409,6 +418,9 @@ constexpr std::string_view REAL_JSON_5 = R"(
             }
         },
         "network_monitoring": {
+            "enabled": true
+        },
+        "shell_commands_monitoring": {
             "enabled": true
         }
     },
