@@ -201,7 +201,7 @@ Scenario: complex_120_token_chmod_rule__match_and_exclude
         | process.file.path                 | /usr/bin/chmod                                           |
         | data.target.file.path             | /tmp/complex_120_test                                    |
         | data.chmod.requested_mode         | 493                                                      |
-        | matched_rule_id                   | 32                                                       |
+        | matched_rule_id                   | 36                                                       |
         | matched_rule_metadata.description | Complex ~120-token chmod rule for max token limit testing |
     And I find the event in output in "10" seconds:
         | action                    | ALLOW_EVENT               |
