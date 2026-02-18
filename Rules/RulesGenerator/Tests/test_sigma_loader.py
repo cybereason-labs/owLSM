@@ -107,7 +107,7 @@ class TestLoadValidRules:
     
     def test_load_all_rules(self, valid_rules_dir):
         rules = load_sigma_rules(valid_rules_dir)
-        assert len(rules) == 30
+        assert len(rules) == 31
     
     def test_rule_ids_are_unique(self, valid_rules_dir):
         rules = load_sigma_rules(valid_rules_dir)
@@ -117,7 +117,7 @@ class TestLoadValidRules:
     def test_expected_ids_present(self, valid_rules_dir):
         rules = load_sigma_rules(valid_rules_dir)
         ids = {r.id for r in rules}
-        expected = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 20, 21, 22, 23, 24, 25, 26, 27, 30, 31, 32, 40, 41, 42}
+        expected = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 20, 21, 22, 23, 24, 25, 26, 27, 30, 31, 32, 40, 41, 42, 43}
         assert ids == expected
     
     def test_rule_1_details(self, valid_rules_dir):
@@ -967,6 +967,195 @@ detection:
         
         with pytest.raises(Exception, match="invalid format"):
             load_sigma_rules(str(tmp_path))
+
+
+class TestNeqModifierValidation:
+    """Tests for |neq modifier validation in parse_field_key."""
+    
+    def test_neq_on_string_field(self):
+        result = parse_field_key("process.file.filename|neq")
+        assert result.field_name == "process.file.filename"
+        assert result.field_type == "string"
+        assert result.comparison == "exactmatch"
+    
+    def test_neq_on_numeric_field(self):
+        result = parse_field_key("process.pid|neq")
+        assert result.field_name == "process.pid"
+        assert result.field_type == "numeric"
+        assert result.comparison == "equal"
+    
+    def test_neq_on_enum_field(self):
+        result = parse_field_key("process.file.type|neq")
+        assert result.field_name == "process.file.type"
+        assert result.field_type == "enum"
+        assert result.comparison == "equal"
+    
+    def test_neq_combined_with_contains_raises(self):
+        with pytest.raises(Exception, match="(?i)modifier"):
+            parse_field_key("process.cmd|neq|contains")
+    
+    def test_neq_combined_with_startswith_raises(self):
+        with pytest.raises(Exception, match="(?i)modifier"):
+            parse_field_key("process.cmd|neq|startswith")
+    
+    def test_contains_combined_with_neq_raises(self):
+        with pytest.raises(Exception, match="neq.*cannot be combined"):
+            parse_field_key("process.cmd|contains|neq")
+    
+    def test_neq_combined_with_gt_raises(self):
+        with pytest.raises(Exception, match="(?i)modifier"):
+            parse_field_key("process.pid|neq|gt")
+    
+    def test_neq_combined_with_all_raises(self):
+        with pytest.raises(Exception, match="neq.*cannot be combined"):
+            parse_field_key("process.cmd|all|neq")
+    
+    def test_neq_combined_with_cidr_raises(self):
+        with pytest.raises(Exception, match="(?i)modifier"):
+            parse_field_key("network.source_ip|neq|cidr")
+    
+    def test_rule_with_neq_string_loads(self, tmp_path):
+        rule = """
+id: 900
+description: "neq string test"
+action: "BLOCK_EVENT"
+events: [CHMOD]
+detection:
+    sel:
+        process.file.filename|neq: "bad_process"
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+        rules = load_sigma_rules(str(tmp_path))
+        assert len(rules) == 1
+    
+    def test_rule_with_neq_numeric_loads(self, tmp_path):
+        rule = """
+id: 901
+description: "neq numeric test"
+action: "BLOCK_EVENT"
+events: [CHMOD]
+detection:
+    sel:
+        process.pid|neq: 100
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+        rules = load_sigma_rules(str(tmp_path))
+        assert len(rules) == 1
+    
+    def test_rule_with_neq_enum_loads(self, tmp_path):
+        rule = """
+id: 902
+description: "neq enum test"
+action: "BLOCK_EVENT"
+events: [CHMOD]
+detection:
+    sel:
+        process.file.type|neq: "REGULAR_FILE"
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+        rules = load_sigma_rules(str(tmp_path))
+        assert len(rules) == 1
+    
+    def test_rule_with_neq_list_value_rejected(self, tmp_path):
+        """neq with a list of values should be rejected at validation."""
+        rule = """
+id: 903
+description: "neq with list value"
+action: "BLOCK_EVENT"
+events: [CHMOD]
+detection:
+    sel:
+        process.file.filename|neq:
+            - "bash"
+            - "sh"
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+        
+        with pytest.raises(Exception, match="neq.*only supports a single scalar"):
+            load_sigma_rules(str(tmp_path))
+    
+    def test_rule_with_neq_numeric_list_value_rejected(self, tmp_path):
+        """neq with a list of numeric values should be rejected."""
+        rule = """
+id: 904
+description: "neq with numeric list"
+action: "BLOCK_EVENT"
+events: [CHMOD]
+detection:
+    sel:
+        process.pid|neq:
+            - 0
+            - 1
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+        
+        with pytest.raises(Exception, match="neq.*only supports a single scalar"):
+            load_sigma_rules(str(tmp_path))
+    
+    def test_rule_with_neq_dict_value_rejected(self, tmp_path):
+        """neq with a dict value should be rejected at validation."""
+        rule = """
+id: 907
+description: "neq with dict value"
+action: "BLOCK_EVENT"
+events: [CHMOD]
+detection:
+    sel:
+        process.file.filename|neq:
+            key: "value"
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+        
+        with pytest.raises(Exception, match="neq.*only supports a single scalar"):
+            load_sigma_rules(str(tmp_path))
+    
+    def test_rule_with_neq_in_list_selection_rejected(self, tmp_path):
+        """neq in list-style (OR) selections should be rejected."""
+        from AST import parse_rules
+        
+        rule = """
+id: 905
+description: "neq in list selection"
+action: "BLOCK_EVENT"
+events: [CHMOD]
+detection:
+    sel:
+        - process.pid|neq: 100
+        - process.cmd: "test"
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+        rules = load_sigma_rules(str(tmp_path))
+        
+        with pytest.raises(Exception, match="neq.*not supported.*list"):
+            parse_rules(rules)
+    
+    def test_neq_on_ip_field(self):
+        result = parse_field_key("network.source_ip|neq")
+        assert result.field_name == "network.source_ip"
+        assert result.field_type == "string"
+        assert result.comparison == "exactmatch"
+    
+    def test_rule_with_neq_ip_loads(self, tmp_path):
+        rule = """
+id: 906
+description: "neq IP test"
+action: "BLOCK_EVENT"
+events: [NETWORK]
+detection:
+    sel:
+        network.source_ip|neq: "192.168.1.1"
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+        rules = load_sigma_rules(str(tmp_path))
+        assert len(rules) == 1
 
 
 class TestNetworkEventValidation:

@@ -480,7 +480,7 @@ class TestParseRulesIntegration:
         rules = load_sigma_rules(valid_rules_dir)
         ctx = parse_rules(rules)
         
-        assert len(ctx.rules) == 30
+        assert len(ctx.rules) == 31
         assert len(ctx.id_to_string) > 0
         assert len(ctx.id_to_predicate) > 0
     
@@ -766,6 +766,228 @@ class TestKeywordBackend:
         parsed = parsed_list[0]
         # EXEC has 8 common + 4 target.process = 12 string fields (incl. shell_command)
         assert len(parsed.condition_expr.children) == 12
+
+
+class TestNeqModifier:
+    """Tests for |neq modifier processing through the AST pipeline."""
+    
+    def test_neq_string_creates_not_predicate(self):
+        """neq on a string field wraps the predicate in NOT."""
+        rule = SigmaRule(
+            id=1, description="neq string", action="BLOCK_EVENT", events=["CHMOD"],
+            detection={"sel": {"process.file.filename|neq": "bad.exe"}, "condition": "sel"},
+            source_file="test.yml"
+        )
+        ctx = ParsedRulesContext()
+        parsed = parse_rule_with_pysigma(rule, ctx)[0]
+        
+        assert parsed.condition_expr.operator_type == "NOT"
+        child = parsed.condition_expr.children[0]
+        assert child.operator_type == "PRED"
+        pred = ctx.id_to_predicate[child.predicate_idx]
+        assert pred.field == "process.file.filename"
+        assert pred.comparison_type == "exactmatch"
+        assert ctx.id_to_string[pred.string_idx].value == "bad.exe"
+    
+    def test_neq_numeric_creates_not_predicate(self):
+        """neq on a numeric field wraps the predicate in NOT."""
+        rule = SigmaRule(
+            id=1, description="neq numeric", action="BLOCK_EVENT", events=["CHMOD"],
+            detection={"sel": {"process.pid|neq": 100}, "condition": "sel"},
+            source_file="test.yml"
+        )
+        ctx = ParsedRulesContext()
+        parsed = parse_rule_with_pysigma(rule, ctx)[0]
+        
+        assert parsed.condition_expr.operator_type == "NOT"
+        child = parsed.condition_expr.children[0]
+        assert child.operator_type == "PRED"
+        pred = ctx.id_to_predicate[child.predicate_idx]
+        assert pred.field == "process.pid"
+        assert pred.comparison_type == "equal"
+        assert pred.numerical_value == 100
+    
+    def test_neq_enum_creates_not_predicate(self):
+        """neq on an enum field wraps the predicate in NOT."""
+        rule = SigmaRule(
+            id=1, description="neq enum", action="BLOCK_EVENT", events=["CHMOD"],
+            detection={"sel": {"process.file.type|neq": "REGULAR_FILE"}, "condition": "sel"},
+            source_file="test.yml"
+        )
+        ctx = ParsedRulesContext()
+        parsed = parse_rule_with_pysigma(rule, ctx)[0]
+        
+        assert parsed.condition_expr.operator_type == "NOT"
+        child = parsed.condition_expr.children[0]
+        assert child.operator_type == "PRED"
+        pred = ctx.id_to_predicate[child.predicate_idx]
+        assert pred.field == "process.file.type"
+        assert pred.comparison_type == "equal"
+        assert pred.numerical_value == 5  # REGULAR_FILE = 5
+    
+    def test_neq_mixed_with_normal_fields(self):
+        """neq combined with normal fields: sel becomes AND(normal_pred, NOT(neq_pred))."""
+        rule = SigmaRule(
+            id=1, description="mixed neq", action="BLOCK_EVENT", events=["CHMOD"],
+            detection={
+                "sel": {
+                    "process.file.path|startswith": "/usr/bin/",
+                    "process.pid|neq": 1,
+                },
+                "condition": "sel"
+            },
+            source_file="test.yml"
+        )
+        ctx = ParsedRulesContext()
+        parsed = parse_rule_with_pysigma(rule, ctx)[0]
+        
+        # Should be AND(startswith_pred, NOT(equal_pred))
+        assert parsed.condition_expr.operator_type == "AND"
+        children = parsed.condition_expr.children
+        assert len(children) == 2
+        
+        # One child is a PRED, one is a NOT
+        types = {c.operator_type for c in children}
+        assert "PRED" in types
+        assert "NOT" in types
+    
+    def test_neq_only_selection_replaces_in_condition(self):
+        """A selection with only neq fields should replace sel with NOT in condition."""
+        rule = SigmaRule(
+            id=1, description="neq only", action="BLOCK_EVENT", events=["CHMOD"],
+            detection={
+                "sel": {"process.pid|neq": 0},
+                "other": {"process.cmd|contains": "test"},
+                "condition": "sel and other"
+            },
+            source_file="test.yml"
+        )
+        ctx = ParsedRulesContext()
+        parsed = parse_rule_with_pysigma(rule, ctx)[0]
+        
+        # Outer should be AND
+        assert parsed.condition_expr.operator_type == "AND"
+        children = parsed.condition_expr.children
+        types = {c.operator_type for c in children}
+        assert "NOT" in types
+        assert "PRED" in types
+    
+    def test_neq_multiple_fields_in_selection(self):
+        """Multiple neq fields in one selection create multiple NOT clauses."""
+        rule = SigmaRule(
+            id=1, description="multi neq", action="BLOCK_EVENT", events=["CHMOD"],
+            detection={
+                "sel": {
+                    "process.pid|neq": 0,
+                    "process.euid|neq": 1000,
+                },
+                "condition": "sel"
+            },
+            source_file="test.yml"
+        )
+        ctx = ParsedRulesContext()
+        parsed = parse_rule_with_pysigma(rule, ctx)[0]
+        
+        # Both neq fields create NOTs, ANDed together
+        assert parsed.condition_expr.operator_type == "AND"
+        for child in parsed.condition_expr.children:
+            assert child.operator_type == "NOT"
+    
+    def test_neq_string_list_rejected(self):
+        """neq with a list of string values should be rejected."""
+        rule = SigmaRule(
+            id=1, description="neq list", action="BLOCK_EVENT", events=["CHMOD"],
+            detection={
+                "sel": {"process.file.filename|neq": ["bash", "sh"]},
+                "condition": "sel"
+            },
+            source_file="test.yml"
+        )
+        ctx = ParsedRulesContext()
+        
+        with pytest.raises(Exception, match="neq.*only supports a single scalar"):
+            parse_rule_with_pysigma(rule, ctx)
+    
+    def test_neq_numeric_list_rejected(self):
+        """neq with a list of numeric values should be rejected."""
+        rule = SigmaRule(
+            id=1, description="neq numeric list", action="BLOCK_EVENT", events=["CHMOD"],
+            detection={
+                "sel": {"process.pid|neq": [0, 1]},
+                "condition": "sel"
+            },
+            source_file="test.yml"
+        )
+        ctx = ParsedRulesContext()
+        
+        with pytest.raises(Exception, match="neq.*only supports a single scalar"):
+            parse_rule_with_pysigma(rule, ctx)
+    
+    def test_neq_dict_value_rejected(self):
+        """neq with a dict value should be rejected."""
+        rule = SigmaRule(
+            id=1, description="neq dict", action="BLOCK_EVENT", events=["CHMOD"],
+            detection={
+                "sel": {"process.file.filename|neq": {"key": "value"}},
+                "condition": "sel"
+            },
+            source_file="test.yml"
+        )
+        ctx = ParsedRulesContext()
+        
+        with pytest.raises(Exception, match="neq.*only supports a single scalar"):
+            parse_rule_with_pysigma(rule, ctx)
+    
+    def test_neq_ip_creates_not_predicate(self):
+        """neq on an IP field wraps the predicate in NOT."""
+        rule = SigmaRule(
+            id=1, description="neq ip", action="BLOCK_EVENT", events=["NETWORK"],
+            detection={"sel": {"network.source_ip|neq": "192.168.1.1"}, "condition": "sel"},
+            source_file="test.yml"
+        )
+        ctx = ParsedRulesContext()
+        parsed = parse_rule_with_pysigma(rule, ctx)[0]
+        
+        assert parsed.condition_expr.operator_type == "NOT"
+        child = parsed.condition_expr.children[0]
+        assert child.operator_type == "PRED"
+        pred = ctx.id_to_predicate[child.predicate_idx]
+        assert pred.field == "network.source_ip"
+        assert pred.comparison_type == "equal"
+        ip_entry = ctx.id_to_ip[pred.numerical_value]
+        assert ip_entry.ip == "192.168.1.1"
+        assert ip_entry.cidr == 32
+    
+    def test_neq_full_pipeline_postfix(self):
+        """neq goes through the full pipeline: load -> AST -> postfix -> serialize."""
+        import json
+        from postfix import convert_to_postfix
+        from serializer import to_json_string
+        from constants import OperatorType
+        
+        rule = SigmaRule(
+            id=1, description="neq pipeline", action="BLOCK_EVENT", events=["CHMOD"],
+            detection={
+                "sel": {
+                    "target.file.path|startswith": "/tmp/",
+                    "chmod.requested_mode|neq": 493,
+                },
+                "condition": "sel"
+            },
+            source_file="test.yml"
+        )
+        ctx = parse_rules([rule])
+        
+        postfix_ctx = convert_to_postfix(ctx)
+        json_str = to_json_string(postfix_ctx)
+        data = json.loads(json_str)
+        
+        # Rule should exist and have tokens including NOT
+        assert len(data["rules"]) == 1
+        tokens = data["rules"][0]["tokens"]
+        token_types = [t["operator_type"] for t in tokens]
+        assert OperatorType.OPERATOR_NOT.value in token_types
+        assert OperatorType.OPERATOR_AND.value in token_types
 
 
 class TestGetStringFieldsForEvent:

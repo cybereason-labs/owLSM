@@ -3,9 +3,12 @@
 These tests validate the complete pipeline from YAML rule files to parsed output.
 Each test creates temporary YAML files and validates expected behavior.
 """
+import json
 import pytest
-from sigma_rule_loader import load_sigma_rules
+from sigma_rule_loader import load_sigma_rules, SigmaRule
 from AST import parse_rules
+from postfix import convert_to_postfix
+from serializer import serialize_context, to_json_string
 
 
 # =============================================================================
@@ -1333,4 +1336,351 @@ detection:
             assert rule["action"] == "BLOCK_EVENT"
             assert rule["applied_events"] == ["CHMOD"]
             assert "different condition" in rule["description"]
+
+
+# =============================================================================
+# 8) Extra Sigma Fields Ignored Tests
+# =============================================================================
+
+RULE_WITH_ALL_EXTRA_SIGMA_FIELDS = """
+title: "Detect Suspicious chmod on /etc"
+id: 5000
+status: stable
+description: "Detects suspicious chmod on sensitive paths"
+author: "Test Author (Test Organization)"
+date: 2024-01-15
+modified: 2025-06-20
+references:
+    - https://attack.mitre.org/techniques/T1222/
+    - https://example.com/advisory-123
+tags:
+    - attack.defense-evasion
+    - attack.t1222.002
+    - detection.threat-hunting
+logsource:
+    product: linux
+    category: process_creation
+    service: auditd
+    definition: |
+        Required auditd configuration:
+        -a always,exit -F arch=b64 -S chmod -k chmod_monitor
+related:
+    - id: e3a8a052-111f-4606-9aee-f28ebeb76776
+      type: derived
+    - id: abcdef01-2345-6789-abcd-ef0123456789
+      type: similar
+falsepositives:
+    - Legitimate administrative activity
+    - Package installation scripts
+level: high
+simulation:
+    - type: atomic-red-team
+      name: chmod - Change file or folder mode
+      technique: T1222.002
+      atomic_guid: ffe2346c-abd5-4b45-a713-bf5f1ebd573a
+action: "BLOCK_EVENT"
+events:
+    - CHMOD
+detection:
+    selection_path:
+        target.file.path|startswith: "/etc/"
+    selection_mode:
+        chmod.requested_mode: 777
+    condition: selection_path and selection_mode
+"""
+
+RULE_WITHOUT_EXTRA_SIGMA_FIELDS = """
+id: 5000
+description: "Detects suspicious chmod on sensitive paths"
+action: "BLOCK_EVENT"
+events:
+    - CHMOD
+detection:
+    selection_path:
+        target.file.path|startswith: "/etc/"
+    selection_mode:
+        chmod.requested_mode: 777
+    condition: selection_path and selection_mode
+"""
+
+
+class TestExtraSigmaFieldsIgnored:
+    """Tests that standard Sigma metadata fields (title, status, level, author,
+    date, modified, references, tags, falsepositives, logsource, related,
+    simulation) are silently ignored and do not affect rule loading, parsing,
+    or serialization."""
+
+    def test_rule_with_all_extra_fields_loads(self, tmp_path):
+        """Rule containing all standard Sigma metadata fields should load without error."""
+        (tmp_path / "rule.yml").write_text(RULE_WITH_ALL_EXTRA_SIGMA_FIELDS)
+
+        rules = load_sigma_rules(str(tmp_path))
+        assert len(rules) == 1
+        assert rules[0].id == 5000
+        assert rules[0].description == "Detects suspicious chmod on sensitive paths"
+        assert rules[0].action == "BLOCK_EVENT"
+        assert rules[0].events == ["CHMOD"]
+
+    def test_rule_with_all_extra_fields_parses(self, tmp_path):
+        """Rule with extra Sigma fields should parse through the full pipeline."""
+        (tmp_path / "rule.yml").write_text(RULE_WITH_ALL_EXTRA_SIGMA_FIELDS)
+
+        rules = load_sigma_rules(str(tmp_path))
+        ctx = parse_rules(rules)
+
+        assert len(ctx.rules) == 1
+        assert ctx.rules[0].rule_id == 5000
+
+    def test_extra_fields_not_in_sigma_rule_object(self, tmp_path):
+        """Extra Sigma fields must not leak into the SigmaRule dataclass."""
+        (tmp_path / "rule.yml").write_text(RULE_WITH_ALL_EXTRA_SIGMA_FIELDS)
+
+        rules = load_sigma_rules(str(tmp_path))
+        rule = rules[0]
+
+        extra_field_names = [
+            "title", "status", "level", "author", "date", "modified",
+            "references", "tags", "logsource", "falsepositives", "related",
+            "simulation",
+        ]
+        for field_name in extra_field_names:
+            assert not hasattr(rule, field_name), (
+                f"SigmaRule should not have attribute '{field_name}'"
+            )
+
+    def test_extra_fields_not_in_serialized_json(self, tmp_path):
+        """Extra Sigma fields must not appear anywhere in the final JSON output."""
+        (tmp_path / "rule.yml").write_text(RULE_WITH_ALL_EXTRA_SIGMA_FIELDS)
+
+        rules = load_sigma_rules(str(tmp_path))
+        parsed_ctx = parse_rules(rules)
+        postfix_ctx = convert_to_postfix(parsed_ctx)
+        json_str = to_json_string(postfix_ctx)
+        data = json.loads(json_str)
+
+        forbidden_keys = {
+            "title", "status", "level", "author", "date", "modified",
+            "references", "tags", "logsource", "falsepositives", "related",
+            "simulation",
+        }
+        for rule_data in data["rules"]:
+            rule_keys = set(rule_data.keys())
+            leaked = rule_keys & forbidden_keys
+            assert not leaked, f"Serialized rule contains unexpected keys: {leaked}"
+
+    def test_extra_fields_produce_identical_output(self, tmp_path):
+        """A rule with extra Sigma fields must produce the same JSON output
+        as the identical rule without those fields."""
+        dir_with = tmp_path / "with_extra"
+        dir_without = tmp_path / "without_extra"
+        dir_with.mkdir()
+        dir_without.mkdir()
+
+        (dir_with / "rule.yml").write_text(RULE_WITH_ALL_EXTRA_SIGMA_FIELDS)
+        (dir_without / "rule.yml").write_text(RULE_WITHOUT_EXTRA_SIGMA_FIELDS)
+
+        rules_with = load_sigma_rules(str(dir_with))
+        parsed_with = parse_rules(rules_with)
+        postfix_with = convert_to_postfix(parsed_with)
+        data_with = serialize_context(postfix_with)
+
+        rules_without = load_sigma_rules(str(dir_without))
+        parsed_without = parse_rules(rules_without)
+        postfix_without = convert_to_postfix(parsed_without)
+        data_without = serialize_context(postfix_without)
+
+        assert data_with == data_without
+
+    def test_logsource_with_nested_definition_ignored(self, tmp_path):
+        """logsource with nested sub-keys (product, category, service, definition)
+        should be silently ignored."""
+        rule = """
+id: 5001
+description: "Rule with complex logsource"
+action: "BLOCK_EVENT"
+events:
+    - EXEC
+logsource:
+    product: linux
+    category: process_creation
+    service: auditd
+    definition: |
+        Required auditd configuration:
+        -a always,exit -F arch=b64 -S execve -k exec_monitor
+        -a always,exit -F arch=b32 -S execve -k exec_monitor
+detection:
+    sel:
+        target.process.cmd|contains: "bash"
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+
+        rules = load_sigma_rules(str(tmp_path))
+        assert len(rules) == 1
+
+        ctx = parse_rules(rules)
+        assert len(ctx.rules) == 1
+
+    def test_tags_with_mitre_attack_ids_ignored(self, tmp_path):
+        """tags with MITRE ATT&CK technique IDs should be silently ignored."""
+        rule = """
+id: 5002
+description: "Rule with many MITRE tags"
+action: "BLOCK_EVENT"
+events:
+    - CHMOD
+tags:
+    - attack.execution
+    - attack.t1059
+    - attack.t1059.004
+    - attack.persistence
+    - attack.t1543.002
+    - attack.defense-evasion
+    - detection.threat-hunting
+detection:
+    sel:
+        process.file.filename: "chmod"
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+
+        rules = load_sigma_rules(str(tmp_path))
+        assert len(rules) == 1
+
+        ctx = parse_rules(rules)
+        assert len(ctx.rules) == 1
+
+    def test_simulation_with_atomic_red_team_ignored(self, tmp_path):
+        """simulation block with Atomic Red Team entries should be silently ignored."""
+        rule = """
+id: 5003
+description: "Rule with simulation block"
+action: "KILL_PROCESS"
+events:
+    - WRITE
+simulation:
+    - type: atomic-red-team
+      name: Pad Binary to Change Hash
+      technique: T1027.001
+      atomic_guid: ffe2346c-abd5-4b45-a713-bf5f1ebd573a
+    - type: atomic-red-team
+      name: Another Test
+      technique: T1059.004
+      atomic_guid: 12345678-1234-1234-1234-123456789012
+detection:
+    sel:
+        target.file.path|startswith: "/etc/shadow"
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+
+        rules = load_sigma_rules(str(tmp_path))
+        assert len(rules) == 1
+        assert rules[0].action == "KILL_PROCESS"
+
+        ctx = parse_rules(rules)
+        assert len(ctx.rules) == 1
+
+    def test_related_with_multiple_entries_ignored(self, tmp_path):
+        """related block with derived/similar/obsolete entries should be silently ignored."""
+        rule = """
+id: 5004
+description: "Rule with related entries"
+action: "BLOCK_EVENT"
+events:
+    - READ
+related:
+    - id: e3a8a052-111f-4606-9aee-f28ebeb76776
+      type: derived
+    - id: abcdef01-2345-6789-abcd-ef0123456789
+      type: similar
+    - id: 99999999-9999-9999-9999-999999999999
+      type: obsolete
+detection:
+    sel:
+        target.file.path|contains: "/etc/passwd"
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+
+        rules = load_sigma_rules(str(tmp_path))
+        assert len(rules) == 1
+
+        ctx = parse_rules(rules)
+        assert len(ctx.rules) == 1
+
+    def test_multiple_rules_with_extra_fields(self, tmp_path):
+        """Multiple rules each with different extra fields should all load and parse."""
+        rule1 = """
+id: 5010
+title: "First Rule"
+status: experimental
+level: critical
+author: "Author One"
+description: "First rule with extras"
+action: "BLOCK_EVENT"
+events: [CHMOD]
+detection:
+    sel:
+        process.file.filename: "badtool"
+    condition: sel
+"""
+        rule2 = """
+id: 5011
+title: "Second Rule"
+date: 2023-03-15
+modified: 2024-12-01
+tags:
+    - attack.discovery
+    - attack.t1082
+references:
+    - https://example.com/ref1
+falsepositives:
+    - System monitoring tools
+description: "Second rule with extras"
+action: "ALLOW_EVENT"
+events: [READ]
+detection:
+    sel:
+        target.file.path|startswith: "/proc/"
+    condition: sel
+"""
+        rule3 = """
+id: 5012
+title: "Third Rule"
+logsource:
+    product: linux
+    service: syslog
+simulation:
+    - type: atomic-red-team
+      name: Test
+      technique: T1070.002
+      atomic_guid: aabbccdd-1122-3344-5566-778899aabbcc
+related:
+    - id: 12345678-abcd-ef01-2345-6789abcdef01
+      type: derived
+description: "Third rule with extras"
+action: "BLOCK_KILL_PROCESS"
+events: [EXEC]
+detection:
+    sel:
+        target.process.cmd|contains: "rm -rf"
+    condition: sel
+"""
+        (tmp_path / "rule1.yml").write_text(rule1)
+        (tmp_path / "rule2.yml").write_text(rule2)
+        (tmp_path / "rule3.yml").write_text(rule3)
+
+        rules = load_sigma_rules(str(tmp_path))
+        assert len(rules) == 3
+
+        parsed_ctx = parse_rules(rules)
+        assert len(parsed_ctx.rules) == 3
+
+        postfix_ctx = convert_to_postfix(parsed_ctx)
+        data = serialize_context(postfix_ctx)
+        assert len(data["rules"]) == 3
+
+        rule_ids = {r["id"] for r in data["rules"]}
+        assert rule_ids == {5010, 5011, 5012}
 

@@ -211,3 +211,24 @@ Scenario: complex_120_token_chmod_rule__match_and_exclude
         | data.chmod.requested_mode | 493                       |
         | matched_rule_id           | 0                         |
 
+
+Scenario: neq_modifier_numeric_and_string_exclusion
+    Given The owLSM process is running
+    And I ensure the file "/tmp/neq_test_file" exists
+    When I run the command "/usr/bin/chmod 755 /tmp/neq_test_file" sync
+    Then I dont find the event in output in "10" seconds:
+        | type                  | CHMOD              |
+        | data.target.file.path | /tmp/neq_test_file |
+        | matched_rule_id       | 33                 |
+    And I dont find the event in output in "10" seconds:
+        | type                  | CHMOD              |
+        | data.target.file.path | /tmp/neq_test_file |
+        | matched_rule_id       | 34                 |
+    And I find the event in output in "30" seconds:
+        | action                            | BLOCK_EVENT                                  |
+        | type                              | CHMOD                                        |
+        | process.file.path                 | /usr/bin/chmod                               |
+        | data.target.file.path             | /tmp/neq_test_file                           |
+        | data.chmod.requested_mode         | 493                                          |
+        | matched_rule_id                   | 35                                           |
+        | matched_rule_metadata.description | Normal chmod rule matching /tmp/neq_test - no neq |
