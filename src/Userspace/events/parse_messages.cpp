@@ -53,7 +53,7 @@ void to_json(nlohmann::json& j, const StdioFileDescriptorsAtProcessCreation& s)
 
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Owner, uid, gid)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(File, inode, dev, path, owner, mode, type, suid, sgid, last_modified_seconds, nlink, filename)
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Process, pid, ppid, ruid, rgid, euid, egid, suid, cgroup_id, start_time, ptrace_flags, file, cmd, stdio_file_descriptors_at_process_creation)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Process, pid, ppid, ruid, rgid, euid, egid, suid, cgroup_id, start_time, ptrace_flags, file, cmd, stdio_file_descriptors_at_process_creation, shell_command)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ExitEventData, exit_code, signal)
 
 void to_json(nlohmann::json& j, const GenericFileEventData& e)

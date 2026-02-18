@@ -36,6 +36,9 @@ RUN rm -rf /var/lib/apt/lists/* && \
         libzstd-dev \
         # libssl-dev (for OpenSSL build)
         libssl-dev \
+        # sqlite3 (for SQLite build)
+        libsqlite3-dev \
+        # libs for tests
         libgtest-dev \
         googletest \
         # misc

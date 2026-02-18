@@ -14,5 +14,6 @@ private:
     static void addBasicProbes(std::vector<std::shared_ptr<AbstractProbe>>& probes);
     static void addFileMonitoringProbes(std::vector<std::shared_ptr<AbstractProbe>>& probes);
     static void addNetworkMonitoringProbes(std::vector<std::shared_ptr<AbstractProbe>>& probes);
+    static void addShellCommandsMonitoringProbes(std::vector<std::shared_ptr<AbstractProbe>>& probes);
 };
 }

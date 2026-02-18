@@ -14,13 +14,23 @@ enum class probe_type
     PROBE_MANAGER,
     LSM,
     FENTRY,
-    TRACEPOINT
+    TRACEPOINT,
+    UPROBE
 };
 
 class AbstractProbe
 {
 public:
     virtual ~AbstractProbe() = default;
+
+    AbstractProbe& operator=(const AbstractProbe& other)
+    {
+        if (this != &other)
+        {
+            m_skel = other.m_skel;
+        }
+        return *this;
+    }
 
     virtual void bpfOpen() {};
     virtual void bpfLoad() {};

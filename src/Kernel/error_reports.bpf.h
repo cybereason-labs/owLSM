@@ -23,7 +23,8 @@ do {                                                                            
 do {                                                                                 \
     if(log_level_to_print <= LOG_LEVEL_DEBUG)                                        \
     {                                                                                \
-        char * hook_name = NULL;                                                     \
+        unsigned int key = 0;                                                        \
+        char *hook_name = bpf_map_lookup_elem(&hook_names, &key);                    \
         bpf_printk("[DEBUG][%s:%s:%d] " FMT, hook_name, __func__, __LINE__, ##__VA_ARGS__);        \
     }                                                                                \
 } while (0)
@@ -33,7 +34,8 @@ do {                                                                            
 do {                                                                                 \
     if(log_level_to_print <= LOG_LEVEL_INFO)                                         \
     {                                                                                \
-        char * hook_name = NULL;                                                     \
+        unsigned int key = 0;                                                        \
+        char *hook_name = bpf_map_lookup_elem(&hook_names, &key);                    \
         bpf_printk("[INFO][%s:%s:%d] " FMT, hook_name, __func__, __LINE__, ##__VA_ARGS__);         \
     }                                                                                \
 } while (0)

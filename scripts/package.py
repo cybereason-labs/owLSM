@@ -21,6 +21,7 @@ EXCLUDE_LIBS = ["linux-vdso", "ld-linux", "libc.so", "libm.so", "libdl.so", "lib
 # Fallback search paths for libraries that ldd reports as "not found"
 LIBRARY_SEARCH_PATHS = ["/usr/lib64", "/usr/lib/x86_64-linux-gnu", "/usr/lib", "/lib/x86_64-linux-gnu", "/lib64", "/lib"]
 
+RESOURCES_SRC = PROJECT_ROOT / "src" / "Userspace" / "resources"
 RULES_GENERATOR_SRC = PROJECT_ROOT / "Rules" / "RulesGenerator"
 RULES_GENERATOR_FILES = [
     "AST.py",
@@ -119,10 +120,17 @@ def package(mode_name):
         print(f"  Copying: {lib}")
         shutil.copy2(lib.resolve(), lib_dir / lib.name)
 
-    # Create empty resources directory
+    # Copy resources directory
     if mode["with_resources"]:
-        (output_dir / "resources").mkdir()
-        print("==> Created empty resources directory")
+        resources_dest = output_dir / "resources"
+        if resources_dest.exists():
+            shutil.rmtree(resources_dest)
+        resources_dest.mkdir()
+        print("==> Copying resources...")
+        for src_file in RESOURCES_SRC.iterdir():
+            if src_file.is_file():
+                shutil.copy2(src_file, resources_dest / src_file.name)
+                print(f"  Copying: {src_file.name}")
 
     # Copy RulesGenerator source files only (no tests, no repo-level files)
     if mode["with_rules_generator"]:

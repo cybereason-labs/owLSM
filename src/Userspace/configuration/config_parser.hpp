@@ -29,6 +29,7 @@ private:
     void fromJson(const nlohmann::json& j, FileMonitoringConfig& o);
     void fromJson(const nlohmann::json& j, FileMonitoringEventsConfig& o);
     void fromJson(const nlohmann::json& j, NetworkMonitoringConfig& o);
+    void fromJson(const nlohmann::json& j, ShellCommandsMonitoringConfig& o);
     void fromJson(const nlohmann::json& j, UserspaceConfig& o);
     void fromJson(const nlohmann::json& j, KernelConfig& o);
     

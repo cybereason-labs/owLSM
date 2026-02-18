@@ -230,6 +230,7 @@ __noinline int eval_process(const struct process_t *process, struct predicate_t 
     switch (rule_file_field_type)
     {
         case TARGET_PROCESS_CMD: return compare_string(process->cmd.value, process->cmd.length, CMD_MAX - 1, pred);
+        case TARGET_PROCESS_SHELL_COMMAND: return compare_string(process->shell_command.value, process->shell_command.length, CMD_MAX - 1, pred);
         case TARGET_PROCESS_PID: return compare_numeric(process->pid, pred);
         case TARGET_PROCESS_PPID: return compare_numeric(process->ppid, pred);
         case TARGET_PROCESS_RUID: return compare_numeric(process->ruid, pred);
@@ -300,6 +301,7 @@ statfunc int eval_pred(unsigned int pred_idx, const struct event_t *current_even
         case TARGET_PROCESS_SUID: return eval_target_process(current_event, pred, TARGET_PROCESS_SUID);
         case TARGET_PROCESS_PTRACE_FLAGS: return eval_target_process(current_event, pred, TARGET_PROCESS_PTRACE_FLAGS);
         case TARGET_PROCESS_CMD: return eval_target_process(current_event, pred, TARGET_PROCESS_CMD);
+        case TARGET_PROCESS_SHELL_COMMAND: return eval_target_process(current_event, pred, TARGET_PROCESS_SHELL_COMMAND);
         case TARGET_PROCESS_FILE_PATH: return eval_target_process(current_event, pred, TARGET_FILE_PATH);
         case TARGET_PROCESS_FILE_FILENAME: return eval_target_process(current_event, pred, TARGET_FILE_FILENAME);
         case TARGET_PROCESS_FILE_OWNER_UID: return eval_target_process(current_event, pred, TARGET_FILE_OWNER_UID);
@@ -318,6 +320,7 @@ statfunc int eval_pred(unsigned int pred_idx, const struct event_t *current_even
         case PROCESS_SUID: return eval_process(&current_event->process, pred, TARGET_PROCESS_SUID);
         case PROCESS_PTRACE_FLAGS: return eval_process(&current_event->process, pred, TARGET_PROCESS_PTRACE_FLAGS);
         case PROCESS_CMD: return eval_process(&current_event->process, pred, TARGET_PROCESS_CMD);
+        case PROCESS_SHELL_COMMAND: return eval_process(&current_event->process, pred, TARGET_PROCESS_SHELL_COMMAND);
         case PROCESS_FILE_PATH: return eval_process(&current_event->process, pred, TARGET_FILE_PATH);
         case PROCESS_FILE_FILENAME: return eval_process(&current_event->process, pred, TARGET_FILE_FILENAME);
         case PROCESS_FILE_OWNER_UID: return eval_process(&current_event->process, pred, TARGET_FILE_OWNER_UID);
@@ -336,6 +339,7 @@ statfunc int eval_pred(unsigned int pred_idx, const struct event_t *current_even
         case PARENT_PROCESS_SUID: return eval_process(&current_event->parent_process, pred, TARGET_PROCESS_SUID);
         case PARENT_PROCESS_PTRACE_FLAGS: return eval_process(&current_event->parent_process, pred, TARGET_PROCESS_PTRACE_FLAGS);
         case PARENT_PROCESS_CMD: return eval_process(&current_event->parent_process, pred, TARGET_PROCESS_CMD);
+        case PARENT_PROCESS_SHELL_COMMAND: return eval_process(&current_event->parent_process, pred, TARGET_PROCESS_SHELL_COMMAND);
         case PARENT_PROCESS_FILE_PATH: return eval_process(&current_event->parent_process, pred, TARGET_FILE_PATH);
         case PARENT_PROCESS_FILE_FILENAME: return eval_process(&current_event->parent_process, pred, TARGET_FILE_FILENAME);
         case PARENT_PROCESS_FILE_OWNER_UID: return eval_process(&current_event->parent_process, pred, TARGET_FILE_OWNER_UID);

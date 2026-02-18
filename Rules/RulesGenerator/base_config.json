@@ -16,6 +16,9 @@
         },
         "network_monitoring": {
             "enabled": true
+        },
+        "shell_commands_monitoring": {
+            "enabled": true
         }
     },
     "userspace": {

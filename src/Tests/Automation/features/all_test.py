@@ -4,6 +4,7 @@ from common_steps.process_steps import *
 from common_steps.event_steps import *
 from common_steps.network_steps import *
 from common_steps.logger_steps import *
+from common_steps.db_steps import *
 
 @scenario('on_chmod_test.feature', 'allowed_chmod')
 def test_allowed_chmod():
@@ -215,4 +216,48 @@ def test_blocked_incoming_netcat_connection():
 
 @scenario('on_tcp_test.feature', 'blocked_outgoing_netcat_connection')
 def test_blocked_outgoing_netcat_connection():
+    pass
+
+@scenario('shell_commands.feature', 'multiple_unchained_shell_commands_same_shell_instance')
+def test_multiple_unchained_shell_commands_same_shell_instance():
+    pass
+
+@scenario('shell_commands.feature', 'chained_shell_command_find_all_events')
+def test_chained_shell_command_find_all_events():
+    pass
+
+@scenario('shell_commands.feature', 'mixed_shell_builtin_and_external_commands')
+def test_mixed_shell_builtin_and_external_commands():
+    pass
+
+@scenario('shell_commands.feature', 'shell_exits_before_child_process')
+def test_shell_exits_before_child_process():
+    pass
+
+@scenario('shell_commands.feature', 'shell_exec_to_another_process')
+def test_shell_exec_to_another_process():
+    pass
+
+@scenario('shell_commands.feature', 'shell_starts_before_owlsm')
+def test_shell_starts_before_owlsm():
+    pass
+
+@scenario('shell_commands.feature', 'new_shell_gets_detected_and_monitored')
+def test_new_shell_gets_detected_and_monitored():
+    pass
+
+@scenario('shell_commands.feature', 'complex_commands')
+def test_complex_commands():
+    pass
+
+@scenario('shell_commands.feature', 'shell_db_contains_all_system_shells')
+def test_shell_db_contains_all_system_shells():
+    pass
+
+@scenario('shell_commands.feature', 'shell_monitoring_disabled')
+def test_shell_monitoring_disabled():
+    pass
+
+@scenario('shell_commands.feature', 'shell_command_blocked_write')
+def test_shell_command_blocked_write():
     pass

@@ -2,7 +2,7 @@
 
 #include "bpf_header_includes.h"
 #include "events/sync_enrichment.hpp"
-#include "events/async_work_distributor.hpp"
+#include "async_event_work/async_work_distributor.hpp"
 #include "events/parse_messages.hpp"
 #include "logger.hpp"
 
@@ -180,10 +180,17 @@ private:
     {
         for (const auto& msg : m_messages_queue)
         {
-            nlohmann::json j;
-            owlsm::events::to_json(j, msg);
-            output_buffer += j.dump();
-            output_buffer += '\n';
+            try
+            {
+                nlohmann::json j;
+                owlsm::events::to_json(j, msg);
+                output_buffer += j.dump();
+                output_buffer += '\n';
+            }
+            catch (const std::exception& e)
+            {
+                LOG_ERROR("Failed to serialize message to JSON: " << e.what());
+            }
         }
     }
 

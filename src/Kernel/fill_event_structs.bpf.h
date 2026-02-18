@@ -94,7 +94,7 @@ statfunc int fill_event_process_from_cache(struct process_t *process_event)
         int ret = fill_current_process_t(process_event);
         if(ret == SUCCESS)
         {
-            update_process_in_alive_process_cache(pid, process_event);
+            ret = update_process_in_alive_process_cache(pid, process_event);
         }
         return ret;
     }

@@ -3,4 +3,6 @@
 namespace owlsm::globals 
 {
     config::Config g_config {};
+    ProbeManager g_probe_manager {};
+    ShellsDB g_shells_db {};
 }
