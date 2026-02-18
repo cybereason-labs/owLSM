@@ -1,4 +1,5 @@
 # Rule 005: Complex rule with 64 tokens - does NOT match due to strategic "not"
+# (Note: MAX_TOKENS_PER_RULE was increased from 64 to 128. This rule still has 64 tokens.)
 # Target: chmod 777 /tmp/1 (path=/usr/bin/chmod, filename=chmod, commandline="chmod 777 /tmp/1")
 # The "not chmodMatch" at the end causes this rule to NOT match
 # If you remove "and not chmodMatch", the rule WILL match

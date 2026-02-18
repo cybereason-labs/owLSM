@@ -12,7 +12,7 @@
 // Macros
 // =============================================================================
 
-#define MAX_TOKENS_PER_RULE 64
+#define MAX_TOKENS_PER_RULE 128
 #define MAX_NEEDLE_LENGTH 32
 #define MAX_TOTAL_PREDS 16384
 #define MAX_RULES_PER_MAP 100

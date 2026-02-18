@@ -13,7 +13,11 @@ struct {
     __type(value, struct eval_stack);
 } helper_stack SEC(".maps");
 
-#define STACK_IDX(stack_pointer) ((stack_pointer) & (MAX_TOKENS_PER_RULE - 1))
+#define STACK_IDX(stack_pointer) ({                                    \
+    unsigned char __idx = (stack_pointer) & (MAX_TOKENS_PER_RULE - 1); \
+    asm volatile("" : "+r"(__idx));                                    \
+    __idx;                                                             \
+})
 
 statfunc struct eval_stack* get_helper_stack(void)
 {

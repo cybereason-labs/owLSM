@@ -187,3 +187,27 @@ Scenario: out_of_range_versions
             | type                  | CHMOD                           |
             | data.target.file.path | /tmp/out_of_range_versions_test |
             | matched_rule_id       | 0                               |
+
+
+Scenario: complex_120_token_chmod_rule__match_and_exclude
+    Given The owLSM process is running
+    And I ensure the file "/tmp/complex_120_test" exists
+    And I ensure the file "/tmp/complex_120_excluded" exists
+    When I run the command "/usr/bin/chmod 755 /tmp/complex_120_test" sync
+    And I run the command "/usr/bin/chmod 755 /tmp/complex_120_excluded" sync
+    Then I find the event in output in "30" seconds:
+        | action                            | BLOCK_EVENT                                              |
+        | type                              | CHMOD                                                    |
+        | process.file.path                 | /usr/bin/chmod                                           |
+        | data.target.file.path             | /tmp/complex_120_test                                    |
+        | data.chmod.requested_mode         | 493                                                      |
+        | matched_rule_id                   | 32                                                       |
+        | matched_rule_metadata.description | Complex ~120-token chmod rule for max token limit testing |
+    And I find the event in output in "10" seconds:
+        | action                    | ALLOW_EVENT               |
+        | type                      | CHMOD                     |
+        | process.file.path         | /usr/bin/chmod            |
+        | data.target.file.path     | /tmp/complex_120_excluded |
+        | data.chmod.requested_mode | 493                       |
+        | matched_rule_id           | 0                         |
+

@@ -62,7 +62,7 @@
       },
       "7": {
         "value": "/bin",
-        "is_contains": false
+        "is_contains": true
       },
       "8": {
         "value": "test",
@@ -218,7 +218,7 @@
       },
       "46": {
         "value": "mod",
-        "is_contains": false
+        "is_contains": true
       },
       "47": {
         "value": "automation.txt",
@@ -256,15 +256,15 @@
         "value": "out_of_range_versions_test",
         "is_contains": false
       },
-      "56": {
+      "57": {
         "value": "/tmp/test_exclude_mkdir_event",
         "is_contains": true
       },
-      "57": {
+      "58": {
         "value": "_blocked_rmdir_test_",
         "is_contains": true
       },
-      "58": {
+      "59": {
         "value": "/tmp/test_exclude_rmdir_event",
         "is_contains": true
       },
