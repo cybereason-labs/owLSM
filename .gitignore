@@ -19,7 +19,6 @@ venv/
 Thumbs.db
 
 # automation 
-*.db
 *.log
 *.sqlite
 src/Tests/Automation/owlsm/*
