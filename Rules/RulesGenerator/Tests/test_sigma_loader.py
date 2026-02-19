@@ -1158,6 +1158,295 @@ detection:
         assert len(rules) == 1
 
 
+class TestFieldrefModifierValidation:
+    """Tests for |fieldref modifier validation in parse_field_key and validate_selection_item."""
+
+    def test_fieldref_string_field(self):
+        result = parse_field_key("process.file.filename|fieldref")
+        assert result.field_name == "process.file.filename"
+        assert result.field_type == "string"
+        assert result.comparison == "exactmatch"
+        assert result.is_fieldref == True
+
+    def test_fieldref_numeric_field(self):
+        result = parse_field_key("process.pid|fieldref")
+        assert result.field_name == "process.pid"
+        assert result.field_type == "numeric"
+        assert result.comparison == "equal"
+        assert result.is_fieldref == True
+
+    def test_fieldref_enum_field(self):
+        result = parse_field_key("process.file.type|fieldref")
+        assert result.field_name == "process.file.type"
+        assert result.field_type == "enum"
+        assert result.comparison == "equal"
+        assert result.is_fieldref == True
+
+    def test_fieldref_with_startswith(self):
+        result = parse_field_key("process.cmd|fieldref|startswith")
+        assert result.comparison == "startswith"
+        assert result.is_fieldref == True
+
+    def test_fieldref_with_endswith(self):
+        result = parse_field_key("process.file.path|fieldref|endswith")
+        assert result.comparison == "endswith"
+        assert result.is_fieldref == True
+
+    def test_fieldref_with_gt(self):
+        result = parse_field_key("process.pid|fieldref|gt")
+        assert result.comparison == "above"
+        assert result.is_fieldref == True
+
+    def test_fieldref_with_gte(self):
+        result = parse_field_key("process.euid|fieldref|gte")
+        assert result.comparison == "equal_above"
+        assert result.is_fieldref == True
+
+    def test_fieldref_with_lt(self):
+        result = parse_field_key("process.rgid|fieldref|lt")
+        assert result.comparison == "below"
+        assert result.is_fieldref == True
+
+    def test_fieldref_with_lte(self):
+        result = parse_field_key("chmod.requested_mode|fieldref|lte")
+        assert result.comparison == "equal_below"
+        assert result.is_fieldref == True
+
+    def test_fieldref_with_neq(self):
+        result = parse_field_key("process.pid|fieldref|neq")
+        assert result.is_fieldref == True
+
+    def test_fieldref_neq_reversed_order(self):
+        result = parse_field_key("process.pid|neq|fieldref")
+        assert result.is_fieldref == True
+
+    def test_fieldref_on_ip_field_rejected(self):
+        with pytest.raises(Exception, match="fieldref.*cannot.*IP"):
+            parse_field_key("network.source_ip|fieldref")
+
+    def test_fieldref_with_contains_rejected(self):
+        with pytest.raises(Exception, match="contains.*cannot.*fieldref"):
+            parse_field_key("process.cmd|fieldref|contains")
+
+    def test_fieldref_with_all_rejected(self):
+        with pytest.raises(Exception, match="all.*cannot.*fieldref"):
+            parse_field_key("process.cmd|fieldref|all")
+
+    def test_fieldref_with_cidr_rejected(self):
+        with pytest.raises(Exception, match="fieldref.*cannot.*IP"):
+            parse_field_key("network.source_ip|fieldref|cidr")
+
+    def test_fieldref_duplicate_rejected(self):
+        with pytest.raises(Exception, match="[Dd]uplicate.*fieldref"):
+            parse_field_key("process.cmd|fieldref|fieldref")
+
+    def test_enum_fieldref_with_gt_rejected(self):
+        with pytest.raises(Exception, match="[Ee]num.*fieldref.*do not support"):
+            parse_field_key("process.file.type|fieldref|gt")
+
+    def test_enum_fieldref_with_lte_rejected(self):
+        with pytest.raises(Exception, match="[Ee]num.*fieldref.*do not support"):
+            parse_field_key("process.file.type|fieldref|lte")
+
+    def test_enum_fieldref_with_neq_allowed(self):
+        result = parse_field_key("process.file.type|fieldref|neq")
+        assert result.is_fieldref == True
+
+    def test_fieldref_gte_reversed_order(self):
+        result = parse_field_key("process.pid|gte|fieldref")
+        assert result.comparison == "equal_above"
+        assert result.is_fieldref == True
+
+    def test_fieldref_lt_reversed_order(self):
+        result = parse_field_key("process.pid|lt|fieldref")
+        assert result.comparison == "below"
+        assert result.is_fieldref == True
+
+    def test_fieldref_startswith_reversed_order(self):
+        result = parse_field_key("process.cmd|startswith|fieldref")
+        assert result.comparison == "startswith"
+        assert result.is_fieldref == True
+
+    def test_fieldref_multiple_numeric_modifiers_rejected(self):
+        with pytest.raises(Exception, match="[Mm]ultiple modifiers"):
+            parse_field_key("process.pid|fieldref|gte|lt")
+
+    def test_fieldref_multiple_string_modifiers_rejected(self):
+        with pytest.raises(Exception, match="[Mm]ultiple modifiers"):
+            parse_field_key("process.cmd|fieldref|startswith|endswith")
+
+    def test_without_fieldref_has_false(self):
+        result = parse_field_key("process.cmd|contains")
+        assert result.is_fieldref == False
+
+    def test_rule_with_fieldref_string_loads(self, tmp_path):
+        rule = """
+id: 1100
+description: "fieldref string test"
+action: "BLOCK_EVENT"
+events: [CHMOD]
+detection:
+    sel:
+        process.file.filename|fieldref: parent_process.file.filename
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+        rules = load_sigma_rules(str(tmp_path))
+        assert len(rules) == 1
+
+    def test_rule_with_fieldref_numeric_loads(self, tmp_path):
+        rule = """
+id: 1101
+description: "fieldref numeric test"
+action: "BLOCK_EVENT"
+events: [CHMOD]
+detection:
+    sel:
+        process.pid|fieldref: parent_process.pid
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+        rules = load_sigma_rules(str(tmp_path))
+        assert len(rules) == 1
+
+    def test_rule_with_fieldref_enum_loads(self, tmp_path):
+        rule = """
+id: 1102
+description: "fieldref enum test"
+action: "BLOCK_EVENT"
+events: [CHMOD]
+detection:
+    sel:
+        process.file.type|fieldref: parent_process.file.type
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+        rules = load_sigma_rules(str(tmp_path))
+        assert len(rules) == 1
+
+    def test_fieldref_invalid_target_rejected(self, tmp_path):
+        rule = """
+id: 1103
+description: "fieldref invalid target"
+action: "BLOCK_EVENT"
+events: [CHMOD]
+detection:
+    sel:
+        process.cmd|fieldref: nonexistent.field
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+        with pytest.raises(Exception, match="fieldref target.*not a valid field"):
+            load_sigma_rules(str(tmp_path))
+
+    def test_fieldref_type_mismatch_rejected(self, tmp_path):
+        rule = """
+id: 1104
+description: "fieldref type mismatch"
+action: "BLOCK_EVENT"
+events: [CHMOD]
+detection:
+    sel:
+        process.file.filename|fieldref: parent_process.pid
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+        with pytest.raises(Exception, match="fieldref type mismatch"):
+            load_sigma_rules(str(tmp_path))
+
+    def test_fieldref_list_value_rejected(self, tmp_path):
+        rule = """
+id: 1105
+description: "fieldref list value"
+action: "BLOCK_EVENT"
+events: [CHMOD]
+detection:
+    sel:
+        process.cmd|fieldref:
+            - parent_process.cmd
+            - parent_process.file.filename
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+        with pytest.raises(Exception, match="fieldref.*single field name string"):
+            load_sigma_rules(str(tmp_path))
+
+    def test_fieldref_target_ip_field_rejected(self, tmp_path):
+        rule = """
+id: 1106
+description: "fieldref target is IP field"
+action: "BLOCK_EVENT"
+events: [NETWORK]
+detection:
+    sel:
+        process.cmd|fieldref: network.source_ip
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+        with pytest.raises(Exception, match="fieldref cannot reference IP fields"):
+            load_sigma_rules(str(tmp_path))
+
+    def test_fieldref_with_startswith_loads(self, tmp_path):
+        rule = """
+id: 1107
+description: "fieldref startswith"
+action: "BLOCK_EVENT"
+events: [CHMOD]
+detection:
+    sel:
+        process.file.path|fieldref|startswith: parent_process.file.path
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+        rules = load_sigma_rules(str(tmp_path))
+        assert len(rules) == 1
+
+    def test_fieldref_with_numeric_modifier_loads(self, tmp_path):
+        rule = """
+id: 1108
+description: "fieldref gte"
+action: "BLOCK_EVENT"
+events: [CHMOD]
+detection:
+    sel:
+        process.pid|fieldref|gte: parent_process.pid
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+        rules = load_sigma_rules(str(tmp_path))
+        assert len(rules) == 1
+
+    def test_fieldref_numeric_value_rejected(self, tmp_path):
+        rule = """
+id: 1109
+description: "fieldref with numeric value"
+action: "BLOCK_EVENT"
+events: [CHMOD]
+detection:
+    sel:
+        process.pid|fieldref: 123
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+        with pytest.raises(Exception, match="fieldref.*single field name string"):
+            load_sigma_rules(str(tmp_path))
+
+    def test_fieldref_enum_type_mismatch_rejected(self, tmp_path):
+        rule = """
+id: 1110
+description: "fieldref enum to string mismatch"
+action: "BLOCK_EVENT"
+events: [CHMOD]
+detection:
+    sel:
+        process.file.type|fieldref: process.cmd
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+        with pytest.raises(Exception, match="fieldref type mismatch"):
+            load_sigma_rules(str(tmp_path))
+
+
 class TestNetworkEventValidation:
     """Tests for NETWORK event type validation."""
     

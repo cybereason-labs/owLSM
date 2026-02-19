@@ -1684,3 +1684,295 @@ detection:
         rule_ids = {r["id"] for r in data["rules"]}
         assert rule_ids == {5010, 5011, 5012}
 
+
+# =============================================================================
+# 9) Fieldref Tests
+# =============================================================================
+
+class TestFieldrefE2E:
+    """E2E tests for fieldref modifier through the full pipeline."""
+
+    def test_fieldref_string_e2e(self, tmp_path):
+        rule = """
+id: 6000
+description: "fieldref string e2e"
+action: "BLOCK_EVENT"
+events: [CHMOD]
+detection:
+    sel:
+        process.file.filename|fieldref: parent_process.file.filename
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+        rules = load_sigma_rules(str(tmp_path))
+        ctx = parse_rules(rules)
+
+        assert len(ctx.rules) == 1
+        pred = ctx.id_to_predicate[0]
+        assert pred.is_fieldref_predicate()
+        assert pred.fieldref == "PARENT_PROCESS_FILE_FILENAME"
+        assert pred.comparison_type == "exactmatch"
+        assert pred.string_idx == -1
+        assert pred.numerical_value == -1
+
+    def test_fieldref_numeric_e2e(self, tmp_path):
+        rule = """
+id: 6001
+description: "fieldref numeric e2e"
+action: "BLOCK_EVENT"
+events: [CHMOD]
+detection:
+    sel:
+        process.pid|fieldref: parent_process.pid
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+        rules = load_sigma_rules(str(tmp_path))
+        ctx = parse_rules(rules)
+
+        pred = ctx.id_to_predicate[0]
+        assert pred.fieldref == "PARENT_PROCESS_PID"
+        assert pred.comparison_type == "equal"
+
+    def test_fieldref_enum_e2e(self, tmp_path):
+        rule = """
+id: 6002
+description: "fieldref enum e2e"
+action: "BLOCK_EVENT"
+events: [CHMOD]
+detection:
+    sel:
+        process.file.type|fieldref: parent_process.file.type
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+        rules = load_sigma_rules(str(tmp_path))
+        ctx = parse_rules(rules)
+
+        pred = ctx.id_to_predicate[0]
+        assert pred.fieldref == "PARENT_PROCESS_FILE_TYPE"
+        assert pred.comparison_type == "equal"
+
+    def test_fieldref_with_startswith_e2e(self, tmp_path):
+        rule = """
+id: 6003
+description: "fieldref startswith e2e"
+action: "BLOCK_EVENT"
+events: [CHMOD]
+detection:
+    sel:
+        process.file.path|fieldref|startswith: parent_process.file.path
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+        rules = load_sigma_rules(str(tmp_path))
+        ctx = parse_rules(rules)
+
+        pred = ctx.id_to_predicate[0]
+        assert pred.comparison_type == "startswith"
+        assert pred.fieldref == "PARENT_PROCESS_FILE_PATH"
+
+    def test_fieldref_with_endswith_e2e(self, tmp_path):
+        rule = """
+id: 6004
+description: "fieldref endswith e2e"
+action: "BLOCK_EVENT"
+events: [CHMOD]
+detection:
+    sel:
+        process.file.filename|fieldref|endswith: parent_process.file.filename
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+        rules = load_sigma_rules(str(tmp_path))
+        ctx = parse_rules(rules)
+
+        pred = ctx.id_to_predicate[0]
+        assert pred.comparison_type == "endswith"
+        assert pred.fieldref == "PARENT_PROCESS_FILE_FILENAME"
+
+    def test_fieldref_with_gte_e2e(self, tmp_path):
+        rule = """
+id: 6005
+description: "fieldref gte e2e"
+action: "BLOCK_EVENT"
+events: [CHMOD]
+detection:
+    sel:
+        process.euid|fieldref|gte: parent_process.euid
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+        rules = load_sigma_rules(str(tmp_path))
+        ctx = parse_rules(rules)
+
+        pred = ctx.id_to_predicate[0]
+        assert pred.comparison_type == "equal_above"
+        assert pred.fieldref == "PARENT_PROCESS_EUID"
+
+    def test_fieldref_with_neq_e2e(self, tmp_path):
+        rule = """
+id: 6006
+description: "fieldref neq e2e"
+action: "BLOCK_EVENT"
+events: [CHMOD]
+detection:
+    sel:
+        process.pid|neq|fieldref: parent_process.pid
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+        rules = load_sigma_rules(str(tmp_path))
+        ctx = parse_rules(rules)
+
+        assert ctx.rules[0].condition_expr.operator_type == "NOT"
+        child = ctx.rules[0].condition_expr.children[0]
+        pred = ctx.id_to_predicate[child.predicate_idx]
+        assert pred.fieldref == "PARENT_PROCESS_PID"
+
+    def test_fieldref_mixed_with_regular_fields_e2e(self, tmp_path):
+        rule = """
+id: 6007
+description: "fieldref mixed"
+action: "BLOCK_EVENT"
+events: [CHMOD]
+detection:
+    sel:
+        process.file.filename|fieldref: parent_process.file.filename
+        process.cmd|contains: "suspicious"
+        process.pid|gt: 100
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+        rules = load_sigma_rules(str(tmp_path))
+        ctx = parse_rules(rules)
+
+        assert len(ctx.id_to_predicate) == 3
+        fieldref_preds = [p for p in ctx.id_to_predicate.values() if p.is_fieldref_predicate()]
+        string_preds = [p for p in ctx.id_to_predicate.values() if p.is_string_predicate()]
+        numeric_preds = [p for p in ctx.id_to_predicate.values() if p.is_numeric_predicate()]
+        assert len(fieldref_preds) == 1
+        assert len(string_preds) == 1
+        assert len(numeric_preds) == 1
+
+    def test_fieldref_json_output_e2e(self, tmp_path):
+        """Test fieldref through the full pipeline to JSON output."""
+        rule = """
+id: 6008
+description: "fieldref json output"
+action: "BLOCK_EVENT"
+events: [CHMOD]
+detection:
+    sel:
+        process.pid|fieldref|gte: parent_process.pid
+        process.file.filename|fieldref|startswith: parent_process.file.filename
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+        rules = load_sigma_rules(str(tmp_path))
+        parsed_ctx = parse_rules(rules)
+        postfix_ctx = convert_to_postfix(parsed_ctx)
+        data = serialize_context(postfix_ctx)
+
+        assert len(data["rules"]) == 1
+        assert len(data["id_to_predicate"]) == 2
+        assert len(data["id_to_string"]) == 0
+
+        preds = data["id_to_predicate"]
+        for pred in preds.values():
+            assert pred["fieldref"] != "FIELD_TYPE_NONE"
+            assert pred["string_idx"] == -1
+            assert pred["numerical_value"] == -1
+
+    def test_fieldref_type_mismatch_rejected_e2e(self, tmp_path):
+        rule = """
+id: 6009
+description: "fieldref type mismatch"
+action: "BLOCK_EVENT"
+events: [CHMOD]
+detection:
+    sel:
+        process.file.filename|fieldref: parent_process.pid
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+        with pytest.raises(Exception, match="fieldref type mismatch"):
+            load_sigma_rules(str(tmp_path))
+
+    def test_fieldref_invalid_target_rejected_e2e(self, tmp_path):
+        rule = """
+id: 6010
+description: "fieldref invalid target"
+action: "BLOCK_EVENT"
+events: [CHMOD]
+detection:
+    sel:
+        process.cmd|fieldref: nonexistent_field
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+        with pytest.raises(Exception, match="fieldref target.*not a valid field"):
+            load_sigma_rules(str(tmp_path))
+
+    def test_fieldref_contains_rejected_e2e(self, tmp_path):
+        rule = """
+id: 6011
+description: "fieldref contains rejected"
+action: "BLOCK_EVENT"
+events: [CHMOD]
+detection:
+    sel:
+        process.cmd|fieldref|contains: parent_process.cmd
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+        with pytest.raises(Exception, match="contains.*cannot.*fieldref"):
+            load_sigma_rules(str(tmp_path))
+
+    def test_fieldref_ip_field_rejected_e2e(self, tmp_path):
+        rule = """
+id: 6012
+description: "fieldref on IP field"
+action: "BLOCK_EVENT"
+events: [NETWORK]
+detection:
+    sel:
+        network.source_ip|fieldref: network.destination_ip
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+        with pytest.raises(Exception, match="fieldref.*cannot.*IP"):
+            load_sigma_rules(str(tmp_path))
+
+    def test_fieldref_enum_with_extra_modifier_rejected_e2e(self, tmp_path):
+        rule = """
+id: 6013
+description: "fieldref enum with gt rejected"
+action: "BLOCK_EVENT"
+events: [CHMOD]
+detection:
+    sel:
+        process.file.type|fieldref|gt: parent_process.file.type
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+        with pytest.raises(Exception, match="[Ee]num.*fieldref.*do not support"):
+            load_sigma_rules(str(tmp_path))
+
+    def test_fieldref_list_value_rejected_e2e(self, tmp_path):
+        rule = """
+id: 6014
+description: "fieldref list value"
+action: "BLOCK_EVENT"
+events: [CHMOD]
+detection:
+    sel:
+        process.cmd|fieldref:
+            - parent_process.cmd
+            - parent_process.file.filename
+    condition: sel
+"""
+        (tmp_path / "rule.yml").write_text(rule)
+        with pytest.raises(Exception, match="fieldref.*single field name string"):
+            load_sigma_rules(str(tmp_path))
+

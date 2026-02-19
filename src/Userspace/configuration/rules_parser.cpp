@@ -126,6 +126,9 @@ namespace owlsm::config
         
         o.string_idx = j.at("string_idx").get<int>();
         o.numerical_value = j.at("numerical_value").get<int>();
+
+        const auto fieldref_str = j.at("fieldref").get<std::string>();
+        o.fieldref = parse_field_id(fieldref_str);
     }
 
     void RulesParser::from_json(const nlohmann::json& j, RuleIP& o) const

@@ -236,7 +236,7 @@ constexpr std::string_view REAL_SCHEMA_4 = R"(
         },
         "predicate_t": {
             "type": "object",
-            "required": ["field", "comparison_type", "string_idx", "numerical_value"],
+            "required": ["field", "comparison_type", "string_idx", "numerical_value", "fieldref"],
             "additionalProperties": false,
             "properties": {
                 "field": {
@@ -263,6 +263,9 @@ constexpr std::string_view REAL_SCHEMA_4 = R"(
                 "numerical_value": {
                     "type": "integer",
                     "minimum": -1
+                },
+                "fieldref": {
+                    "type": "string"
                 }
             },
             "oneOf": [
@@ -274,6 +277,9 @@ constexpr std::string_view REAL_SCHEMA_4 = R"(
                         "numerical_value": {
                             "type": "integer",
                             "minimum": 0
+                        },
+                        "fieldref": {
+                            "const": "FIELD_TYPE_NONE"
                         }
                     }
                 },
@@ -285,6 +291,23 @@ constexpr std::string_view REAL_SCHEMA_4 = R"(
                         },
                         "numerical_value": {
                             "const": -1
+                        },
+                        "fieldref": {
+                            "const": "FIELD_TYPE_NONE"
+                        }
+                    }
+                },
+                {
+                    "properties": {
+                        "string_idx": {
+                            "const": -1
+                        },
+                        "numerical_value": {
+                            "const": -1
+                        },
+                        "fieldref": {
+                            "type": "string",
+                            "not": { "const": "FIELD_TYPE_NONE" }
                         }
                     }
                 }
@@ -448,19 +471,22 @@ constexpr std::string_view REAL_JSON_5 = R"(
                 "field": "target.file.path",
                 "comparison_type": "contains",
                 "string_idx": 0,
-                "numerical_value": -1
+                "numerical_value": -1,
+                "fieldref": "FIELD_TYPE_NONE"
             },
             "1": {
                 "field": "process.file.filename",
                 "comparison_type": "endswith",
                 "string_idx": 1,
-                "numerical_value": -1
+                "numerical_value": -1,
+                "fieldref": "FIELD_TYPE_NONE"
             },
             "2": {
                 "field": "process.pid",
                 "comparison_type": "equal",
                 "string_idx": -1,
-                "numerical_value": 1000
+                "numerical_value": 1000,
+                "fieldref": "FIELD_TYPE_NONE"
             }
         },
         "id_to_ip": {},
@@ -515,7 +541,8 @@ constexpr std::string_view INVALID_STRING_TOO_LONG_JSON = R"(
                 "field": "target.file.path",
                 "comparison_type": "contains",
                 "string_idx": 0,
-                "numerical_value": -1
+                "numerical_value": -1,
+                "fieldref": "FIELD_TYPE_NONE"
             }
         },
         "id_to_ip": {},
@@ -538,7 +565,8 @@ constexpr std::string_view INVALID_IS_CONTAINS_NOT_BOOLEAN_JSON = R"(
                 "field": "target.file.path",
                 "comparison_type": "contains",
                 "string_idx": 0,
-                "numerical_value": -1
+                "numerical_value": -1,
+                "fieldref": "FIELD_TYPE_NONE"
             }
         },
         "id_to_ip": {},
@@ -561,7 +589,8 @@ constexpr std::string_view INVALID_FIELD_NAME_JSON = R"(
                 "field": "invalid.field.name",
                 "comparison_type": "contains",
                 "string_idx": 0,
-                "numerical_value": -1
+                "numerical_value": -1,
+                "fieldref": "FIELD_TYPE_NONE"
             }
         },
         "id_to_ip": {},
@@ -584,7 +613,8 @@ constexpr std::string_view INVALID_BOTH_INDICES_SET_JSON = R"(
                 "field": "target.file.path",
                 "comparison_type": "contains",
                 "string_idx": 0,
-                "numerical_value": 100
+                "numerical_value": 100,
+                "fieldref": "FIELD_TYPE_NONE"
             }
         },
         "id_to_ip": {},
@@ -603,7 +633,8 @@ constexpr std::string_view RULE_WITH_ZERO_TOKENS_JSON = R"(
                 "field": "target.file.path",
                 "comparison_type": "contains",
                 "string_idx": 0,
-                "numerical_value": -1
+                "numerical_value": -1,
+                "fieldref": "FIELD_TYPE_NONE"
             }
         },
         "rules": [
@@ -643,7 +674,8 @@ constexpr std::string_view VALID_EMPTY_ID_TO_STRING_JSON = R"(
                 "field": "process.pid",
                 "comparison_type": "equal",
                 "string_idx": -1,
-                "numerical_value": 1000
+                "numerical_value": 1000,
+                "fieldref": "FIELD_TYPE_NONE"
             }
         },
         "id_to_ip": {},

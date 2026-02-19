@@ -168,7 +168,7 @@
         },
         "predicate_t": {
             "type": "object",
-            "required": ["field", "comparison_type", "string_idx", "numerical_value"],
+            "required": ["field", "comparison_type", "string_idx", "numerical_value", "fieldref"],
             "additionalProperties": false,
             "properties": {
                 "field": {
@@ -195,6 +195,9 @@
                 "numerical_value": {
                     "type": "integer",
                     "minimum": -1
+                },
+                "fieldref": {
+                    "type": "string"
                 }
             },
             "oneOf": [
@@ -206,6 +209,9 @@
                         "numerical_value": {
                             "type": "integer",
                             "minimum": 0
+                        },
+                        "fieldref": {
+                            "const": "FIELD_TYPE_NONE"
                         }
                     }
                 },
@@ -217,6 +223,23 @@
                         },
                         "numerical_value": {
                             "const": -1
+                        },
+                        "fieldref": {
+                            "const": "FIELD_TYPE_NONE"
+                        }
+                    }
+                },
+                {
+                    "properties": {
+                        "string_idx": {
+                            "const": -1
+                        },
+                        "numerical_value": {
+                            "const": -1
+                        },
+                        "fieldref": {
+                            "type": "string",
+                            "not": { "const": "FIELD_TYPE_NONE" }
                         }
                     }
                 }

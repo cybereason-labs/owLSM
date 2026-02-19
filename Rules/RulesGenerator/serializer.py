@@ -9,7 +9,8 @@ def serialize_predicate(pred: Predicate) -> Dict[str, Any]:
         "field": pred.field,
         "comparison_type": pred.comparison_type,
         "string_idx": pred.string_idx,
-        "numerical_value": pred.numerical_value
+        "numerical_value": pred.numerical_value,
+        "fieldref": pred.fieldref
     }
 
 def serialize_ip(rule_ip: RuleIP) -> Dict[str, Any]:

@@ -1,0 +1,113 @@
+I want to start supporting fieldref
+However, the fieldref isn't documented very well https://sigmahq.io/docs/basics/modifiers.html#fieldref And doesn't have many examples.
+Its unclear if fieldref supports: Lists and extra modifiers like (contains, startswith, gte, lte, etc)
+It only talks about supporting the modifier neq.
+
+What I want to support when using fieldref:
+- string values
+- numeric values
+- enum values
+- string modifiers (startswith, endswith)
+- numeric modifiers (gte, lte, gt, lt)
+- neq
+
+What I don't want to support when using fieldref:
+- ip values
+- Lists
+- cidr
+- all modifier (as we don't support lists)
+- contains 
+
+# How I see us doing it:
+## constants
+1) Add a FIELD_TYPE_NONE to the rule_field_type. Make it the first value.
+This will be used as the default vaule for predicate.fieldref when its not set.
+
+2) Add fieldref to the schema.json
+- update the unit tests
+- update everything that uses the scehma
+
+## Rules Generator. Python
+3) When we see fieldref we need to check if it has extra modifiers. 
+If it does, ensure its an allowed modifier.
+
+4) Ensure that the value of the fieldref is in src/Shared/constants.json rule_field_types
+
+5) Ensure that the value of fieldref and the type of the field are the same. 
+For example:
+[Good. Both are strings] process.file.filename|fieldref: parent_process.cmd
+[Bad. parent_process.pid is a numeric field] process.file.filename|fieldref: parent_process.pid
+
+6) If the fieldref has an extra modifier, ensure the modifier is aligned with the field type.
+Just like we do already.
+
+7) Currently class Predicate looks like this:
+class Predicate:
+    field: str
+    comparison_type: str
+    string_idx: int = -1
+    numerical_value: int = -1
+
+- when creating a predicate, one of string_idx or numerical_value will be -1 and the other will be a valid value.
+- field is the field that the predicate is on. Example: process.file.filename
+- comparison_type is the comparison type of the predicate. Example: contains, startswith, endswith, gte, lte, gt, lt, equal, neq
+
+We will add another field called fieldref, wich will be a string that describes the field it represents in the enum in src/Shared/constants.h rule_field_type
+
+8) when fieldref is used in the sigma rule, we will populate the Predicate.fieldref member.
+
+9) We will still need to ensure that only one of Predicate.string_idx or Predicate.numerical_value or Predicate.fieldref is set.
+If Predicate.fieldref is set, the other two will be set to -1.
+If Predicate.string_idx or Predicate.numerical_value is set, Predicate.fieldref will be empty string and the other one will be -1.
+
+10) Ensure that when enum field is used, we don't allow fieldref to be used with additional modifiers.
+Only the modifier neq is allowed.
+
+
+## Userspace. C++
+11) We currently have
+struct predicate_t {
+    enum rule_field_type field;
+    enum comparison_type operation;
+    int string_idx;
+    int numerical_value;
+};
+
+We will need to add: 
+enum rule_field_type fieldref;
+
+12) Enhance the parser to parse the fieldref field from the json and using magic_enum to convert the string to the enum value.
+
+- update the relevant structs and classes, like predicate_t and rule.hpp, etc
+
+## EBPF side. C
+13) In 
+statfunc int compare_numeric(int event_value, struct predicate_t *pred) {...}
+Check if the pred->numerical_value is set. If it is, use it. If not, use the fieldref.
+Using fieldref means getting the corresponding field from the event and using it as the event_value.
+
+14) In 
+statfunc int compare_string(const char *haystack, unsigned char haystack_length, unsigned char haystack_max_length, struct predicate_t *pred) {...}
+Check if the pred->string_idx is set. If it is, use it. If not, use the fieldref.
+Using fieldref means getting the corresponding field from the event and using it as the event_value.
+
+15) When using fieldref we will have to add support for startswith, endswith and exactmatch for strings of length of up to PATH_MAX (256)
+- lets focus on how to do it later.
+
+16) Add unit tests for the long string comparison.
+
+
+## Automation tests. Python
+- numeric fieldref values
+- string fieldref values with long string (around 200 characters)
+- enum fieldref values
+- numeric fieldref values with with extra modifiers.
+- string fieldref values with modifiers (startswith and endswith. If possible in a single test) with long string (around 250 characters)
+
+
+# Extra details for implementation:
+- Try to use pysigma as much as possible, in order to avoid reinventing the wheel.
+- Try to use 3rd party code and libraries as much as possible, in order to avoid reinventing the wheel.
+- Keep everything as simple and as readable as possible.
+- Cover the new logic and code with a lot of unit tests. Thing about every edge case. This is specifically for the Rules Generator.
+- Many cuurent unit tests in the rules generator are going to fail due to the changes. Fix them.

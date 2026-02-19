@@ -28,6 +28,7 @@ struct Predicate
     enum comparison_type comparison_type;
     int string_idx;
     int numerical_value;
+    enum rule_field_type fieldref;
 };
 
 struct Token

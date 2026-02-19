@@ -25,6 +25,7 @@ struct predicate_t {
     enum comparison_type operation;
     int string_idx;
     int numerical_value;
+    enum rule_field_type fieldref;
 };
 
 struct token_t {

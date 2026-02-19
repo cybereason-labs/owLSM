@@ -53,6 +53,7 @@
     },
 
     "rule_field_types": {
+        "FIELD_TYPE_NONE": "none",
         "target.file.path": "string",
         "target.file.filename": "string",
         "target.file.owner.uid": "numeric",
