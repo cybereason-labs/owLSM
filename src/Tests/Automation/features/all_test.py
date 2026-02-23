@@ -46,6 +46,14 @@ def test_all_wildcards_in_rule():
 def test_out_of_range_versions():
     pass
 
+@scenario('on_chmod_test.feature', 'complex_120_token_chmod_rule__match_and_exclude')
+def test_complex_120_token_chmod_rule__match_and_exclude():
+    pass
+
+@scenario('on_chmod_test.feature', 'neq_modifier_numeric_and_string_exclusion')
+def test_neq_modifier_numeric_and_string_exclusion():
+    pass
+
 @scenario('on_chown_test.feature', 'allowed_chown')
 def test_allowed_chown():
     pass

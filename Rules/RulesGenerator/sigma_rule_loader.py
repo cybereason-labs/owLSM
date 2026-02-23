@@ -155,6 +155,12 @@ def parse_field_key(field_key: str) -> FieldModifiers:
             has_quantifier = True
             continue
         
+        elif modifier_lower == "neq":
+            if has_modifier or has_quantifier:
+                raise Exception(f"The 'neq' modifier cannot be combined with other modifiers or quantifiers in field key '{field_key}'.")
+            has_modifier = True
+            has_quantifier = True
+        
         elif modifier_lower == "cidr":
             if not is_ip_field:
                 raise Exception(f"Modifier 'cidr' can only be used with IP fields. Field '{field_name}' is not an IP field. Valid IP fields: {sorted(IP_FIELDS)}")
@@ -287,6 +293,11 @@ def validate_keyword_selection(selection_name: str, selection_value: Any, rule_f
         raise Exception(f"Validation error in '{rule_file}': Invalid keyword selection format")
 
 
+def _field_key_has_neq(field_key: str) -> bool:
+    parts = field_key.split("|")
+    return any(p.lower() == "neq" for p in parts[1:])
+
+
 def validate_selection_item(item: Dict[str, Any], selection_name: str, rule_file: str) -> None:
 
     for field_key, values in item.items():
@@ -294,6 +305,13 @@ def validate_selection_item(item: Dict[str, Any], selection_name: str, rule_file
             field_info = parse_field_key(field_key)
         except Exception as e:
             raise Exception(f"Validation error in '{rule_file}': In selection '{selection_name}': {e}")
+        
+        if _field_key_has_neq(field_key) and not isinstance(values, (str, int, float)):
+            raise Exception(
+                f"Validation error in '{rule_file}': In selection '{selection_name}', "
+                f"field '{field_key}': the 'neq' modifier only supports a single scalar value "
+                f"(string or number). Got {type(values).__name__}."
+            )
         
         field_type = field_info.field_type
         

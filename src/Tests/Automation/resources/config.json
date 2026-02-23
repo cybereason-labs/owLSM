@@ -62,7 +62,7 @@
       },
       "7": {
         "value": "/bin",
-        "is_contains": false
+        "is_contains": true
       },
       "8": {
         "value": "test",
@@ -218,7 +218,7 @@
       },
       "46": {
         "value": "mod",
-        "is_contains": false
+        "is_contains": true
       },
       "47": {
         "value": "automation.txt",
@@ -275,6 +275,126 @@
       "60": {
         "value": "/tmp/shell_command_blocking.txt",
         "is_contains": false
+      },
+      "61": {
+        "value": "/tmp/neq_test",
+        "is_contains": false
+      },
+      "62": {
+        "value": "/usr",
+        "is_contains": true
+      },
+      "63": {
+        "value": "/usr/",
+        "is_contains": false
+      },
+      "64": {
+        "value": "/chmod",
+        "is_contains": false
+      },
+      "65": {
+        "value": "usr/bin",
+        "is_contains": true
+      },
+      "66": {
+        "value": "bin/ch",
+        "is_contains": true
+      },
+      "67": {
+        "value": "r/b",
+        "is_contains": true
+      },
+      "68": {
+        "value": "hmo",
+        "is_contains": true
+      },
+      "69": {
+        "value": "/usr/bin/chmod",
+        "is_contains": false
+      },
+      "70": {
+        "value": "chm",
+        "is_contains": true
+      },
+      "71": {
+        "value": "ch",
+        "is_contains": true
+      },
+      "72": {
+        "value": "od",
+        "is_contains": false
+      },
+      "73": {
+        "value": "c",
+        "is_contains": true
+      },
+      "74": {
+        "value": "h",
+        "is_contains": true
+      },
+      "75": {
+        "value": "/tmp",
+        "is_contains": true
+      },
+      "76": {
+        "value": "120",
+        "is_contains": true
+      },
+      "77": {
+        "value": " ",
+        "is_contains": true
+      },
+      "78": {
+        "value": "75",
+        "is_contains": true
+      },
+      "79": {
+        "value": "mp",
+        "is_contains": true
+      },
+      "80": {
+        "value": "mp/",
+        "is_contains": true
+      },
+      "81": {
+        "value": "plex",
+        "is_contains": true
+      },
+      "82": {
+        "value": "lex_",
+        "is_contains": true
+      },
+      "83": {
+        "value": "forbidden",
+        "is_contains": true
+      },
+      "84": {
+        "value": "ignore_it",
+        "is_contains": true
+      },
+      "85": {
+        "value": "skip_this",
+        "is_contains": true
+      },
+      "86": {
+        "value": "bypass_me",
+        "is_contains": true
+      },
+      "87": {
+        "value": "malware",
+        "is_contains": true
+      },
+      "88": {
+        "value": "virus",
+        "is_contains": true
+      },
+      "89": {
+        "value": "trojan",
+        "is_contains": true
+      },
+      "90": {
+        "value": "hacktool",
+        "is_contains": true
       }
     },
     "id_to_predicate": {
@@ -1464,6 +1584,276 @@
         "field": "target.file.path",
         "comparison_type": "exactmatch",
         "string_idx": 60,
+        "numerical_value": -1
+      },
+      "198": {
+        "field": "target.file.path",
+        "comparison_type": "startswith",
+        "string_idx": 61,
+        "numerical_value": -1
+      },
+      "199": {
+        "field": "process.file.path",
+        "comparison_type": "contains",
+        "string_idx": 62,
+        "numerical_value": -1
+      },
+      "200": {
+        "field": "process.file.path",
+        "comparison_type": "contains",
+        "string_idx": 7,
+        "numerical_value": -1
+      },
+      "201": {
+        "field": "process.file.path",
+        "comparison_type": "startswith",
+        "string_idx": 63,
+        "numerical_value": -1
+      },
+      "202": {
+        "field": "process.file.path",
+        "comparison_type": "endswith",
+        "string_idx": 64,
+        "numerical_value": -1
+      },
+      "203": {
+        "field": "process.file.path",
+        "comparison_type": "contains",
+        "string_idx": 65,
+        "numerical_value": -1
+      },
+      "204": {
+        "field": "process.file.path",
+        "comparison_type": "contains",
+        "string_idx": 66,
+        "numerical_value": -1
+      },
+      "205": {
+        "field": "process.file.path",
+        "comparison_type": "contains",
+        "string_idx": 67,
+        "numerical_value": -1
+      },
+      "206": {
+        "field": "process.file.path",
+        "comparison_type": "contains",
+        "string_idx": 68,
+        "numerical_value": -1
+      },
+      "207": {
+        "field": "process.file.path",
+        "comparison_type": "exactmatch",
+        "string_idx": 69,
+        "numerical_value": -1
+      },
+      "208": {
+        "field": "process.file.filename",
+        "comparison_type": "contains",
+        "string_idx": 70,
+        "numerical_value": -1
+      },
+      "209": {
+        "field": "process.file.filename",
+        "comparison_type": "contains",
+        "string_idx": 46,
+        "numerical_value": -1
+      },
+      "210": {
+        "field": "process.file.filename",
+        "comparison_type": "contains",
+        "string_idx": 68,
+        "numerical_value": -1
+      },
+      "211": {
+        "field": "process.file.filename",
+        "comparison_type": "startswith",
+        "string_idx": 71,
+        "numerical_value": -1
+      },
+      "212": {
+        "field": "process.file.filename",
+        "comparison_type": "endswith",
+        "string_idx": 72,
+        "numerical_value": -1
+      },
+      "213": {
+        "field": "process.file.filename",
+        "comparison_type": "contains",
+        "string_idx": 73,
+        "numerical_value": -1
+      },
+      "214": {
+        "field": "process.file.filename",
+        "comparison_type": "contains",
+        "string_idx": 74,
+        "numerical_value": -1
+      },
+      "215": {
+        "field": "process.cmd",
+        "comparison_type": "contains",
+        "string_idx": 0,
+        "numerical_value": -1
+      },
+      "216": {
+        "field": "process.cmd",
+        "comparison_type": "contains",
+        "string_idx": 75,
+        "numerical_value": -1
+      },
+      "217": {
+        "field": "process.cmd",
+        "comparison_type": "contains",
+        "string_idx": 76,
+        "numerical_value": -1
+      },
+      "218": {
+        "field": "process.cmd",
+        "comparison_type": "contains",
+        "string_idx": 77,
+        "numerical_value": -1
+      },
+      "219": {
+        "field": "process.cmd",
+        "comparison_type": "contains",
+        "string_idx": 71,
+        "numerical_value": -1
+      },
+      "220": {
+        "field": "process.cmd",
+        "comparison_type": "contains",
+        "string_idx": 78,
+        "numerical_value": -1
+      },
+      "221": {
+        "field": "process.cmd",
+        "comparison_type": "contains",
+        "string_idx": 79,
+        "numerical_value": -1
+      },
+      "222": {
+        "field": "process.cmd",
+        "comparison_type": "contains",
+        "string_idx": 8,
+        "numerical_value": -1
+      },
+      "223": {
+        "field": "target.file.path",
+        "comparison_type": "contains",
+        "string_idx": 75,
+        "numerical_value": -1
+      },
+      "224": {
+        "field": "target.file.path",
+        "comparison_type": "contains",
+        "string_idx": 2,
+        "numerical_value": -1
+      },
+      "225": {
+        "field": "target.file.path",
+        "comparison_type": "contains",
+        "string_idx": 76,
+        "numerical_value": -1
+      },
+      "226": {
+        "field": "target.file.path",
+        "comparison_type": "contains",
+        "string_idx": 8,
+        "numerical_value": -1
+      },
+      "227": {
+        "field": "target.file.path",
+        "comparison_type": "contains",
+        "string_idx": 80,
+        "numerical_value": -1
+      },
+      "228": {
+        "field": "target.file.path",
+        "comparison_type": "contains",
+        "string_idx": 81,
+        "numerical_value": -1
+      },
+      "229": {
+        "field": "target.file.path",
+        "comparison_type": "contains",
+        "string_idx": 82,
+        "numerical_value": -1
+      },
+      "230": {
+        "field": "process.euid",
+        "comparison_type": "equal",
+        "string_idx": -1,
+        "numerical_value": 0
+      },
+      "231": {
+        "field": "process.ruid",
+        "comparison_type": "equal",
+        "string_idx": -1,
+        "numerical_value": 0
+      },
+      "232": {
+        "field": "process.egid",
+        "comparison_type": "equal",
+        "string_idx": -1,
+        "numerical_value": 0
+      },
+      "233": {
+        "field": "process.rgid",
+        "comparison_type": "equal",
+        "string_idx": -1,
+        "numerical_value": 0
+      },
+      "234": {
+        "field": "process.pid",
+        "comparison_type": "above",
+        "string_idx": -1,
+        "numerical_value": 1
+      },
+      "235": {
+        "field": "target.file.path",
+        "comparison_type": "contains",
+        "string_idx": 83,
+        "numerical_value": -1
+      },
+      "236": {
+        "field": "target.file.path",
+        "comparison_type": "contains",
+        "string_idx": 84,
+        "numerical_value": -1
+      },
+      "237": {
+        "field": "target.file.path",
+        "comparison_type": "contains",
+        "string_idx": 85,
+        "numerical_value": -1
+      },
+      "238": {
+        "field": "target.file.path",
+        "comparison_type": "contains",
+        "string_idx": 86,
+        "numerical_value": -1
+      },
+      "239": {
+        "field": "process.file.filename",
+        "comparison_type": "contains",
+        "string_idx": 87,
+        "numerical_value": -1
+      },
+      "240": {
+        "field": "process.file.filename",
+        "comparison_type": "contains",
+        "string_idx": 88,
+        "numerical_value": -1
+      },
+      "241": {
+        "field": "process.file.filename",
+        "comparison_type": "contains",
+        "string_idx": 89,
+        "numerical_value": -1
+      },
+      "242": {
+        "field": "process.file.filename",
+        "comparison_type": "contains",
+        "string_idx": 90,
         "numerical_value": -1
       }
     },
@@ -3996,6 +4386,501 @@
           {
             "operator_type": "OPERATOR_PREDICATE",
             "predicate_idx": 197
+          },
+          {
+            "operator_type": "OPERATOR_AND"
+          }
+        ]
+      },
+      {
+        "id": 33,
+        "description": "neq numeric test - should NOT match chmod 755",
+        "action": "BLOCK_EVENT",
+        "applied_events": [
+          "CHMOD"
+        ],
+        "tokens": [
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 198
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 12
+          },
+          {
+            "operator_type": "OPERATOR_NOT"
+          },
+          {
+            "operator_type": "OPERATOR_AND"
+          }
+        ]
+      },
+      {
+        "id": 34,
+        "description": "neq string test - should NOT match chmod process",
+        "action": "BLOCK_EVENT",
+        "applied_events": [
+          "CHMOD"
+        ],
+        "tokens": [
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 198
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 130
+          },
+          {
+            "operator_type": "OPERATOR_NOT"
+          },
+          {
+            "operator_type": "OPERATOR_AND"
+          }
+        ]
+      },
+      {
+        "id": 35,
+        "description": "Normal chmod rule matching /tmp/neq_test - no neq",
+        "action": "BLOCK_EVENT",
+        "applied_events": [
+          "CHMOD"
+        ],
+        "tokens": [
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 198
+          }
+        ]
+      },
+      {
+        "id": 36,
+        "description": "Complex ~120-token chmod rule for max token limit testing",
+        "action": "BLOCK_EVENT",
+        "applied_events": [
+          "CHMOD"
+        ],
+        "tokens": [
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 199
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 200
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 40
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 201
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 49
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 2
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 202
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 203
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 204
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 205
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 206
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 207
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 130
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 208
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 209
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 210
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 211
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 212
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 213
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 214
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 215
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 3
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 216
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 4
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 217
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 218
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 219
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 220
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 221
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 222
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 10
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 11
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 12
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 223
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 224
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 8
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 225
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 226
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 227
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 228
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 229
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 230
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 231
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 232
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 233
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 27
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 234
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 215
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 3
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 216
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 217
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 13
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 235
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 236
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 237
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 238
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_NOT"
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 239
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 240
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 241
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 242
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_NOT"
+          },
+          {
+            "operator_type": "OPERATOR_AND"
+          },
+          {
+            "operator_type": "OPERATOR_AND"
+          },
+          {
+            "operator_type": "OPERATOR_AND"
+          },
+          {
+            "operator_type": "OPERATOR_AND"
+          },
+          {
+            "operator_type": "OPERATOR_AND"
+          },
+          {
+            "operator_type": "OPERATOR_AND"
+          },
+          {
+            "operator_type": "OPERATOR_AND"
+          },
+          {
+            "operator_type": "OPERATOR_AND"
+          },
+          {
+            "operator_type": "OPERATOR_AND"
+          },
+          {
+            "operator_type": "OPERATOR_AND"
           },
           {
             "operator_type": "OPERATOR_AND"
