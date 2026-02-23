@@ -489,6 +489,98 @@ class OwlsmBackend(Backend):
     
 
 
+def preprocess_neq_modifier(detection: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Transforms |neq fields into separate NOT selections before pySigma sees them.
+    
+    For each field with |neq in a dict-style selection:
+    1. Remove the field from the original selection
+    2. Create a new selection with the field (without |neq)
+    3. Replace the selection reference in the condition with (sel and not __neq_N)
+    
+    If a selection has only neq fields, its reference becomes (not __neq_0 and not __neq_1 ...).
+    """
+    import re as _re
+
+    condition = detection.get("condition", "")
+    new_detection = {}
+    neq_counter = 0
+    sel_replacements = {}
+
+    for sel_name, sel_value in detection.items():
+        if sel_name == "condition":
+            continue
+
+        if isinstance(sel_value, dict):
+            neq_fields = {}
+            normal_fields = {}
+
+            for field_key, value in sel_value.items():
+                parts = field_key.split("|")
+                has_neq = any(p.lower() == "neq" for p in parts[1:])
+
+                if has_neq:
+                    clean_parts = [p for p in parts if p.lower() != "neq"]
+                    clean_key = "|".join(clean_parts)
+                    neq_fields[clean_key] = value
+                else:
+                    normal_fields[field_key] = value
+
+            if not neq_fields:
+                new_detection[sel_name] = sel_value
+                continue
+
+            for clean_key, value in neq_fields.items():
+                if not isinstance(value, (str, int, float)):
+                    raise Exception(
+                        f"The |neq modifier only supports a single scalar value "
+                        f"(string or number). Got {type(value).__name__} "
+                        f"for field '{clean_key}' in selection '{sel_name}'."
+                    )
+
+            neq_not_clauses = []
+            for clean_key, value in neq_fields.items():
+                neq_name = f"__neq_{neq_counter}"
+                neq_counter += 1
+                new_detection[neq_name] = {clean_key: value}
+                neq_not_clauses.append(f"not {neq_name}")
+
+            neq_clause = " and ".join(neq_not_clauses)
+
+            if normal_fields:
+                new_detection[sel_name] = normal_fields
+                sel_replacements[sel_name] = f"({sel_name} and {neq_clause})"
+            else:
+                sel_replacements[sel_name] = f"({neq_clause})"
+
+        elif isinstance(sel_value, list):
+            for item in sel_value:
+                if isinstance(item, dict):
+                    for field_key in item.keys():
+                        parts = field_key.split("|")
+                        if any(p.lower() == "neq" for p in parts[1:]):
+                            raise Exception(
+                                f"The |neq modifier is not supported in list-style (OR) selections "
+                                f"(selection '{sel_name}'). Use a dict-style selection instead."
+                            )
+            new_detection[sel_name] = sel_value
+        else:
+            new_detection[sel_name] = sel_value
+
+    if sel_replacements:
+        new_condition = condition
+        for orig_name in sorted(sel_replacements.keys(), key=len, reverse=True):
+            replacement = sel_replacements[orig_name]
+            new_condition = _re.sub(
+                rf'\b{_re.escape(orig_name)}\b', replacement, new_condition
+            )
+        new_detection["condition"] = new_condition
+    else:
+        new_detection["condition"] = condition
+
+    return new_detection
+
+
 def create_pysigma_rule(rule_id: int, description: str, detection: Dict[str, Any]) -> PySigmaRule:
     import uuid
     
@@ -611,7 +703,8 @@ def _convert_single_rule(rule: SigmaRule, pysigma_rule: PySigmaRule, ctx: Parsed
 
 
 def parse_rule_with_pysigma(rule: SigmaRule, ctx: ParsedRulesContext) -> List[ParsedRule]:
-    expanded_detection = expand_x_of_conditions(rule.detection)
+    neq_processed = preprocess_neq_modifier(rule.detection)
+    expanded_detection = expand_x_of_conditions(neq_processed)
     pysigma_rule = create_pysigma_rule(rule.id, rule.description, expanded_detection)
     
     if detection_has_keywords(rule.detection):
