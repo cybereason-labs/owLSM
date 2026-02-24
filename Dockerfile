@@ -38,6 +38,8 @@ RUN rm -rf /var/lib/apt/lists/* && \
         libssl-dev \
         # sqlite3 (for SQLite build)
         libsqlite3-dev \
+        # libbz2 (transitive dep of libdw; link directly so RUNPATH finds it)
+        libbz2-dev \
         # libs for tests
         libgtest-dev \
         googletest \

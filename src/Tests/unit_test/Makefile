@@ -68,7 +68,7 @@ else
     LDFLAGS    += -Wl,-z,relro,-z,now -pie
 endif
 
-LDLIBS         := -lbpf -lelf -lz -lgtest -lsqlite3 -ldw
+LDLIBS         := -lbpf -lelf -lz -lgtest -lsqlite3 -ldw -lbz2
 
 # ---- EBPF Files ----------------------------------------------
 LOCAL_BPF_SRC  := $(wildcard $(KERNEL_TESTS_DIR)/*.bpf.c)
