@@ -17,8 +17,12 @@ BPF_CPPFLAGS   := -D__TARGET_ARCH_$(shell uname -m | sed 's/x86_64/x86/') \
                   -I$(CURDIR)/Programs/syscall_monitoring \
                   -I$(SHARED_DIR)
 
-BPF_CFLAGS     := -O1 -g -Wall -Wno-unused-function -Wno-c23-extensions \
-                  -target bpf
+BPF_CFLAGS     := -O2 -g -Wall -Wno-unused-function -Wno-c23-extensions -target bpf \
+                -Wno-address-of-packed-member \
+                -fno-stack-protector \
+                -fno-jump-tables \
+                -fno-unroll-loops \
+                -mcpu=v2
 
 # ---- BPF Source Files ----------------------------------------
 BPF_SRC        := common_maps.bpf.c \

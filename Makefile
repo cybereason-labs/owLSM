@@ -51,7 +51,7 @@ userspace: kernel
 	@echo "==> Building Userspace..."
 	@$(MAKE) -C $(USERSPACE_DIR)
 
-test:
+test: kernel
 	@echo "==> Building unit tests..."
 	@$(MAKE) -C $(UNIT_TEST_DIR)
 	@python3 $(SCRIPTS_DIR)/package.py unit_tests

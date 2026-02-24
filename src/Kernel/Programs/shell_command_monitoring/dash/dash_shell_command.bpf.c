@@ -48,6 +48,11 @@
      char arr[CMD_MAX];
      unsigned short length;
  };
+
+static unsigned int __attribute__((noinline)) boundedCmdIdx(int i)
+{
+    return (unsigned int)i & (CMD_MAX - 1);
+}
  
 static __always_inline void appendStr(struct CmdStr *out, const char *str)
 {
@@ -81,7 +86,7 @@ static __always_inline void appendStrNoLeadingSpace(struct CmdStr *out, const ch
  
  // Global BPF function: must return scalar, and must null-check pointer args
  // (the verifier types them as mem_or_null)
- int appendSeparator(struct CmdStr *out, int type)
+__noinline int appendSeparator(struct CmdStr *out, int type)
  {
      if (!out)
          return 0;
@@ -172,23 +177,20 @@ struct WalkState
 // directly prove they are in [0, 255].  Comparison-based bounds checks
 // alone are not enough: the compiler may re-read the original unchecked
 // register for the memory access, causing "makes mem pointer be out of bounds".
-int sanitizeOneChar(struct CmdStr *cmd, int r, int w)
+__noinline int sanitizeOneChar(struct CmdStr *cmd, int r, int w)
 {
     if (!cmd)
         return -1;
     if ((unsigned int)r >= CMD_MAX || (unsigned int)w >= CMD_MAX)
         return -1;
 
-    unsigned int ri = (unsigned int)r & (CMD_MAX - 1);
-    unsigned int wi = (unsigned int)w & (CMD_MAX - 1);
-
-    unsigned char c = (unsigned char)cmd->arr[ri];
+    unsigned char c = (unsigned char)cmd->arr[boundedCmdIdx(r)];
     if (c == '\0')
         return -1;
 
     if (c == DASH_CTLQUOTEMARK)
     {
-        cmd->arr[wi] = '\'';
+        cmd->arr[boundedCmdIdx(w)] = '\'';
         return ((r + 1) << 16) | (w + 1);
     }
 
@@ -197,10 +199,9 @@ int sanitizeOneChar(struct CmdStr *cmd, int r, int w)
         int next_r = r + 1;
         if ((unsigned int)next_r >= CMD_MAX)
             return -1;
-        unsigned int next_ri = (unsigned int)next_r & (CMD_MAX - 1);
-        if (cmd->arr[next_ri] != '\0')
+        if (cmd->arr[boundedCmdIdx(next_r)] != '\0')
         {
-            cmd->arr[wi] = cmd->arr[next_ri];
+            cmd->arr[boundedCmdIdx(w)] = cmd->arr[boundedCmdIdx(next_r)];
             return ((next_r + 1) << 16) | (w + 1);
         }
         return (next_r << 16) | w;
@@ -209,8 +210,15 @@ int sanitizeOneChar(struct CmdStr *cmd, int r, int w)
     if (c >= 0x82 && c <= 0x87)
         return ((r + 1) << 16) | w;
 
-    cmd->arr[wi] = cmd->arr[ri];
+    cmd->arr[boundedCmdIdx(w)] = cmd->arr[boundedCmdIdx(r)];
     return ((r + 1) << 16) | (w + 1);
+}
+
+static void sanitizeNullTerminate(struct CmdStr *cmd, int w)
+{
+    if (w < 0 || (unsigned int)w >= CMD_MAX)
+        return;
+    cmd->arr[boundedCmdIdx(w)] = '\0';
 }
 
 // Inline wrapper: the loop is trivial (call + unpack per iteration),
@@ -229,9 +237,7 @@ static __always_inline void sanitizeDashText(struct CmdStr *cmd)
         w = result & 0xFFFF;
     }
 
-    if (w >= 0 && w < CMD_MAX)
-        cmd->arr[w] = '\0';
-
+    sanitizeNullTerminate(cmd, w);
     cmd->length = (unsigned short)w;
 }
 
@@ -347,7 +353,7 @@ static __always_inline void printRedirects(void *redir, struct CmdStr *out,
   *   node:        Pointer to ncmd structure in dash's memory
  *   extra_redir: Redirections from an outer NREDIR wrapper (if any)
  */
-int printNcmdWithRedir(unsigned long node_addr, unsigned long extra_redir_addr, struct CmdStr *out)
+ __noinline int printNcmdWithRedir(unsigned long node_addr, unsigned long extra_redir_addr, struct CmdStr *out)
  {
      void *node = (void *)node_addr;
      if (!node || !out)
@@ -571,7 +577,7 @@ static __always_inline int unwrapToCommand(void **node, int *out_type,
  * → printNcmdWithRedir → report_error would be 5 frames and exceed the
  * 512-byte combined stack limit.
  */
-int processPipeStage(unsigned long node_addr, struct CmdStr *out)
+ __noinline int processPipeStage(unsigned long node_addr, struct CmdStr *out)
 {
     void *pipe_node = (void *)node_addr;
     if (!pipe_node || !out)
@@ -597,7 +603,7 @@ int processPipeStage(unsigned long node_addr, struct CmdStr *out)
 
 
 // Forward declaration: mini-DFS for binary operators inside subshells
-int processSubshellBinary(unsigned long node_addr, struct CmdStr *out);
+__noinline int processSubshellBinary(unsigned long node_addr, struct CmdStr *out);
 
  /*
   * =============================================================================
@@ -611,7 +617,7 @@ int processSubshellBinary(unsigned long node_addr, struct CmdStr *out);
   *   - NNOT wrapping any of the above: "! echo hello"
   *   - NPIPE: "cmd1 | cmd2 | cmd3"
   */
-int processSingleNode(unsigned long node_addr, struct CmdStr *out)
+__noinline int processSingleNode(unsigned long node_addr, struct CmdStr *out)
 {
     void *node = (void *)node_addr;
     if (!node || !out)
@@ -720,7 +726,7 @@ struct {
  * Processes NCMD leaves directly via printNcmdWithRedir.
  * Uses a separate per-CPU map to avoid clobbering the main DFS state.
  */
-int processSubshellBinary(unsigned long node_addr, struct CmdStr *out)
+__noinline int processSubshellBinary(unsigned long node_addr, struct CmdStr *out)
 {
     if (!out)
         return 0;
