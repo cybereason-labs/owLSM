@@ -66,6 +66,17 @@ sed -i 's/^#\?PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/ssh
 
 rm -fRd /etc/ssh/sshd_config.d/*
 
+# Create drop-in that persists in image. When new instances boot, cloud-init creates 50-cloud-init.conf
+# with restrictive defaults. sshd uses "first value wins" - files are read lexicographically.
+# 00- loads before 50-, so our values take precedence. See:
+# https://cloudinit.readthedocs.io/en/latest/reference/modules.html#mod-cc-ssh
+# https://docs.oracle.com/en/operating-systems/oracle-linux/openssh/openssh-ModifyingOpenSSHServerConfigurationFiles.html
+cat > /etc/ssh/sshd_config.d/00-owlsm-ssh.conf << 'EOF'
+PermitRootLogin yes
+PasswordAuthentication yes
+KbdInteractiveAuthentication yes
+EOF
+
 # Restart SSH service
 systemctl restart sshd 2>/dev/null || true
 
@@ -196,6 +207,20 @@ if docker run hello-world; then
 else
     echo "✗ Docker test failed"
 fi
+
+# Cloud-init config keys (ssh_pwauth, disable_root) - belt-and-suspenders with the drop-in above.
+# Cloud-init must stay enabled (e.g. for DevOps runner registration).
+# Ref: https://cloudinit.readthedocs.io/en/latest/reference/modules.html#mod-cc-ssh
+echo "Configuring cloud-init SSH defaults..."
+mkdir -p /etc/cloud/cloud.cfg.d
+cat > /etc/cloud/cloud.cfg.d/99-owlsm-ssh.cfg << 'EOF'
+ssh_pwauth: true
+disable_root: false
+EOF
+
+# Use Python 3.9 interpreter for cloud-init
+echo "Setting cloud-init to use Python 3.9..."
+sed -i '1s|#!/usr/bin/python3|#!/usr/bin/python3.9|' /usr/bin/cloud-init
 
 echo "=========================================="
 echo "Setup Complete!"
