@@ -29,8 +29,12 @@ BPF_CPPFLAGS   := -D__TARGET_ARCH_$(shell uname -m | sed 's/x86_64/x86/') \
                   -I$(SHARED_HDR_DIR) \
                   -I$(KERNEL_HDR_DIR)
 
-BPF_CFLAGS     := -O1 -g -Wall -Wno-unused-function -Wno-c23-extensions \
-                  -target bpf
+BPF_CFLAGS     := -O2 -g -Wall -Wno-unused-function -Wno-c23-extensions -target bpf \
+                -Wno-address-of-packed-member \
+                -fno-stack-protector \
+                -fno-jump-tables \
+                -fno-unroll-loops \
+                -mcpu=v2 
 
 # ---- C++ Compilation Flags -----------------------------------
 CPPFLAGS       := -DOWLSM_VERSION_STR=\"$(VERSION)\" \
