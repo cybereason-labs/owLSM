@@ -8,6 +8,19 @@
 namespace owlsm
 {
 
+void UprobeProbe::bpfLoad()
+{
+    switch (m_target)
+    {
+        case ShellType::DASH:
+        {
+            addProgramToArray(m_skel->progs.exitList_2, m_skel->maps.dash_shell_command_prog_array);
+            break;
+        }
+        default: break;
+    }
+}
+
 void UprobeProbe::bpfAttach()
 {
     switch (m_target)

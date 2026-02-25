@@ -156,7 +156,7 @@ class Test_Netcat_Server(Base_Test_Server):
 
         try:
             stdout, stderr = netcat.communicate(input=system_globals.networking_globals.SERVER_MESSAGE, timeout=self.timeout)
-            result = stdout and system_globals.networking_globals.CLIENT_MESSAGE.strip() in stdout.strip()
+            result = bool(stdout and system_globals.networking_globals.CLIENT_MESSAGE.strip() in stdout.strip())
             if result != self.expected_connection:
                 error_message = f"[SRV] expected_connection: {self.expected_connection}, result: {result}\nstdout: {stdout.strip()}\nstderr: {stderr.strip()}"
                 logger.log_error(error_message)
@@ -330,7 +330,9 @@ class Test_Netcat_Client(Base_Test_Client):
         super().__init__(server_port, expected_connection, timeout)
 
     def connect(self):
-        run_command_sync(f"ip netns exec {system_globals.networking_globals.NS_NAME} {system_globals.networking_globals.NETCAT_PATH} {system_globals.networking_globals.SERVER_IP_ADDR} {self.server_port} -w {self.timeout} -v -N", timeout=self.timeout + 1, stdin_data=system_globals.networking_globals.CLIENT_MESSAGE + "\n")
+        netcat_path = system_globals.networking_globals.NETCAT_PATH
+        shutdown_on_eof = "" if "ncat" in os.path.basename(netcat_path) else " -N"
+        run_command_sync(f"ip netns exec {system_globals.networking_globals.NS_NAME} {netcat_path} {system_globals.networking_globals.SERVER_IP_ADDR} {self.server_port} -w {self.timeout} -v{shutdown_on_eof}", timeout=self.timeout + 1, stdin_data=system_globals.networking_globals.CLIENT_MESSAGE + "\n")
     
     def request(self):
         pass

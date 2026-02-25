@@ -6,6 +6,7 @@ from Utils.user_utils import *
 from globals.system_related_globals import system_globals
 from state_db.file_db import file_db
 from state_db.process_db import process_db
+from Utils.distro_utils import get_distro_type, DistroType
 from common_steps.bdd_conftest_extentions import *
 
 @pytest.fixture(scope="function")
@@ -15,6 +16,22 @@ def scenario_context():
 
 def pytest_configure(config):
     logger.log_info("pytest_configure")
+
+
+def pytest_collection_modifyitems(config, items):
+    distro = get_distro_type()
+    if distro == DistroType.DEB:
+        return
+
+    dash_suffix = "dash-dash]"
+    remaining = []
+    for item in items:
+        if item.nodeid.endswith(dash_suffix):
+            logger.log_info(f"Deselecting DASH test (not .deb distro): {item.nodeid}")
+        else:
+            remaining.append(item)
+
+    items[:] = remaining
 
 def pytest_sessionstart(session):
     logger.log_info("pytest_sessionstart")

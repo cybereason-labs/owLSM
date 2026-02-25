@@ -18,7 +18,6 @@ public:
     virtual void bpfAttach() override;
 
 private:
-    void addProgramToArray(const bpf_program* program, const bpf_map* table);
 
     enum event_type m_event_type;
 };
