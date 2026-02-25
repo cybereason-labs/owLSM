@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:18.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -11,13 +11,18 @@ RUN rm -rf /var/lib/apt/lists/* && \
         curl \
         gnupg \
         software-properties-common && \
+    # Add GCC 9 PPA (Ubuntu 18.04 defaults to GCC 7, we need GCC 9 to match Ubuntu 20.04)
+    add-apt-repository ppa:ubuntu-toolchain-r/test && \
     # Add LLVM's official apt repository for clang-18
     curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | gpg --dearmor -o /usr/share/keyrings/llvm.gpg && \
-    echo "deb [signed-by=/usr/share/keyrings/llvm.gpg] http://apt.llvm.org/focal/ llvm-toolchain-focal-18 main" > /etc/apt/sources.list.d/llvm.list && \
+    echo "deb [signed-by=/usr/share/keyrings/llvm.gpg] http://apt.llvm.org/bionic/ llvm-toolchain-bionic-18 main" > /etc/apt/sources.list.d/llvm.list && \
     add-apt-repository universe && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
         build-essential \
+        gcc-9 \
+        g++-9 \
+        libstdc++-10-dev \
         git \
         pkg-config \
         xxd \
@@ -43,9 +48,20 @@ RUN rm -rf /var/lib/apt/lists/* && \
         # libs for tests
         libgtest-dev \
         googletest \
+        cmake \
         # misc
         make && \
+    # Set GCC 9 as the default gcc/g++
+    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 100 && \
+    update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 100 && \
     rm -rf /var/lib/apt/lists/*
+
+# Build & install Google Test (Ubuntu 18.04's libgtest-dev ships source only)
+RUN cd /usr/src/googletest && \
+    cmake -DCMAKE_CXX_COMPILER=g++-9 . && \
+    make -j"$(nproc)" && \
+    find . -name '*.a' -exec cp {} /usr/lib/ \; && \
+    ldconfig
 
 # Make clang-18 and LLVM tools the default (without version suffix)
 RUN update-alternatives --install /usr/bin/clang clang /usr/bin/clang-18 100 && \
