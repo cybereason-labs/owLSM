@@ -87,15 +87,4 @@ namespace owlsm
             default: break;
         }
     }
-
-    void LsmProbe::addProgramToArray(const bpf_program* program, const bpf_map* table)
-    {
-        int map_fd = bpf_map__fd(table);
-        int prog_fd = bpf_program__fd(program);
-        unsigned int idx = 0;
-        if (bpf_map_update_elem(map_fd, &idx, &prog_fd, BPF_ANY) < 0)
-        {
-            throw std::runtime_error("failed to update program array. errno: " + std::to_string(errno) + " program: " + bpf_program__name(program));
-        }
-    }
 }

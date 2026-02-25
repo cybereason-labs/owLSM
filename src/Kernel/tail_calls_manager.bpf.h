@@ -223,6 +223,16 @@ struct {
     } inet_conn_request_prog_array SEC(".maps");
 #endif // ACCEPT_EVENT
 
+#ifdef DASH_SHELL_COMMAND_EVENT
+    struct {
+        __uint(type, BPF_MAP_TYPE_PROG_ARRAY);
+        __uint(max_entries, 1);
+        __type(key,   u32);
+        __type(value, u32);
+    } dash_shell_command_prog_array SEC(".maps");
+
+#endif // DASH_SHELL_COMMAND_EVENT
+
 statfunc void do_tail_call(void* ctx, void* prog_array)
 {
     int hops = get_current_and_increment_tail_counter();

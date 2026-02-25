@@ -18,6 +18,7 @@ public:
 
     virtual ~UprobeProbe() override = default;
     
+    virtual void bpfLoad() override;
     virtual void bpfAttach() override;
     virtual void bpfDetach() override;
 

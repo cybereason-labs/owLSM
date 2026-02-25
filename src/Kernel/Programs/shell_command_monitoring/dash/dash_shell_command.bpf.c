@@ -43,6 +43,9 @@
  #include "active_shells.bpf.h"
  #include "dash_nodes.h"
  
+ #define DASH_SHELL_COMMAND_EVENT
+ #include "tail_calls_manager.bpf.h"
+ 
  struct CmdStr
  {
      char arr[CMD_MAX];
@@ -805,6 +808,55 @@ __noinline int processSubshellBinary(unsigned long node_addr, struct CmdStr *out
 
 
 /*
+ * Extracted loop body for DFS walk to reduce program size for verifier.
+ * Returns the new stack top after processing one node.
+ */
+static __noinline int processDfsIteration(struct WalkState *ws, int top)
+{
+    top--;
+    int idx = top & (MAX_CHAIN_CMDS - 1);  // bounds mask for verifier
+    unsigned long node_addr = ws->node_addrs[idx];
+    int sep = ws->separators[idx];
+
+    if (!node_addr)
+        return top;
+
+    int type = 0;
+    if (bpf_probe_read_user(&type, sizeof(type), (void *)node_addr) < 0)
+        return top;
+
+    if (type == DASH_NSEMI || type == DASH_NAND || type == DASH_NOR)
+    {
+        void *ch1 = NULL, *ch2 = NULL;
+        getBinaryChildren((void *)node_addr, &ch1, &ch2);
+
+        // Push ch2 first (popped second), then ch1 (popped first = left-to-right order)
+        if (top < MAX_CHAIN_CMDS)
+        {
+            int pi = top & (MAX_CHAIN_CMDS - 1);
+            ws->node_addrs[pi] = (unsigned long)ch2;
+            ws->separators[pi] = type;
+            top++;
+        }
+
+        if (top < MAX_CHAIN_CMDS)
+        {
+            int pi = top & (MAX_CHAIN_CMDS - 1);
+            ws->node_addrs[pi] = (unsigned long)ch1;
+            ws->separators[pi] = sep;
+            top++;
+        }
+    }
+    else
+    {
+        if (sep >= 0)
+            appendSeparator(&ws->cmd, sep);
+        processSingleNode(node_addr, &ws->cmd);
+    }
+    return top;
+}
+
+/*
  * =============================================================================
  * URETPROBE: Hook list() return to capture the parsed command tree
  * =============================================================================
@@ -875,74 +927,51 @@ int exitList(struct pt_regs *ctx)
     // Max iterations = (N-1) binary pops + N leaf pops = 2N-1 = 31 for N=16
     for (int iter = 0; iter < MAX_CHAIN_CMDS * 2 && top > 0; iter++)
     {
-        top--;
-        int idx = top & (MAX_CHAIN_CMDS - 1);  // bounds mask for verifier
-        unsigned long node_addr = ws->node_addrs[idx];
-        int sep = ws->separators[idx];
-        
-        if (!node_addr)
-            continue;
-        
-        int type = 0;
-        if (bpf_probe_read_user(&type, sizeof(type), (void *)node_addr) < 0)
-            continue;
-        
-        if (type == DASH_NSEMI || type == DASH_NAND || type == DASH_NOR)
-        {
-            void *ch1 = NULL, *ch2 = NULL;
-            getBinaryChildren((void *)node_addr, &ch1, &ch2);
-            
-            // Push ch2 first (popped second), then ch1 (popped first = left-to-right order)
-            if (top < MAX_CHAIN_CMDS)
-            {
-                int pi = top & (MAX_CHAIN_CMDS - 1);
-                ws->node_addrs[pi] = (unsigned long)ch2;
-                ws->separators[pi] = type;
-                top++;
-            }
-            
-            if (top < MAX_CHAIN_CMDS)
-            {
-                int pi = top & (MAX_CHAIN_CMDS - 1);
-                ws->node_addrs[pi] = (unsigned long)ch1;
-                ws->separators[pi] = sep;
-                top++;
-            }
-        }
-        else
-        {
-            if (sep >= 0)
-                appendSeparator(&ws->cmd, sep);
-            processSingleNode(node_addr, &ws->cmd);
-        }
+        top = processDfsIteration(ws, top);
     }
     
     if (ws->cmd.length > 0)
     {
-        sanitizeDashText(&ws->cmd);
-        
-        struct process_t *process = allocate_process_t();
-        if (!process)
-        {
-            REPORT_ERROR(GENERIC_ERROR, "allocate_process_t failed");
-            return 0;
-        }
-        if (fill_event_process_from_cache(process) != SUCCESS)
-        {
-            REPORT_ERROR(GENERIC_ERROR, "fill_event_process_from_cache failed");
-            return 0;
-        }
-        
-        process->shell_command.length = (short)ws->cmd.length;
-        if (bpf_probe_read_kernel(process->shell_command.value, sizeof(process->shell_command.value), ws->cmd.arr) != SUCCESS)
-        {
-            REPORT_ERROR(GENERIC_ERROR, "bpf_probe_read_kernel(shell_command) failed");
-            return 0;
-        }
-        
-        update_shell_command_in_process(process->pid, &process->shell_command);
+        reset_tail_counter();
+        do_tail_call(ctx, &dash_shell_command_prog_array);
     }
     
+    return 0;
+}
+
+SEC("uretprobe")
+int exitList_2(struct pt_regs *ctx)
+{
+    unsigned int zero = 0;
+    struct WalkState *ws = bpf_map_lookup_elem(&walk_state, &zero);
+    if (!ws)
+    {
+        REPORT_ERROR(GENERIC_ERROR, "bpf_map_lookup_elem(walk_state) failed");
+        return 0;
+    }
+
+    sanitizeDashText(&ws->cmd);
+        
+    struct process_t *process = allocate_process_t();
+    if (!process)
+    {
+        REPORT_ERROR(GENERIC_ERROR, "allocate_process_t failed");
+        return 0;
+    }
+    if (fill_event_process_from_cache(process) != SUCCESS)
+    {
+        REPORT_ERROR(GENERIC_ERROR, "fill_event_process_from_cache failed");
+        return 0;
+    }
+    
+    process->shell_command.length = (short)ws->cmd.length;
+    if (bpf_probe_read_kernel(process->shell_command.value, sizeof(process->shell_command.value), ws->cmd.arr) != SUCCESS)
+    {
+        REPORT_ERROR(GENERIC_ERROR, "bpf_probe_read_kernel(shell_command) failed");
+        return 0;
+    }
+    
+    update_shell_command_in_process(process->pid, &process->shell_command);
     return 0;
 }
  

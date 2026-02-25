@@ -5,7 +5,7 @@ Scenario Outline: multiple_unchained_shell_commands_same_shell_instance
     And I ensure the file "/tmp/shell_command_non_existing_file_1" does not exist
     When I run shell commands with shell "<shell_path>" and save shell pid:
         | echo 123 > /tmp/shell_command_non_existing_file_1 |
-        | . /tmp/shell_command_non_existing_file_1     |
+        | read x < /tmp/shell_command_non_existing_file_1 |
     And I add the path "/tmp/shell_command_non_existing_file_1" to the file db
     Then I find the event in output in "30" seconds:
         | type                     | FILE_CREATE                                       |
@@ -26,7 +26,7 @@ Scenario Outline: multiple_unchained_shell_commands_same_shell_instance
         | process.pid              | <shell_pid>                                   |
         | process.ppid             | <automation_pid>                              |
         | process.file.filename    | <shell_file>                                  |
-        | process.shell_command    | . /tmp/shell_command_non_existing_file_1 |
+        | process.shell_command    | read x < /tmp/shell_command_non_existing_file_1 |
         | data.target.file.path    | /tmp/shell_command_non_existing_file_1        |
     Examples:
         | shell_path | shell_file |
@@ -38,9 +38,10 @@ Scenario Outline: multiple_unchained_shell_commands_same_shell_instance
 Scenario Outline: chained_shell_command_find_all_events
     Given The owLSM process is running
     And I ensure the file "/tmp/shell_command_non_existing_file_1" exists
+    And I run shell command "echo 123 > /tmp/shell_command_non_existing_file_1" with shell "<shell_path>" and save shell pid
     And I ensure the file "/tmp/shell_command_non_existing_file_2" does not exist
     And I ensure the file "/tmp/shell_command_non_existing_file_2.1" does not exist
-    When I run shell command "echo 123 > /tmp/shell_command_non_existing_file_2; . /tmp/shell_command_non_existing_file_1 && echo abc > /tmp/shell_command_non_existing_file_2.1" with shell "<shell_path>" and save shell pid
+    When I run shell command "echo 123 > /tmp/shell_command_non_existing_file_2; read x < /tmp/shell_command_non_existing_file_1 && echo abc > /tmp/shell_command_non_existing_file_2.1" with shell "<shell_path>" and save shell pid
     And I add the path "/tmp/shell_command_non_existing_file_2" to the file db
     And I add the path "/tmp/shell_command_non_existing_file_2.1" to the file db
     Then I find the event in output in "30" seconds:
@@ -48,53 +49,53 @@ Scenario Outline: chained_shell_command_find_all_events
         | process.pid              | <shell_pid>                                                                                                                                              |
         | process.ppid             | <automation_pid>                                                                                                                                         |
         | process.file.filename    | <shell_file>                                                                                                                                             |
-        | process.shell_command    | echo 123 > /tmp/shell_command_non_existing_file_2; . /tmp/shell_command_non_existing_file_1 && echo abc > /tmp/shell_command_non_existing_file_2.1  |
+        | process.shell_command    | echo 123 > /tmp/shell_command_non_existing_file_2; read x < /tmp/shell_command_non_existing_file_1 && echo abc > /tmp/shell_command_non_existing_file_2.1  |
         | data.target.file.path    | /tmp/shell_command_non_existing_file_2                                                                                                                   |
     And I find the event in output in "10" seconds:
         | type                     | WRITE                                                                                                                                                    |
         | process.pid              | <shell_pid>                                                                                                                                              |
         | process.ppid             | <automation_pid>                                                                                                                                         |
         | process.file.filename    | <shell_file>                                                                                                                                             |
-        | process.shell_command    | echo 123 > /tmp/shell_command_non_existing_file_2; . /tmp/shell_command_non_existing_file_1 && echo abc > /tmp/shell_command_non_existing_file_2.1  |
+        | process.shell_command    | echo 123 > /tmp/shell_command_non_existing_file_2; read x < /tmp/shell_command_non_existing_file_1 && echo abc > /tmp/shell_command_non_existing_file_2.1  |
         | data.target.file.path    | /tmp/shell_command_non_existing_file_2                                                                                                                   |
     And I find the event in output in "10" seconds:
         | type                     | READ                                                                                                                                                     |
         | process.pid              | <shell_pid>                                                                                                                                              |
         | process.ppid             | <automation_pid>                                                                                                                                         |
         | process.file.filename    | <shell_file>                                                                                                                                             |
-        | process.shell_command    | echo 123 > /tmp/shell_command_non_existing_file_2; . /tmp/shell_command_non_existing_file_1 && echo abc > /tmp/shell_command_non_existing_file_2.1  |
+        | process.shell_command    | echo 123 > /tmp/shell_command_non_existing_file_2; read x < /tmp/shell_command_non_existing_file_1 && echo abc > /tmp/shell_command_non_existing_file_2.1  |
         | data.target.file.path    | /tmp/shell_command_non_existing_file_1                                                                                                                   |
     And I find the event in output in "10" seconds:
         | type                     | FILE_CREATE                                                                                                                                              |
         | process.pid              | <shell_pid>                                                                                                                                              |
         | process.ppid             | <automation_pid>                                                                                                                                         |
         | process.file.filename    | <shell_file>                                                                                                                                             |
-        | process.shell_command    | echo 123 > /tmp/shell_command_non_existing_file_2; . /tmp/shell_command_non_existing_file_1 && echo abc > /tmp/shell_command_non_existing_file_2.1  |
+        | process.shell_command    | echo 123 > /tmp/shell_command_non_existing_file_2; read x < /tmp/shell_command_non_existing_file_1 && echo abc > /tmp/shell_command_non_existing_file_2.1  |
         | data.target.file.path    | /tmp/shell_command_non_existing_file_2.1                                                                                                                 |
     And I find the event in output in "10" seconds:
         | type                     | WRITE                                                                                                                                                    |
         | process.pid              | <shell_pid>                                                                                                                                              |
         | process.ppid             | <automation_pid>                                                                                                                                         |
         | process.file.filename    | <shell_file>                                                                                                                                             |
-        | process.shell_command    | echo 123 > /tmp/shell_command_non_existing_file_2; . /tmp/shell_command_non_existing_file_1 && echo abc > /tmp/shell_command_non_existing_file_2.1  |
+        | process.shell_command    | echo 123 > /tmp/shell_command_non_existing_file_2; read x < /tmp/shell_command_non_existing_file_1 && echo abc > /tmp/shell_command_non_existing_file_2.1  |
         | data.target.file.path    | /tmp/shell_command_non_existing_file_2.1                                                                                                                 |
     Examples:
         | shell_path | shell_file |
         | /bin/bash  | bash       |
         | /bin/zsh   | zsh        |
-        | /bin/dash | dash      |
+        | /bin/dash  | dash       |
 
 
 Scenario Outline: mixed_shell_builtin_and_external_commands
     Given The owLSM process is running
     And I ensure the file "/tmp/both" exists
-    When I run shell command "chmod 777 /tmp/both && echo 'abc 123 !@#' > /tmp/both; rm -f /tmp/both" with shell "<shell_path>" and save shell pid
+    When I run shell command "chmod 777 /tmp/both && echo 'abc 123 !@#' > /tmp/both; /bin/rm -f /tmp/both" with shell "<shell_path>" and save shell pid
     # chmod EXEC: parent_process is original shell, process is forked shell, data.target.process is chmod
     Then I find the event in output in "30" seconds:
         | type                              | EXEC                                                                       |
         | parent_process.pid                | <shell_pid>                                                                |
         | parent_process.ppid               | <automation_pid>                                                           |
-        | parent_process.shell_command      | chmod 777 /tmp/both && echo 'abc 123 !@#' > /tmp/both; rm -f /tmp/both     |
+        | parent_process.shell_command      | chmod 777 /tmp/both && echo 'abc 123 !@#' > /tmp/both; /bin/rm -f /tmp/both     |
         | data.target.process.file.filename | chmod                                                                      |
         | data.target.process.cmd           | chmod 777 /tmp/both                                                        |
         | data.target.process.shell_command |                                                                            |
@@ -106,7 +107,7 @@ Scenario Outline: mixed_shell_builtin_and_external_commands
         | process.cmd                       | chmod 777 /tmp/both                                                        |
         | process.shell_command             |                                                                            |
         | parent_process.pid                | <shell_pid>                                                                |
-        | parent_process.shell_command      | chmod 777 /tmp/both && echo 'abc 123 !@#' > /tmp/both; rm -f /tmp/both     |
+        | parent_process.shell_command      | chmod 777 /tmp/both && echo 'abc 123 !@#' > /tmp/both; /bin/rm -f /tmp/both     |
         | data.target.file.path             | /tmp/both                                                                  |
     # chmod EXIT event
     And I find the event in output in "10" seconds:
@@ -116,42 +117,42 @@ Scenario Outline: mixed_shell_builtin_and_external_commands
         | process.cmd                       | chmod 777 /tmp/both                                                        |
         | process.shell_command             |                                                                            |
         | parent_process.pid                | <shell_pid>                                                                |
-        | parent_process.shell_command      | chmod 777 /tmp/both && echo 'abc 123 !@#' > /tmp/both; rm -f /tmp/both     |
+        | parent_process.shell_command      | chmod 777 /tmp/both && echo 'abc 123 !@#' > /tmp/both; /bin/rm -f /tmp/both     |
     # echo: shell builtin - shell does the write, process (shell) has shell_command
     And I find the event in output in "10" seconds:
         | type                              | WRITE                                                                      |
         | process.pid                       | <shell_pid>                                                                |
         | process.ppid                      | <automation_pid>                                                           |
         | process.file.filename             | <shell_file>                                                               |
-        | process.shell_command             | chmod 777 /tmp/both && echo 'abc 123 !@#' > /tmp/both; rm -f /tmp/both     |
+        | process.shell_command             | chmod 777 /tmp/both && echo 'abc 123 !@#' > /tmp/both; /bin/rm -f /tmp/both     |
         | data.target.file.path             | /tmp/both                                                                  |
     # rm EXEC: parent_process is original shell, data.target.process is rm
     And I find the event in output in "10" seconds:
         | type                              | EXEC                                                                       |
         | parent_process.pid                | <shell_pid>                                                                |
-        | parent_process.shell_command      | chmod 777 /tmp/both && echo 'abc 123 !@#' > /tmp/both; rm -f /tmp/both     |
+        | parent_process.shell_command      | chmod 777 /tmp/both && echo 'abc 123 !@#' > /tmp/both; /bin/rm -f /tmp/both     |
         | data.target.process.file.filename | rm                                                                         |
-        | data.target.process.cmd           | rm -f /tmp/both                                                            |
+        | data.target.process.cmd           | /bin/rm -f /tmp/both                                                            |
         | data.target.process.shell_command |                                                                            |
     # rm UNLINK event: process is rm, parent is original shell
     And I find the event in output in "10" seconds:
         | type                              | UNLINK                                                                     |
         | process.ppid                      | <shell_pid>                                                                |
         | process.file.filename             | rm                                                                         |
-        | process.cmd                       | rm -f /tmp/both                                                            |
+        | process.cmd                       | /bin/rm -f /tmp/both                                                            |
         | process.shell_command             |                                                                            |
         | parent_process.pid                | <shell_pid>                                                                |
-        | parent_process.shell_command      | chmod 777 /tmp/both && echo 'abc 123 !@#' > /tmp/both; rm -f /tmp/both     |
+        | parent_process.shell_command      | chmod 777 /tmp/both && echo 'abc 123 !@#' > /tmp/both; /bin/rm -f /tmp/both     |
         | data.target.file.path             | /tmp/both                                                                  |
     # rm EXIT event
     And I find the event in output in "10" seconds:
         | type                              | EXIT                                                                       |
         | process.ppid                      | <shell_pid>                                                                |
         | process.file.filename             | rm                                                                         |
-        | process.cmd                       | rm -f /tmp/both                                                            |
+        | process.cmd                       | /bin/rm -f /tmp/both                                                            |
         | process.shell_command             |                                                                            |
         | parent_process.pid                | <shell_pid>                                                                |
-        | parent_process.shell_command      | chmod 777 /tmp/both && echo 'abc 123 !@#' > /tmp/both; rm -f /tmp/both     |
+        | parent_process.shell_command      | chmod 777 /tmp/both && echo 'abc 123 !@#' > /tmp/both; /bin/rm -f /tmp/both     |
     Examples:
         | shell_path | shell_file |
         | /bin/bash  | bash       |
