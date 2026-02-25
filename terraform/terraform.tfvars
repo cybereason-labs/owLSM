@@ -3,6 +3,10 @@ subnet_id           = "ocid1.subnet.oc1.iad.aaaaaaaay5pwilaohrjtuv766qlay7mkntym
 availability_domain = "Akey:US-ASHBURN-AD-1"
 region              = "us-ashburn-1"
 
+runner_user          = "ghrunner"
+runner_version       = "2.321.0"
+runner_shared_labels = ["owLSM-automation"]
+
 network_security_group_ids = [
     "ocid1.networksecuritygroup.oc1.iad.aaaaaaaab6y5zvx7htsfg77l4cuv6gzs7hnepdpdjopip3wzixgfms6gqdwq"
 ]

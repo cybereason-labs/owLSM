@@ -49,15 +49,58 @@ variable "github_repo_url" {
   type        = string
 }
 
+# --- Instance Defaults ---
+
+variable "instance_tags" {
+  description = "Freeform tags to apply to all runner instances"
+  type        = map(string)
+  default = {
+    managed-by = "terraform"
+    purpose    = "github-actions-runner"
+  }
+}
+
+# --- Runner variables  ----
+
+variable "runner_version" {
+  description = "GitHub Actions runner version to install"
+  type        = string
+  default     = "2.321.0"
+}
+
+variable "runner_group" {
+  description = "GitHub runner group name"
+  type        = string
+  default     = "Default"
+}
+
+variable "runner_user" {
+  description = "OS user to run the GitHub Actions runner service"
+  type        = string
+  default     = "ghrunner"
+}
+
+variable "runner_shared_labels" {
+  description = "GitHub runner shared label for derigister-runner.sh script in destroy-runners.yml"
+  type        = list(string)
+}
+
+variable "ephemeral_runner" {
+  description = "Whether runners should be ephemeral (unregister after first job)"
+  type        = bool
+  default     = true
+}
+
 variable "runners" {
   description = "Map of runner configurations. Each entry creates one OCI instance."
   type = map(object({
     image_id       = string
     display_name   = string
-    shape          = optional(string, "VM.Standard.E4.Flex")
+    shape          = optional(string, "VM.Standard.E5.Flex")
     ocpus          = optional(number, 2)
     memory_in_gbs  = optional(number, 16)
     boot_volume_gb = optional(number, 100)
-    runner_labels  = optional(list(string), ["self-hosted", "linux", "x64", "OCI"])
+    runner_labels              = optional(list(string), ["ubuntu-22"]) # first label must represent unique runner distributive
+    pv_encryption_in_transit   = optional(bool, true)
   }))
 }
