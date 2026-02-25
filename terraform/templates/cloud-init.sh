@@ -113,55 +113,26 @@ RUNNER_TOKEN=$(get_runner_token "$RUNNER_URL" "$GITHUB_PAT") || {
 }
 log_info "Runner token retrieved successfully (expires in 1 hour)"
 
-# =============================================================================
-# STEP 1: Install Dependencies
-# =============================================================================
-log_info "Installing dependencies..."
-
-# Wait for any existing apt/dpkg locks to be released (e.g., unattended-upgrades)
-# if command -v apt-get &> /dev/null; then
-#     log_info "Waiting for apt locks to be released..."
-#     while fuser /var/lib/apt/lists/lock /var/lib/dpkg/lock /var/lib/dpkg/lock-frontend /var/cache/apt/archives/lock >/dev/null 2>&1; do
-#         log_info "  apt is locked by another process, waiting 10s..."
-#         sleep 10
-#     done
-#     log_info "apt locks released, proceeding..."
-# fi
-
-# if command -v apt-get &> /dev/null; then
-#     apt-get update
-#     apt-get install -y \
-#         curl \
-#         jq \
-#         git \
-#         build-essential \
-#         libssl-dev \
-#         libffi-dev \
-#         libicu-dev \
-#         python3 \
-#         python3-pip \
-#         unzip \
-#         zip \
-#         wget
-# elif command -v yum &> /dev/null; then
-#     yum install -y \
-#         curl \
-#         jq \
-#         git \
-#         gcc \
-#         gcc-c++ \
-#         openssl-devel \
-#         libffi-devel \
-#         libicu \
-#         python3 \
-#         python3-pip \
-#         unzip \
-#         zip \
-#         wget
-# fi
+# Release apt locks before installing packages (cloud-init may race with unattended-upgrades)
+release_apt_locks() {
+    if command -v apt-get &> /dev/null; then
+        log_info "Releasing apt locks if held..."
+        for proc in apt-get apt dpkg unattended-upgrade; do
+            pkill -9 "$proc" 2>/dev/null || true
+        done
+        sleep 2
+        rm -f /var/lib/apt/lists/lock \
+              /var/lib/dpkg/lock \
+              /var/lib/dpkg/lock-frontend \
+              /var/cache/apt/archives/lock
+        dpkg --configure -a 2>/dev/null || true
+        log_info "apt locks released."
+    fi
+}
 
 # Optional: Docker
 if ! command -v docker &> /dev/null; then
+    release_apt_locks
     log_info "Installing Docker..."
     curl -fsSL https://get.docker.com | sh
 fi
@@ -219,8 +190,19 @@ sudo -u "$RUNNER_USER" tar xzf "$RUNNER_TAR"
 # =============================================================================
 # STEP 5: Install Runner Dependencies
 # =============================================================================
-# log_info "Installing runner dependencies..."
-# "$RUNNER_DIR/bin/installdependencies.sh"
+release_apt_locks
+
+# installdependencies.sh doesn't know about newer distros (e.g. Debian 13 ships
+# libicu76 and libssl3, but the script only tries libicu52-72 and libssl1.x).
+# Pre-install the correct packages so config.sh finds a working .NET runtime.
+if command -v apt-get &> /dev/null; then
+    log_info "Pre-installing libicu and libssl for .NET runtime..."
+    apt-get update
+    apt-get install -y libicu-dev libssl-dev
+fi
+
+log_info "Installing runner dependencies..."
+"$RUNNER_DIR/bin/installdependencies.sh" || log_warn "installdependencies.sh exited with errors (non-fatal, continuing)"
 
 # =============================================================================
 # STEP 6: Configure Runner
