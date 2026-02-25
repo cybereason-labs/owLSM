@@ -6,11 +6,9 @@
 
 terraform {
   backend "oci" {
-    # Required
     bucket    = "terraform-state-owlsm"
     namespace = "id9uy08ld7kh"
-
-    # Optional
+    
     key                 = "runners/terraform.tfstate"
     config_file_profile = "DEFAULT"
   }

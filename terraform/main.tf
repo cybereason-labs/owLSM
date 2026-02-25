@@ -1,41 +1,98 @@
 # =============================================================================
-# Root Terraform Configuration - OCI GitHub Actions Runners
+# OCI GitHub Actions Runner Module
+# Creates OCI compute instances and registers them as GitHub Actions runners.
 # =============================================================================
 
-module "gh_runners" {
-  source = "./modules/oci-gh-runner"
+locals {
+  # Build the cloud-init script for each runner
+  # Unique display name per runner per workflow run
+  runner_display_names = {
+    for key, runner in var.runners : key => "automation-owlsm-${runner.display_name}-${var.run_id}"
+  }
 
-  compartment_id             = var.compartment_id
-  subnet_id                  = var.subnet_id
-  availability_domain        = var.availability_domain
-  ssh_public_key             = var.ssh_public_key
-  network_security_group_ids = var.network_security_group_ids
-  run_id                     = var.run_id
-  github_pat                 = var.github_pat
-  github_repo_url            = var.github_repo_url
-  runners                    = var.runners
+  # Build the cloud-init script for each runner
+  cloud_init_scripts = {
+    for key, runner in var.runners : key => templatefile(
+      "${path.module}/templates/cloud-init.sh",
+      {
+        runner_user     = var.runner_user
+        runner_version  = var.runner_version
+        github_repo_url = var.github_repo_url
+        github_pat      = var.github_pat
+        runner_name     = local.runner_display_names[key]
+        runner_labels    = join(",", concat(runner.runner_labels, var.runner_shared_labels, ["run-${var.run_id}"]))
+        runner_group     = var.runner_group
+        ephemeral_runner = var.ephemeral_runner
+      }
+    )
+  }
 }
 
 # =============================================================================
-# Outputs
+# Compute Instances
 # =============================================================================
 
-output "runner_public_ips" {
-  description = "Map of runner key to public IP address"
-  value       = module.gh_runners.runner_public_ips
-}
+resource "oci_core_instance" "gh_runner" {
+  for_each = var.runners
 
-output "runner_private_ips" {
-  description = "Map of runner key to private IP address"
-  value       = module.gh_runners.runner_private_ips
-}
+  compartment_id      = var.compartment_id
+  availability_domain = var.availability_domain
+  display_name        = local.runner_display_names[each.key]
+  shape               = each.value.shape
 
-output "runner_instance_ids" {
-  description = "List of all runner instance OCIDs"
-  value       = module.gh_runners.runner_instance_ids
-}
+  # Disable legacy IMDSv1 metadata endpoint
+  instance_options {
+    are_legacy_imds_endpoints_disabled = true
+  }
 
-output "runner_instances" {
-  description = "Map of created runner instances with their details"
-  value       = module.gh_runners.runner_instances
+  # Enable in-transit encryption for boot volume (requires PARAVIRTUALIZED launch mode)
+  launch_options {
+    boot_volume_type                    = "PARAVIRTUALIZED"
+    network_type                        = "PARAVIRTUALIZED"
+    is_pv_encryption_in_transit_enabled = each.value.pv_encryption_in_transit
+  }
+
+  # Flex shape configuration (CPU / memory)
+  dynamic "shape_config" {
+    for_each = can(regex("Flex$", each.value.shape)) ? [1] : []
+    content {
+      ocpus         = each.value.ocpus
+      memory_in_gbs = each.value.memory_in_gbs
+    }
+  }
+
+  source_details {
+    source_type             = "image"
+    source_id               = each.value.image_id
+    boot_volume_size_in_gbs = each.value.boot_volume_gb
+  }
+
+  create_vnic_details {
+    subnet_id                 = var.subnet_id
+    assign_public_ip          = true
+    display_name              = "${local.runner_display_names[each.key]}-vnic"
+    nsg_ids                   = var.network_security_group_ids
+  }
+
+  metadata = {
+    ssh_authorized_keys = var.ssh_public_key
+    user_data           = base64encode(local.cloud_init_scripts[each.key])
+  }
+
+  freeform_tags = merge(
+    var.instance_tags,
+    {
+      runner-name   = local.runner_display_names[each.key]
+      runner-labels = join(",", each.value.runner_labels)
+      runner-key    = each.key
+    }
+  )
+
+  # Prevent destroy from removing active runners accidentally
+  lifecycle {
+    precondition {
+      condition     = length(each.value.image_id) > 0
+      error_message = "image_id must not be empty for runner '${each.key}'."
+    }
+  }
 }

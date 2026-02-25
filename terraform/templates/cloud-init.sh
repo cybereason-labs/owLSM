@@ -20,6 +20,7 @@ RUNNER_NAME="${runner_name}"
 RUNNER_LABELS="${runner_labels}"
 RUNNER_GROUP="${runner_group}"
 RUNNER_WORK_DIR="_work"
+EPHEMERAL_RUNNER="${ephemeral_runner}"
 
 # === COLORS ===
 RED='\033[0;31m'
@@ -226,6 +227,14 @@ sudo -u "$RUNNER_USER" tar xzf "$RUNNER_TAR"
 # =============================================================================
 log_info "Configuring runner..."
 
+EPHEMERAL_FLAG=""
+if [ "$EPHEMERAL_RUNNER" = "true" ]; then
+    EPHEMERAL_FLAG="--ephemeral"
+    log_info "Runner will be ephemeral (single job)"
+else
+    log_info "Runner will be persistent (multi job)"
+fi
+
 sudo -u "$RUNNER_USER" bash -c "
     cd '$RUNNER_DIR'
     ./config.sh \
@@ -236,7 +245,7 @@ sudo -u "$RUNNER_USER" bash -c "
         --work '$RUNNER_WORK_DIR' \
         --unattended \
         --replace \
-        --ephemeral
+        $EPHEMERAL_FLAG
 "
 
 # =============================================================================
