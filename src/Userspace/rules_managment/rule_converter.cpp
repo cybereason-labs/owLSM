@@ -48,6 +48,7 @@ predicate_t RuleStructConverter::convertPredicate(const config::Predicate& predi
     result.operation = predicate.comparison_type;
     result.string_idx = predicate.string_idx;
     result.numerical_value = predicate.numerical_value;
+    result.fieldref = predicate.fieldref;
     
     return result;
 }

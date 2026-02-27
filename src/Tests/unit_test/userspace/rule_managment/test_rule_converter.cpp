@@ -74,6 +74,7 @@ TEST_F(RuleConverterTest, convert_predicate_with_string)
     cpp_pred.comparison_type = COMPARISON_TYPE_CONTAINS;
     cpp_pred.string_idx = 5;
     cpp_pred.numerical_value = -1;
+    cpp_pred.fieldref = FIELD_TYPE_NONE;
     
     predicate_t c_pred = RuleConverterTest::convertPredicate(cpp_pred);
     
@@ -81,6 +82,7 @@ TEST_F(RuleConverterTest, convert_predicate_with_string)
     EXPECT_EQ(c_pred.operation, COMPARISON_TYPE_CONTAINS);
     EXPECT_EQ(c_pred.string_idx, 5);
     EXPECT_EQ(c_pred.numerical_value, -1);
+    EXPECT_EQ(c_pred.fieldref, FIELD_TYPE_NONE);
 }
 
 TEST_F(RuleConverterTest, convert_predicate_with_numerical_value)
@@ -90,6 +92,7 @@ TEST_F(RuleConverterTest, convert_predicate_with_numerical_value)
     cpp_pred.comparison_type = COMPARISON_TYPE_EQUAL;
     cpp_pred.string_idx = -1;
     cpp_pred.numerical_value = 1000;
+    cpp_pred.fieldref = FIELD_TYPE_NONE;
     
     predicate_t c_pred = RuleConverterTest::convertPredicate(cpp_pred);
     
@@ -97,6 +100,25 @@ TEST_F(RuleConverterTest, convert_predicate_with_numerical_value)
     EXPECT_EQ(c_pred.operation, COMPARISON_TYPE_EQUAL);
     EXPECT_EQ(c_pred.string_idx, -1);
     EXPECT_EQ(c_pred.numerical_value, 1000);
+    EXPECT_EQ(c_pred.fieldref, FIELD_TYPE_NONE);
+}
+
+TEST_F(RuleConverterTest, convert_predicate_with_fieldref)
+{
+    owlsm::config::Predicate cpp_pred;
+    cpp_pred.field = PROCESS_FILE_PATH;
+    cpp_pred.comparison_type = COMPARISON_TYPE_EXACT_MATCH;
+    cpp_pred.string_idx = -1;
+    cpp_pred.numerical_value = -1;
+    cpp_pred.fieldref = PARENT_PROCESS_FILE_PATH;
+    
+    predicate_t c_pred = RuleConverterTest::convertPredicate(cpp_pred);
+    
+    EXPECT_EQ(c_pred.field, PROCESS_FILE_PATH);
+    EXPECT_EQ(c_pred.operation, COMPARISON_TYPE_EXACT_MATCH);
+    EXPECT_EQ(c_pred.string_idx, -1);
+    EXPECT_EQ(c_pred.numerical_value, -1);
+    EXPECT_EQ(c_pred.fieldref, PARENT_PROCESS_FILE_PATH);
 }
 
 TEST_F(RuleConverterTest, convert_predicate_comparison_types)

@@ -53,7 +53,7 @@ struct UserspaceConfig
 {
     unsigned int max_events_queue_size = 10000;
     OutputType output_type = OutputType::JSON;
-    log_level log_level = LOG_LEVEL_ERROR;
+    log_level log_level = LOG_LEVEL_INFO;
     bool set_limits = true;
 };
 

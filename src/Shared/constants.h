@@ -70,6 +70,7 @@ enum comparison_type {
 };
 
 enum rule_field_type {
+    FIELD_TYPE_NONE,
     TARGET_FILE_PATH,
     TARGET_FILE_FILENAME,
     TARGET_FILE_OWNER_UID,

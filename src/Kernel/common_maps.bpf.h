@@ -285,3 +285,13 @@ struct {
         __type(key,        u32);
         __type(value,      unsigned char);
 } kthread_exec_pids SEC(".maps");
+
+#ifndef DEFINE_MAPS
+extern
+#endif
+struct {
+    __uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
+    __uint(max_entries, 1);
+    __type(key, u32);
+    __type(value, struct eval_stack);
+} helper_stack SEC(".maps");

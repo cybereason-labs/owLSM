@@ -19,26 +19,26 @@ constexpr const char* AND_OPERATORS_JSON = R"({
     "9": {"value": "/usr/", "is_contains": true}
   },
   "id_to_predicate": {
-    "0": {"field": "target.file.path", "comparison_type": "startswith", "string_idx": 0, "numerical_value": -1},
-    "1": {"field": "target.file.mode", "comparison_type": "above", "string_idx": -1, "numerical_value": 384},
-    "2": {"field": "process.ruid", "comparison_type": "equal", "string_idx": -1, "numerical_value": 1000},
-    "3": {"field": "process.file.filename", "comparison_type": "contains", "string_idx": 1, "numerical_value": -1},
-    "4": {"field": "target.file.path", "comparison_type": "contains", "string_idx": 2, "numerical_value": -1},
-    "5": {"field": "target.file.owner.uid", "comparison_type": "equal", "string_idx": -1, "numerical_value": 0},
-    "6": {"field": "process.euid", "comparison_type": "equal", "string_idx": -1, "numerical_value": 0},
-    "7": {"field": "process.file.path", "comparison_type": "startswith", "string_idx": 3, "numerical_value": -1},
-    "8": {"field": "target.process.file.path", "comparison_type": "startswith", "string_idx": 0, "numerical_value": -1},
-    "9": {"field": "target.process.ruid", "comparison_type": "equal", "string_idx": -1, "numerical_value": 1000},
-    "10": {"field": "process.ppid", "comparison_type": "above", "string_idx": -1, "numerical_value": 1},
-    "11": {"field": "process.file.filename", "comparison_type": "contains", "string_idx": 4, "numerical_value": -1},
-    "12": {"field": "rename.source_file.path", "comparison_type": "startswith", "string_idx": 5, "numerical_value": -1},
-    "13": {"field": "rename.destination_file.path", "comparison_type": "contains", "string_idx": 6, "numerical_value": -1},
-    "14": {"field": "process.pid", "comparison_type": "above", "string_idx": -1, "numerical_value": 1000},
-    "15": {"field": "process.file.filename", "comparison_type": "exactmatch", "string_idx": 7, "numerical_value": -1},
-    "16": {"field": "target.file.path", "comparison_type": "endswith", "string_idx": 8, "numerical_value": -1},
-    "17": {"field": "target.file.mode", "comparison_type": "below", "string_idx": -1, "numerical_value": 448},
-    "18": {"field": "process.euid", "comparison_type": "equal", "string_idx": -1, "numerical_value": 1000},
-    "19": {"field": "process.file.path", "comparison_type": "contains", "string_idx": 9, "numerical_value": -1}
+    "0": {"field": "target.file.path", "comparison_type": "startswith", "string_idx": 0, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "1": {"field": "target.file.mode", "comparison_type": "above", "string_idx": -1, "numerical_value": 384, "fieldref": "FIELD_TYPE_NONE"},
+    "2": {"field": "process.ruid", "comparison_type": "equal", "string_idx": -1, "numerical_value": 1000, "fieldref": "FIELD_TYPE_NONE"},
+    "3": {"field": "process.file.filename", "comparison_type": "contains", "string_idx": 1, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "4": {"field": "target.file.path", "comparison_type": "contains", "string_idx": 2, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "5": {"field": "target.file.owner.uid", "comparison_type": "equal", "string_idx": -1, "numerical_value": 0, "fieldref": "FIELD_TYPE_NONE"},
+    "6": {"field": "process.euid", "comparison_type": "equal", "string_idx": -1, "numerical_value": 0, "fieldref": "FIELD_TYPE_NONE"},
+    "7": {"field": "process.file.path", "comparison_type": "startswith", "string_idx": 3, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "8": {"field": "target.process.file.path", "comparison_type": "startswith", "string_idx": 0, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "9": {"field": "target.process.ruid", "comparison_type": "equal", "string_idx": -1, "numerical_value": 1000, "fieldref": "FIELD_TYPE_NONE"},
+    "10": {"field": "process.ppid", "comparison_type": "above", "string_idx": -1, "numerical_value": 1, "fieldref": "FIELD_TYPE_NONE"},
+    "11": {"field": "process.file.filename", "comparison_type": "contains", "string_idx": 4, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "12": {"field": "rename.source_file.path", "comparison_type": "startswith", "string_idx": 5, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "13": {"field": "rename.destination_file.path", "comparison_type": "contains", "string_idx": 6, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "14": {"field": "process.pid", "comparison_type": "above", "string_idx": -1, "numerical_value": 1000, "fieldref": "FIELD_TYPE_NONE"},
+    "15": {"field": "process.file.filename", "comparison_type": "exactmatch", "string_idx": 7, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "16": {"field": "target.file.path", "comparison_type": "endswith", "string_idx": 8, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "17": {"field": "target.file.mode", "comparison_type": "below", "string_idx": -1, "numerical_value": 448, "fieldref": "FIELD_TYPE_NONE"},
+    "18": {"field": "process.euid", "comparison_type": "equal", "string_idx": -1, "numerical_value": 1000, "fieldref": "FIELD_TYPE_NONE"},
+    "19": {"field": "process.file.path", "comparison_type": "contains", "string_idx": 9, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"}
   },
   "rules": [
     {
@@ -290,26 +290,26 @@ constexpr const char* OR_OPERATORS_JSON = R"({
     "9": {"value": "/usr/", "is_contains": true}
   },
   "id_to_predicate": {
-    "0": {"field": "target.file.path", "comparison_type": "startswith", "string_idx": 0, "numerical_value": -1},
-    "1": {"field": "target.file.mode", "comparison_type": "above", "string_idx": -1, "numerical_value": 493},
-    "2": {"field": "process.ruid", "comparison_type": "equal", "string_idx": -1, "numerical_value": 1000},
-    "3": {"field": "process.file.filename", "comparison_type": "contains", "string_idx": 1, "numerical_value": -1},
-    "4": {"field": "target.file.path", "comparison_type": "contains", "string_idx": 2, "numerical_value": -1},
-    "5": {"field": "target.file.owner.uid", "comparison_type": "equal", "string_idx": -1, "numerical_value": 0},
-    "6": {"field": "process.euid", "comparison_type": "equal", "string_idx": -1, "numerical_value": 0},
-    "7": {"field": "process.file.path", "comparison_type": "startswith", "string_idx": 3, "numerical_value": -1},
-    "8": {"field": "target.process.file.path", "comparison_type": "startswith", "string_idx": 0, "numerical_value": -1},
-    "9": {"field": "target.process.ruid", "comparison_type": "equal", "string_idx": -1, "numerical_value": 1000},
-    "10": {"field": "process.ppid", "comparison_type": "above", "string_idx": -1, "numerical_value": 1},
-    "11": {"field": "process.file.filename", "comparison_type": "contains", "string_idx": 4, "numerical_value": -1},
-    "12": {"field": "rename.source_file.path", "comparison_type": "startswith", "string_idx": 5, "numerical_value": -1},
-    "13": {"field": "rename.destination_file.path", "comparison_type": "contains", "string_idx": 6, "numerical_value": -1},
-    "14": {"field": "process.pid", "comparison_type": "above", "string_idx": -1, "numerical_value": 1000},
-    "15": {"field": "process.file.filename", "comparison_type": "exactmatch", "string_idx": 7, "numerical_value": -1},
-    "16": {"field": "target.file.path", "comparison_type": "endswith", "string_idx": 8, "numerical_value": -1},
-    "17": {"field": "target.file.mode", "comparison_type": "below", "string_idx": -1, "numerical_value": 448},
-    "18": {"field": "process.euid", "comparison_type": "equal", "string_idx": -1, "numerical_value": 1000},
-    "19": {"field": "process.file.path", "comparison_type": "contains", "string_idx": 9, "numerical_value": -1}
+    "0": {"field": "target.file.path", "comparison_type": "startswith", "string_idx": 0, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "1": {"field": "target.file.mode", "comparison_type": "above", "string_idx": -1, "numerical_value": 493, "fieldref": "FIELD_TYPE_NONE"},
+    "2": {"field": "process.ruid", "comparison_type": "equal", "string_idx": -1, "numerical_value": 1000, "fieldref": "FIELD_TYPE_NONE"},
+    "3": {"field": "process.file.filename", "comparison_type": "contains", "string_idx": 1, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "4": {"field": "target.file.path", "comparison_type": "contains", "string_idx": 2, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "5": {"field": "target.file.owner.uid", "comparison_type": "equal", "string_idx": -1, "numerical_value": 0, "fieldref": "FIELD_TYPE_NONE"},
+    "6": {"field": "process.euid", "comparison_type": "equal", "string_idx": -1, "numerical_value": 0, "fieldref": "FIELD_TYPE_NONE"},
+    "7": {"field": "process.file.path", "comparison_type": "startswith", "string_idx": 3, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "8": {"field": "target.process.file.path", "comparison_type": "startswith", "string_idx": 0, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "9": {"field": "target.process.ruid", "comparison_type": "equal", "string_idx": -1, "numerical_value": 1000, "fieldref": "FIELD_TYPE_NONE"},
+    "10": {"field": "process.ppid", "comparison_type": "above", "string_idx": -1, "numerical_value": 1, "fieldref": "FIELD_TYPE_NONE"},
+    "11": {"field": "process.file.filename", "comparison_type": "contains", "string_idx": 4, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "12": {"field": "rename.source_file.path", "comparison_type": "startswith", "string_idx": 5, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "13": {"field": "rename.destination_file.path", "comparison_type": "contains", "string_idx": 6, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "14": {"field": "process.pid", "comparison_type": "above", "string_idx": -1, "numerical_value": 1000, "fieldref": "FIELD_TYPE_NONE"},
+    "15": {"field": "process.file.filename", "comparison_type": "exactmatch", "string_idx": 7, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "16": {"field": "target.file.path", "comparison_type": "endswith", "string_idx": 8, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "17": {"field": "target.file.mode", "comparison_type": "below", "string_idx": -1, "numerical_value": 448, "fieldref": "FIELD_TYPE_NONE"},
+    "18": {"field": "process.euid", "comparison_type": "equal", "string_idx": -1, "numerical_value": 1000, "fieldref": "FIELD_TYPE_NONE"},
+    "19": {"field": "process.file.path", "comparison_type": "contains", "string_idx": 9, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"}
   },
   "rules": [
     {
@@ -407,26 +407,26 @@ constexpr const char* NOT_OPERATORS_JSON = R"({
     "9": {"value": "/usr/", "is_contains": true}
   },
   "id_to_predicate": {
-    "0": {"field": "target.file.path", "comparison_type": "startswith", "string_idx": 0, "numerical_value": -1},
-    "1": {"field": "target.file.mode", "comparison_type": "above", "string_idx": -1, "numerical_value": 493},
-    "2": {"field": "process.ruid", "comparison_type": "equal", "string_idx": -1, "numerical_value": 1000},
-    "3": {"field": "process.file.filename", "comparison_type": "contains", "string_idx": 1, "numerical_value": -1},
-    "4": {"field": "target.file.path", "comparison_type": "contains", "string_idx": 2, "numerical_value": -1},
-    "5": {"field": "target.file.owner.uid", "comparison_type": "equal", "string_idx": -1, "numerical_value": 0},
-    "6": {"field": "process.euid", "comparison_type": "equal", "string_idx": -1, "numerical_value": 0},
-    "7": {"field": "process.file.path", "comparison_type": "startswith", "string_idx": 3, "numerical_value": -1},
-    "8": {"field": "target.process.file.path", "comparison_type": "startswith", "string_idx": 0, "numerical_value": -1},
-    "9": {"field": "target.process.ruid", "comparison_type": "equal", "string_idx": -1, "numerical_value": 1000},
-    "10": {"field": "process.ppid", "comparison_type": "above", "string_idx": -1, "numerical_value": 1},
-    "11": {"field": "process.file.filename", "comparison_type": "contains", "string_idx": 4, "numerical_value": -1},
-    "12": {"field": "rename.source_file.path", "comparison_type": "startswith", "string_idx": 5, "numerical_value": -1},
-    "13": {"field": "rename.destination_file.path", "comparison_type": "contains", "string_idx": 6, "numerical_value": -1},
-    "14": {"field": "process.pid", "comparison_type": "above", "string_idx": -1, "numerical_value": 1000},
-    "15": {"field": "process.file.filename", "comparison_type": "exactmatch", "string_idx": 7, "numerical_value": -1},
-    "16": {"field": "target.file.path", "comparison_type": "endswith", "string_idx": 8, "numerical_value": -1},
-    "17": {"field": "target.file.mode", "comparison_type": "below", "string_idx": -1, "numerical_value": 448},
-    "18": {"field": "process.euid", "comparison_type": "equal", "string_idx": -1, "numerical_value": 1000},
-    "19": {"field": "process.file.path", "comparison_type": "contains", "string_idx": 9, "numerical_value": -1}
+    "0": {"field": "target.file.path", "comparison_type": "startswith", "string_idx": 0, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "1": {"field": "target.file.mode", "comparison_type": "above", "string_idx": -1, "numerical_value": 493, "fieldref": "FIELD_TYPE_NONE"},
+    "2": {"field": "process.ruid", "comparison_type": "equal", "string_idx": -1, "numerical_value": 1000, "fieldref": "FIELD_TYPE_NONE"},
+    "3": {"field": "process.file.filename", "comparison_type": "contains", "string_idx": 1, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "4": {"field": "target.file.path", "comparison_type": "contains", "string_idx": 2, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "5": {"field": "target.file.owner.uid", "comparison_type": "equal", "string_idx": -1, "numerical_value": 0, "fieldref": "FIELD_TYPE_NONE"},
+    "6": {"field": "process.euid", "comparison_type": "equal", "string_idx": -1, "numerical_value": 0, "fieldref": "FIELD_TYPE_NONE"},
+    "7": {"field": "process.file.path", "comparison_type": "startswith", "string_idx": 3, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "8": {"field": "target.process.file.path", "comparison_type": "startswith", "string_idx": 0, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "9": {"field": "target.process.ruid", "comparison_type": "equal", "string_idx": -1, "numerical_value": 1000, "fieldref": "FIELD_TYPE_NONE"},
+    "10": {"field": "process.ppid", "comparison_type": "above", "string_idx": -1, "numerical_value": 1, "fieldref": "FIELD_TYPE_NONE"},
+    "11": {"field": "process.file.filename", "comparison_type": "contains", "string_idx": 4, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "12": {"field": "rename.source_file.path", "comparison_type": "startswith", "string_idx": 5, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "13": {"field": "rename.destination_file.path", "comparison_type": "contains", "string_idx": 6, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "14": {"field": "process.pid", "comparison_type": "above", "string_idx": -1, "numerical_value": 1000, "fieldref": "FIELD_TYPE_NONE"},
+    "15": {"field": "process.file.filename", "comparison_type": "exactmatch", "string_idx": 7, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "16": {"field": "target.file.path", "comparison_type": "endswith", "string_idx": 8, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "17": {"field": "target.file.mode", "comparison_type": "below", "string_idx": -1, "numerical_value": 448, "fieldref": "FIELD_TYPE_NONE"},
+    "18": {"field": "process.euid", "comparison_type": "equal", "string_idx": -1, "numerical_value": 1000, "fieldref": "FIELD_TYPE_NONE"},
+    "19": {"field": "process.file.path", "comparison_type": "contains", "string_idx": 9, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"}
   },
   "rules": [
     {
@@ -954,17 +954,17 @@ constexpr const char* COMPLEX_OPERATORS_JSON = R"({
     "6": {"value": "protected", "is_contains": true}
   },
   "id_to_predicate": {
-    "0": {"field": "target.process.file.path", "comparison_type": "startswith", "string_idx": 0, "numerical_value": -1},
-    "1": {"field": "target.process.ruid", "comparison_type": "equal", "string_idx": -1, "numerical_value": 1000},
-    "2": {"field": "process.ppid", "comparison_type": "above", "string_idx": -1, "numerical_value": 1},
-    "3": {"field": "process.file.filename", "comparison_type": "contains", "string_idx": 1, "numerical_value": -1},
-    "4": {"field": "process.euid", "comparison_type": "equal", "string_idx": -1, "numerical_value": 0},
-    "5": {"field": "target.process.file.path", "comparison_type": "contains", "string_idx": 2, "numerical_value": -1},
-    "6": {"field": "rename.source_file.path", "comparison_type": "startswith", "string_idx": 3, "numerical_value": -1},
-    "7": {"field": "rename.destination_file.path", "comparison_type": "contains", "string_idx": 4, "numerical_value": -1},
-    "8": {"field": "process.pid", "comparison_type": "above", "string_idx": -1, "numerical_value": 1000},
-    "9": {"field": "process.file.filename", "comparison_type": "exactmatch", "string_idx": 5, "numerical_value": -1},
-    "10": {"field": "rename.source_file.path", "comparison_type": "contains", "string_idx": 6, "numerical_value": -1}
+    "0": {"field": "target.process.file.path", "comparison_type": "startswith", "string_idx": 0, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "1": {"field": "target.process.ruid", "comparison_type": "equal", "string_idx": -1, "numerical_value": 1000, "fieldref": "FIELD_TYPE_NONE"},
+    "2": {"field": "process.ppid", "comparison_type": "above", "string_idx": -1, "numerical_value": 1, "fieldref": "FIELD_TYPE_NONE"},
+    "3": {"field": "process.file.filename", "comparison_type": "contains", "string_idx": 1, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "4": {"field": "process.euid", "comparison_type": "equal", "string_idx": -1, "numerical_value": 0, "fieldref": "FIELD_TYPE_NONE"},
+    "5": {"field": "target.process.file.path", "comparison_type": "contains", "string_idx": 2, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "6": {"field": "rename.source_file.path", "comparison_type": "startswith", "string_idx": 3, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "7": {"field": "rename.destination_file.path", "comparison_type": "contains", "string_idx": 4, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "8": {"field": "process.pid", "comparison_type": "above", "string_idx": -1, "numerical_value": 1000, "fieldref": "FIELD_TYPE_NONE"},
+    "9": {"field": "process.file.filename", "comparison_type": "exactmatch", "string_idx": 5, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"},
+    "10": {"field": "rename.source_file.path", "comparison_type": "contains", "string_idx": 6, "numerical_value": -1, "fieldref": "FIELD_TYPE_NONE"}
   },
   "rules": [
     {
@@ -1350,151 +1350,176 @@ constexpr const char* ALL_FIELDS_RENAME_JSON = R"({
       "field": "rename.source_file.path",
       "comparison_type": "startswith",
       "string_idx": 0,
-      "numerical_value": -1
+      "numerical_value": -1,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "1": {
       "field": "rename.source_file.filename",
       "comparison_type": "contains",
       "string_idx": 1,
-      "numerical_value": -1
+      "numerical_value": -1,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "2": {
       "field": "rename.source_file.owner.uid",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 1000
+      "numerical_value": 1000,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "3": {
       "field": "rename.source_file.owner.gid",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 1000
+      "numerical_value": 1000,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "4": {
       "field": "rename.source_file.mode",
       "comparison_type": "above",
       "string_idx": -1,
-      "numerical_value": 384
+      "numerical_value": 384,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "5": {
       "field": "rename.source_file.suid",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 0
+      "numerical_value": 0,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "6": {
       "field": "rename.source_file.sgid",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 0
+      "numerical_value": 0,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "7": {
       "field": "rename.source_file.nlink",
       "comparison_type": "equal_above",
       "string_idx": -1,
-      "numerical_value": 1
+      "numerical_value": 1,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "8": {
       "field": "rename.source_file.type",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 5
+      "numerical_value": 5,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "9": {
       "field": "rename.destination_file.path",
       "comparison_type": "endswith",
       "string_idx": 2,
-      "numerical_value": -1
+      "numerical_value": -1,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "10": {
       "field": "rename.destination_file.filename",
       "comparison_type": "exactmatch",
       "string_idx": 3,
-      "numerical_value": -1
+      "numerical_value": -1,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "11": {
       "field": "rename.destination_file.owner.uid",
       "comparison_type": "equal_below",
       "string_idx": -1,
-      "numerical_value": 1000
+      "numerical_value": 1000,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "12": {
       "field": "rename.destination_file.owner.gid",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 1000
+      "numerical_value": 1000,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "13": {
       "field": "rename.destination_file.mode",
       "comparison_type": "below",
       "string_idx": -1,
-      "numerical_value": 448
+      "numerical_value": 448,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "14": {
       "field": "rename.destination_file.suid",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 0
+      "numerical_value": 0,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "15": {
       "field": "rename.destination_file.sgid",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 0
+      "numerical_value": 0,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "16": {
       "field": "rename.destination_file.nlink",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 1
+      "numerical_value": 1,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "17": {
       "field": "rename.destination_file.type",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 5
+      "numerical_value": 5,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "18": {
       "field": "process.pid",
       "comparison_type": "above",
       "string_idx": -1,
-      "numerical_value": 1000
+      "numerical_value": 1000,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "19": {
       "field": "process.ruid",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 1000
+      "numerical_value": 1000,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "20": {
       "field": "process.euid",
       "comparison_type": "equal_below",
       "string_idx": -1,
-      "numerical_value": 1000
+      "numerical_value": 1000,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "21": {
       "field": "process.cmd",
       "comparison_type": "contains",
       "string_idx": 4,
-      "numerical_value": -1
+      "numerical_value": -1,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "22": {
       "field": "process.file.path",
       "comparison_type": "startswith",
       "string_idx": 5,
-      "numerical_value": -1
+      "numerical_value": -1,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "23": {
       "field": "process.file.filename",
       "comparison_type": "exactmatch",
       "string_idx": 4,
-      "numerical_value": -1
+      "numerical_value": -1,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "24": {
       "field": "process.file.type",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 5
+      "numerical_value": 5,
+      "fieldref": "FIELD_TYPE_NONE"
     }
   },
   "rules": [
@@ -1680,181 +1705,211 @@ constexpr const char* ALL_FIELDS_EXEC_JSON = R"({
       "field": "target.process.pid",
       "comparison_type": "above",
       "string_idx": -1,
-      "numerical_value": 0
+      "numerical_value": 0,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "1": {
       "field": "target.process.ppid",
       "comparison_type": "equal_above",
       "string_idx": -1,
-      "numerical_value": 1
+      "numerical_value": 1,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "2": {
       "field": "target.process.ruid",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 1000
+      "numerical_value": 1000,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "3": {
       "field": "target.process.rgid",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 1000
+      "numerical_value": 1000,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "4": {
       "field": "target.process.euid",
       "comparison_type": "equal_below",
       "string_idx": -1,
-      "numerical_value": 1000
+      "numerical_value": 1000,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "5": {
       "field": "target.process.egid",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 1000
+      "numerical_value": 1000,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "6": {
       "field": "target.process.suid",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 1000
+      "numerical_value": 1000,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "7": {
       "field": "target.process.cmd",
       "comparison_type": "contains",
       "string_idx": 0,
-      "numerical_value": -1
+      "numerical_value": -1,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "8": {
       "field": "target.process.file.path",
       "comparison_type": "startswith",
       "string_idx": 1,
-      "numerical_value": -1
+      "numerical_value": -1,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "9": {
       "field": "target.process.file.filename",
       "comparison_type": "endswith",
       "string_idx": 2,
-      "numerical_value": -1
+      "numerical_value": -1,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "10": {
       "field": "target.process.file.owner.uid",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 1000
+      "numerical_value": 1000,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "11": {
       "field": "target.process.file.owner.gid",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 1000
+      "numerical_value": 1000,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "12": {
       "field": "target.process.file.mode",
       "comparison_type": "equal_above",
       "string_idx": -1,
-      "numerical_value": 448
+      "numerical_value": 448,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "13": {
       "field": "target.process.file.suid",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 0
+      "numerical_value": 0,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "14": {
       "field": "target.process.file.sgid",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 0
+      "numerical_value": 0,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "15": {
       "field": "target.process.file.nlink",
       "comparison_type": "equal_above",
       "string_idx": -1,
-      "numerical_value": 1
+      "numerical_value": 1,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "16": {
       "field": "target.process.file.type",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 5
+      "numerical_value": 5,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "17": {
       "field": "process.pid",
       "comparison_type": "above",
       "string_idx": -1,
-      "numerical_value": 100
+      "numerical_value": 100,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "18": {
       "field": "process.ppid",
       "comparison_type": "above",
       "string_idx": -1,
-      "numerical_value": 1
+      "numerical_value": 1,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "19": {
       "field": "process.ruid",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 1000
+      "numerical_value": 1000,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "20": {
       "field": "process.euid",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 1000
+      "numerical_value": 1000,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "21": {
       "field": "process.file.path",
       "comparison_type": "startswith",
       "string_idx": 3,
-      "numerical_value": -1
+      "numerical_value": -1,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "22": {
       "field": "process.file.type",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 5
+      "numerical_value": 5,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "23": {
       "field": "parent_process.pid",
       "comparison_type": "above",
       "string_idx": -1,
-      "numerical_value": 1
+      "numerical_value": 1,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "24": {
       "field": "parent_process.ruid",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 1000
+      "numerical_value": 1000,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "25": {
       "field": "parent_process.euid",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 1000
+      "numerical_value": 1000,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "26": {
       "field": "parent_process.file.path",
       "comparison_type": "startswith",
       "string_idx": 3,
-      "numerical_value": -1
+      "numerical_value": -1,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "27": {
       "field": "parent_process.file.type",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 5
+      "numerical_value": 5,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "28": {
       "field": "process.euid",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 0
+      "numerical_value": 0,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "29": {
       "field": "target.process.file.path",
       "comparison_type": "contains",
       "string_idx": 4,
-      "numerical_value": -1
+      "numerical_value": -1,
+      "fieldref": "FIELD_TYPE_NONE"
     }
   },
   "rules": [
@@ -2036,7 +2091,8 @@ constexpr const char* IP_SOURCE_IPV4_MASK32_JSON = R"({
       "field": "network.source_ip",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 0
+      "numerical_value": 0,
+      "fieldref": "FIELD_TYPE_NONE"
     }
   },
   "id_to_ip": {
@@ -2066,7 +2122,8 @@ constexpr const char* IP_SOURCE_IPV4_MASK24_JSON = R"({
       "field": "network.source_ip",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 0
+      "numerical_value": 0,
+      "fieldref": "FIELD_TYPE_NONE"
     }
   },
   "id_to_ip": {
@@ -2096,7 +2153,8 @@ constexpr const char* IP_SOURCE_IPV4_MASK0_JSON = R"({
       "field": "network.source_ip",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 0
+      "numerical_value": 0,
+      "fieldref": "FIELD_TYPE_NONE"
     }
   },
   "id_to_ip": {
@@ -2126,7 +2184,8 @@ constexpr const char* IP_SOURCE_IPV6_MASK128_JSON = R"({
       "field": "network.source_ip",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 0
+      "numerical_value": 0,
+      "fieldref": "FIELD_TYPE_NONE"
     }
   },
   "id_to_ip": {
@@ -2156,7 +2215,8 @@ constexpr const char* IP_SOURCE_IPV6_MASK64_JSON = R"({
       "field": "network.source_ip",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 0
+      "numerical_value": 0,
+      "fieldref": "FIELD_TYPE_NONE"
     }
   },
   "id_to_ip": {
@@ -2186,7 +2246,8 @@ constexpr const char* IP_SOURCE_IPV6_MASK0_JSON = R"({
       "field": "network.source_ip",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 0
+      "numerical_value": 0,
+      "fieldref": "FIELD_TYPE_NONE"
     }
   },
   "id_to_ip": {
@@ -2217,7 +2278,8 @@ constexpr const char* IP_DEST_IPV4_MASK32_JSON = R"({
       "field": "network.destination_ip",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 0
+      "numerical_value": 0,
+      "fieldref": "FIELD_TYPE_NONE"
     }
   },
   "id_to_ip": {
@@ -2247,7 +2309,8 @@ constexpr const char* IP_DEST_IPV4_MASK24_JSON = R"({
       "field": "network.destination_ip",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 0
+      "numerical_value": 0,
+      "fieldref": "FIELD_TYPE_NONE"
     }
   },
   "id_to_ip": {
@@ -2277,7 +2340,8 @@ constexpr const char* IP_DEST_IPV4_MASK0_JSON = R"({
       "field": "network.destination_ip",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 0
+      "numerical_value": 0,
+      "fieldref": "FIELD_TYPE_NONE"
     }
   },
   "id_to_ip": {
@@ -2307,7 +2371,8 @@ constexpr const char* IP_DEST_IPV6_MASK128_JSON = R"({
       "field": "network.destination_ip",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 0
+      "numerical_value": 0,
+      "fieldref": "FIELD_TYPE_NONE"
     }
   },
   "id_to_ip": {
@@ -2337,7 +2402,8 @@ constexpr const char* IP_DEST_IPV6_MASK64_JSON = R"({
       "field": "network.destination_ip",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 0
+      "numerical_value": 0,
+      "fieldref": "FIELD_TYPE_NONE"
     }
   },
   "id_to_ip": {
@@ -2367,7 +2433,8 @@ constexpr const char* IP_DEST_IPV6_MASK0_JSON = R"({
       "field": "network.destination_ip",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 0
+      "numerical_value": 0,
+      "fieldref": "FIELD_TYPE_NONE"
     }
   },
   "id_to_ip": {
@@ -2676,6 +2743,748 @@ inline event_t create_network_dest_ipv6_mask0_match() {
     // Any random IPv6
     set_ipv6_addr(event.data.network.addresses.ipv6.destination_ip,
                   0xaabbccdd, 0xeeff0011, 0x22334455, 0x66778899);
+    return event;
+}
+
+// ============================================================================
+// FIELDREF NUMERIC TESTS
+// ============================================================================
+
+constexpr const char* FIELDREF_NUMERIC_JSON = R"({
+  "id_to_string": {},
+  "id_to_predicate": {
+    "0": {"field": "process.euid", "comparison_type": "equal", "string_idx": -1, "numerical_value": -1, "fieldref": "PARENT_PROCESS_EUID"},
+    "1": {"field": "process.pid", "comparison_type": "above", "string_idx": -1, "numerical_value": -1, "fieldref": "PARENT_PROCESS_PID"},
+    "2": {"field": "process.pid", "comparison_type": "equal_above", "string_idx": -1, "numerical_value": -1, "fieldref": "PARENT_PROCESS_PID"},
+    "3": {"field": "process.rgid", "comparison_type": "below", "string_idx": -1, "numerical_value": -1, "fieldref": "PARENT_PROCESS_RGID"},
+    "4": {"field": "process.ruid", "comparison_type": "equal_below", "string_idx": -1, "numerical_value": -1, "fieldref": "PARENT_PROCESS_RUID"},
+    "5": {"field": "process.ruid", "comparison_type": "above", "string_idx": -1, "numerical_value": -1, "fieldref": "PARENT_PROCESS_RUID"},
+    "6": {"field": "process.pid", "comparison_type": "equal", "string_idx": -1, "numerical_value": -1, "fieldref": "PARENT_PROCESS_PID"}
+  },
+  "id_to_ip": {},
+  "rules": [
+    {
+      "id": 7001,
+      "description": "fieldref equal - process.euid == parent_process.euid",
+      "action": "BLOCK_EVENT",
+      "applied_events": ["CHMOD"],
+      "tokens": [
+        {"operator_type": "OPERATOR_PREDICATE", "predicate_idx": 0}
+      ]
+    },
+    {
+      "id": 7004,
+      "description": "fieldref gt - process.pid > parent_process.pid",
+      "action": "BLOCK_EVENT",
+      "applied_events": ["CHMOD"],
+      "tokens": [
+        {"operator_type": "OPERATOR_PREDICATE", "predicate_idx": 1}
+      ]
+    },
+    {
+      "id": 7002,
+      "description": "fieldref gte - process.pid >= parent_process.pid",
+      "action": "BLOCK_EVENT",
+      "applied_events": ["CHMOD"],
+      "tokens": [
+        {"operator_type": "OPERATOR_PREDICATE", "predicate_idx": 2}
+      ]
+    },
+    {
+      "id": 7005,
+      "description": "fieldref lt - process.rgid < parent_process.rgid",
+      "action": "BLOCK_EVENT",
+      "applied_events": ["CHMOD"],
+      "tokens": [
+        {"operator_type": "OPERATOR_PREDICATE", "predicate_idx": 3}
+      ]
+    },
+    {
+      "id": 7003,
+      "description": "fieldref lte - process.ruid <= parent_process.ruid",
+      "action": "BLOCK_EVENT",
+      "applied_events": ["CHMOD"],
+      "tokens": [
+        {"operator_type": "OPERATOR_PREDICATE", "predicate_idx": 4}
+      ]
+    },
+    {
+      "id": 7007,
+      "description": "multiple fieldrefs in one rule",
+      "action": "BLOCK_EVENT",
+      "applied_events": ["CHMOD"],
+      "tokens": [
+        {"operator_type": "OPERATOR_PREDICATE", "predicate_idx": 0},
+        {"operator_type": "OPERATOR_PREDICATE", "predicate_idx": 2},
+        {"operator_type": "OPERATOR_PREDICATE", "predicate_idx": 5},
+        {"operator_type": "OPERATOR_AND"},
+        {"operator_type": "OPERATOR_AND"}
+      ]
+    },
+    {
+      "id": 7006,
+      "description": "fieldref neq - process.pid != parent_process.pid",
+      "action": "BLOCK_EVENT",
+      "applied_events": ["CHMOD"],
+      "tokens": [
+        {"operator_type": "OPERATOR_PREDICATE", "predicate_idx": 6},
+        {"operator_type": "OPERATOR_NOT"}
+      ]
+    }
+  ]
+})";
+
+// --- Fieldref Numeric Event Creators ---
+
+inline event_t create_fieldref_equal_match() {
+    event_t event = {};
+    event.type = CHMOD;
+    event.time = 1000;
+    event.action = ALLOW_EVENT;
+    event.process.euid = 500;
+    event.parent_process.euid = 500;
+    return event;
+}
+
+inline event_t create_fieldref_equal_no_match() {
+    event_t event = {};
+    event.type = CHMOD;
+    event.time = 1000;
+    event.action = ALLOW_EVENT;
+    event.process.euid = 500;
+    event.parent_process.euid = 999;
+    return event;
+}
+
+inline event_t create_fieldref_gte_match_greater() {
+    event_t event = {};
+    event.type = CHMOD;
+    event.time = 1000;
+    event.action = ALLOW_EVENT;
+    event.process.pid = 200;
+    event.parent_process.pid = 100;
+    return event;
+}
+
+inline event_t create_fieldref_gte_match_equal() {
+    event_t event = {};
+    event.type = CHMOD;
+    event.time = 1000;
+    event.action = ALLOW_EVENT;
+    event.process.pid = 100;
+    event.parent_process.pid = 100;
+    return event;
+}
+
+inline event_t create_fieldref_gte_no_match() {
+    event_t event = {};
+    event.type = CHMOD;
+    event.time = 1000;
+    event.action = ALLOW_EVENT;
+    event.process.pid = 50;
+    event.parent_process.pid = 100;
+    return event;
+}
+
+inline event_t create_fieldref_gt_match() {
+    event_t event = {};
+    event.type = CHMOD;
+    event.time = 1000;
+    event.action = ALLOW_EVENT;
+    event.process.pid = 200;
+    event.parent_process.pid = 100;
+    return event;
+}
+
+inline event_t create_fieldref_gt_no_match_equal() {
+    event_t event = {};
+    event.type = CHMOD;
+    event.time = 1000;
+    event.action = ALLOW_EVENT;
+    event.process.pid = 100;
+    event.parent_process.pid = 100;
+    return event;
+}
+
+inline event_t create_fieldref_gt_no_match_less() {
+    event_t event = {};
+    event.type = CHMOD;
+    event.time = 1000;
+    event.action = ALLOW_EVENT;
+    event.process.pid = 50;
+    event.parent_process.pid = 100;
+    return event;
+}
+
+inline event_t create_fieldref_lte_match_less() {
+    event_t event = {};
+    event.type = CHMOD;
+    event.time = 1000;
+    event.action = ALLOW_EVENT;
+    event.process.ruid = 50;
+    event.parent_process.ruid = 100;
+    return event;
+}
+
+inline event_t create_fieldref_lte_match_equal() {
+    event_t event = {};
+    event.type = CHMOD;
+    event.time = 1000;
+    event.action = ALLOW_EVENT;
+    event.process.ruid = 100;
+    event.parent_process.ruid = 100;
+    return event;
+}
+
+inline event_t create_fieldref_lte_no_match() {
+    event_t event = {};
+    event.type = CHMOD;
+    event.time = 1000;
+    event.action = ALLOW_EVENT;
+    event.process.ruid = 200;
+    event.parent_process.ruid = 100;
+    return event;
+}
+
+inline event_t create_fieldref_lt_match() {
+    event_t event = {};
+    event.type = CHMOD;
+    event.time = 1000;
+    event.action = ALLOW_EVENT;
+    event.process.rgid = 50;
+    event.parent_process.rgid = 100;
+    return event;
+}
+
+inline event_t create_fieldref_lt_no_match_equal() {
+    event_t event = {};
+    event.type = CHMOD;
+    event.time = 1000;
+    event.action = ALLOW_EVENT;
+    event.process.rgid = 100;
+    event.parent_process.rgid = 100;
+    return event;
+}
+
+inline event_t create_fieldref_lt_no_match_greater() {
+    event_t event = {};
+    event.type = CHMOD;
+    event.time = 1000;
+    event.action = ALLOW_EVENT;
+    event.process.rgid = 200;
+    event.parent_process.rgid = 100;
+    return event;
+}
+
+inline event_t create_fieldref_neq_match() {
+    event_t event = {};
+    event.type = CHMOD;
+    event.time = 1000;
+    event.action = ALLOW_EVENT;
+    event.process.pid = 200;
+    event.parent_process.pid = 100;
+    return event;
+}
+
+inline event_t create_fieldref_neq_no_match() {
+    event_t event = {};
+    event.type = CHMOD;
+    event.time = 1000;
+    event.action = ALLOW_EVENT;
+    event.process.pid = 100;
+    event.parent_process.pid = 100;
+    return event;
+}
+
+// All three conditions: euid==parent_euid AND pid>=parent_pid AND ruid>parent_ruid
+inline event_t create_fieldref_multi_match() {
+    event_t event = {};
+    event.type = CHMOD;
+    event.time = 1000;
+    event.action = ALLOW_EVENT;
+    event.process.euid = 500;
+    event.parent_process.euid = 500;
+    event.process.pid = 200;
+    event.parent_process.pid = 100;
+    event.process.ruid = 300;
+    event.parent_process.ruid = 100;
+    return event;
+}
+
+// euid matches, pid matches (gte), but ruid fails (not >)
+inline event_t create_fieldref_multi_no_match_one_fails() {
+    event_t event = {};
+    event.type = CHMOD;
+    event.time = 1000;
+    event.action = ALLOW_EVENT;
+    event.process.euid = 500;
+    event.parent_process.euid = 500;
+    event.process.pid = 200;
+    event.parent_process.pid = 100;
+    event.process.ruid = 50;
+    event.parent_process.ruid = 100;
+    return event;
+}
+
+// ============================================================================
+// FIELDREF STRING TESTS
+// ============================================================================
+
+constexpr const char* FIELDREF_STRING_JSON = R"JSON({
+  "id_to_string": {},
+  "id_to_predicate": {
+    "0": {"field": "process.file.filename", "comparison_type": "exactmatch", "string_idx": -1, "numerical_value": -1, "fieldref": "PROCESS_CMD"},
+    "1": {"field": "process.file.filename", "comparison_type": "startswith", "string_idx": -1, "numerical_value": -1, "fieldref": "PROCESS_CMD"},
+    "2": {"field": "process.file.filename", "comparison_type": "endswith", "string_idx": -1, "numerical_value": -1, "fieldref": "PROCESS_CMD"},
+    "3": {"field": "process.cmd", "comparison_type": "exactmatch", "string_idx": -1, "numerical_value": -1, "fieldref": "PROCESS_FILE_FILENAME"},
+    "4": {"field": "process.cmd", "comparison_type": "startswith", "string_idx": -1, "numerical_value": -1, "fieldref": "PROCESS_FILE_FILENAME"},
+    "5": {"field": "process.cmd", "comparison_type": "endswith", "string_idx": -1, "numerical_value": -1, "fieldref": "PROCESS_FILE_FILENAME"},
+    "6": {"field": "parent_process.file.filename", "comparison_type": "exactmatch", "string_idx": -1, "numerical_value": -1, "fieldref": "PARENT_PROCESS_CMD"},
+    "7": {"field": "parent_process.cmd", "comparison_type": "exactmatch", "string_idx": -1, "numerical_value": -1, "fieldref": "PROCESS_CMD"},
+    "8": {"field": "parent_process.cmd", "comparison_type": "startswith", "string_idx": -1, "numerical_value": -1, "fieldref": "PROCESS_CMD"},
+    "9": {"field": "parent_process.cmd", "comparison_type": "endswith", "string_idx": -1, "numerical_value": -1, "fieldref": "PROCESS_CMD"}
+  },
+  "id_to_ip": {},
+  "rules": [
+    {
+      "id": 8001,
+      "description": "Fieldref string: process.file.filename exactmatch process.cmd (haystack=filename, needle=cmd)",
+      "action": "BLOCK_EVENT",
+      "applied_events": ["EXEC"],
+      "tokens": [
+        {"operator_type": "OPERATOR_PREDICATE", "predicate_idx": 0}
+      ]
+    },
+    {
+      "id": 8002,
+      "description": "Fieldref string: process.file.filename startswith process.cmd (haystack=filename, needle=cmd)",
+      "action": "BLOCK_EVENT",
+      "applied_events": ["EXEC"],
+      "tokens": [
+        {"operator_type": "OPERATOR_PREDICATE", "predicate_idx": 1}
+      ]
+    },
+    {
+      "id": 8003,
+      "description": "Fieldref string: process.file.filename endswith process.cmd (haystack=filename, needle=cmd)",
+      "action": "BLOCK_EVENT",
+      "applied_events": ["EXEC"],
+      "tokens": [
+        {"operator_type": "OPERATOR_PREDICATE", "predicate_idx": 2}
+      ]
+    },
+    {
+      "id": 8004,
+      "description": "Fieldref string: process.cmd exactmatch process.file.filename (haystack=cmd, needle=filename)",
+      "action": "BLOCK_EVENT",
+      "applied_events": ["EXEC"],
+      "tokens": [
+        {"operator_type": "OPERATOR_PREDICATE", "predicate_idx": 3}
+      ]
+    },
+    {
+      "id": 8005,
+      "description": "Fieldref string: process.cmd startswith process.file.filename (haystack=cmd, needle=filename)",
+      "action": "BLOCK_EVENT",
+      "applied_events": ["EXEC"],
+      "tokens": [
+        {"operator_type": "OPERATOR_PREDICATE", "predicate_idx": 4}
+      ]
+    },
+    {
+      "id": 8006,
+      "description": "Fieldref string: process.cmd endswith process.file.filename (haystack=cmd, needle=filename)",
+      "action": "BLOCK_EVENT",
+      "applied_events": ["EXEC"],
+      "tokens": [
+        {"operator_type": "OPERATOR_PREDICATE", "predicate_idx": 5}
+      ]
+    },
+    {
+      "id": 8007,
+      "description": "Fieldref string: process.file.filename neq process.cmd (NOT exactmatch)",
+      "action": "BLOCK_EVENT",
+      "applied_events": ["EXEC"],
+      "tokens": [
+        {"operator_type": "OPERATOR_PREDICATE", "predicate_idx": 0},
+        {"operator_type": "OPERATOR_NOT"}
+      ]
+    },
+    {
+      "id": 8008,
+      "description": "Fieldref string: multiple fieldrefs - filename==cmd AND parent_filename==parent_cmd",
+      "action": "BLOCK_EVENT",
+      "applied_events": ["EXEC"],
+      "tokens": [
+        {"operator_type": "OPERATOR_PREDICATE", "predicate_idx": 0},
+        {"operator_type": "OPERATOR_PREDICATE", "predicate_idx": 6},
+        {"operator_type": "OPERATOR_AND"}
+      ]
+    },
+    {
+      "id": 8009,
+      "description": "Fieldref string: parent_process.cmd exactmatch process.cmd (for max-length and empty-needle tests)",
+      "action": "BLOCK_EVENT",
+      "applied_events": ["EXEC"],
+      "tokens": [
+        {"operator_type": "OPERATOR_PREDICATE", "predicate_idx": 7}
+      ]
+    },
+    {
+      "id": 8010,
+      "description": "Fieldref string: parent_process.cmd startswith process.cmd (for max-length and empty-needle tests)",
+      "action": "BLOCK_EVENT",
+      "applied_events": ["EXEC"],
+      "tokens": [
+        {"operator_type": "OPERATOR_PREDICATE", "predicate_idx": 8}
+      ]
+    },
+    {
+      "id": 8011,
+      "description": "Fieldref string: parent_process.cmd endswith process.cmd (for max-length and empty-needle tests)",
+      "action": "BLOCK_EVENT",
+      "applied_events": ["EXEC"],
+      "tokens": [
+        {"operator_type": "OPERATOR_PREDICATE", "predicate_idx": 9}
+      ]
+    }
+  ]
+})JSON";
+
+// ============================================================================
+// FIELDREF STRING EVENT CREATORS
+// ============================================================================
+
+// --- Helpers ---
+
+inline void set_filename(event_t& event, const char* str)
+{
+    auto len = static_cast<short>(strlen(str));
+    strncpy(event.process.file.filename.value, str, FILENAME_MAX_LENGTH - 1);
+    event.process.file.filename.length = len;
+}
+
+inline void set_cmd(event_t& event, const char* str)
+{
+    auto len = static_cast<short>(strlen(str));
+    strncpy(event.process.cmd.value, str, CMD_MAX - 1);
+    event.process.cmd.length = len;
+}
+
+inline void set_parent_filename(event_t& event, const char* str)
+{
+    auto len = static_cast<short>(strlen(str));
+    strncpy(event.parent_process.file.filename.value, str, FILENAME_MAX_LENGTH - 1);
+    event.parent_process.file.filename.length = len;
+}
+
+inline void set_parent_cmd(event_t& event, const char* str)
+{
+    auto len = static_cast<short>(strlen(str));
+    strncpy(event.parent_process.cmd.value, str, CMD_MAX - 1);
+    event.parent_process.cmd.length = len;
+}
+
+inline event_t make_exec_event()
+{
+    event_t event = {};
+    event.type = EXEC;
+    event.time = 1000;
+    event.action = ALLOW_EVENT;
+    return event;
+}
+
+// --- Rule 8001: filename|fieldref: cmd (exactmatch, haystack=filename, needle=cmd) ---
+
+// filename == cmd → MATCH
+inline event_t create_fieldref_str_filename_cmd_exactmatch_match()
+{
+    auto event = make_exec_event();
+    set_filename(event, "bash");
+    set_cmd(event, "bash");
+    return event;
+}
+
+// filename != cmd (different lengths) → NO MATCH
+inline event_t create_fieldref_str_filename_cmd_exactmatch_no_match()
+{
+    auto event = make_exec_event();
+    set_filename(event, "bash");
+    set_cmd(event, "sh");
+    return event;
+}
+
+// --- Rule 8002: filename|startswith|fieldref: cmd (haystack=filename, needle=cmd) ---
+
+// filename starts with cmd → MATCH ("bash_script" starts with "bash")
+inline event_t create_fieldref_str_filename_cmd_startswith_match()
+{
+    auto event = make_exec_event();
+    set_filename(event, "bash_script");
+    set_cmd(event, "bash");
+    return event;
+}
+
+// filename does not start with cmd → NO MATCH ("run_bash" does not start with "bash")
+inline event_t create_fieldref_str_filename_cmd_startswith_no_match()
+{
+    auto event = make_exec_event();
+    set_filename(event, "run_bash");
+    set_cmd(event, "bash");
+    return event;
+}
+
+// --- Rule 8003: filename|endswith|fieldref: cmd (haystack=filename, needle=cmd) ---
+
+// filename ends with cmd → MATCH ("run_bash" ends with "bash")
+inline event_t create_fieldref_str_filename_cmd_endswith_match()
+{
+    auto event = make_exec_event();
+    set_filename(event, "run_bash");
+    set_cmd(event, "bash");
+    return event;
+}
+
+// filename does not end with cmd → NO MATCH ("bash_run" does not end with "bash")
+inline event_t create_fieldref_str_filename_cmd_endswith_no_match()
+{
+    auto event = make_exec_event();
+    set_filename(event, "bash_run");
+    set_cmd(event, "bash");
+    return event;
+}
+
+// --- Rule 8004: cmd|fieldref: filename (exactmatch, haystack=cmd, needle=filename) ---
+
+// cmd == filename → MATCH
+inline event_t create_fieldref_str_cmd_filename_exactmatch_match()
+{
+    auto event = make_exec_event();
+    set_cmd(event, "python3");
+    set_filename(event, "python3");
+    return event;
+}
+
+// cmd != filename (different content) → NO MATCH
+inline event_t create_fieldref_str_cmd_filename_exactmatch_no_match()
+{
+    auto event = make_exec_event();
+    set_cmd(event, "python3");
+    set_filename(event, "python2");
+    return event;
+}
+
+// --- Rule 8005: cmd|startswith|fieldref: filename (haystack=cmd, needle=filename) ---
+
+// cmd starts with filename → MATCH ("bash_runner" starts with "bash")
+inline event_t create_fieldref_str_cmd_filename_startswith_match()
+{
+    auto event = make_exec_event();
+    set_cmd(event, "bash_runner");
+    set_filename(event, "bash");
+    return event;
+}
+
+// cmd does not start with filename → NO MATCH ("run_bash" does not start with "bash")
+inline event_t create_fieldref_str_cmd_filename_startswith_no_match()
+{
+    auto event = make_exec_event();
+    set_cmd(event, "run_bash");
+    set_filename(event, "bash");
+    return event;
+}
+
+// --- Rule 8006: cmd|endswith|fieldref: filename (haystack=cmd, needle=filename) ---
+
+// cmd ends with filename → MATCH ("run_bash" ends with "bash")
+inline event_t create_fieldref_str_cmd_filename_endswith_match()
+{
+    auto event = make_exec_event();
+    set_cmd(event, "run_bash");
+    set_filename(event, "bash");
+    return event;
+}
+
+// cmd does not end with filename → NO MATCH ("bash_run" does not end with "bash")
+inline event_t create_fieldref_str_cmd_filename_endswith_no_match()
+{
+    auto event = make_exec_event();
+    set_cmd(event, "bash_run");
+    set_filename(event, "bash");
+    return event;
+}
+
+// --- Rule 8007: filename|neq|fieldref: cmd (NOT exactmatch) ---
+
+// filename != cmd → NOT(exactmatch) = TRUE → MATCH
+inline event_t create_fieldref_str_filename_cmd_neq_match()
+{
+    auto event = make_exec_event();
+    set_filename(event, "bash");
+    set_cmd(event, "sh");
+    return event;
+}
+
+// filename == cmd → NOT(exactmatch) = FALSE → NO MATCH
+inline event_t create_fieldref_str_filename_cmd_neq_no_match()
+{
+    auto event = make_exec_event();
+    set_filename(event, "bash");
+    set_cmd(event, "bash");
+    return event;
+}
+
+// --- Rule 8008: filename|fieldref: cmd AND parent_filename|fieldref: parent_cmd ---
+
+// Both predicates match → MATCH
+inline event_t create_fieldref_str_multi_fieldref_match()
+{
+    auto event = make_exec_event();
+    set_filename(event, "bash");
+    set_cmd(event, "bash");
+    set_parent_filename(event, "sh");
+    set_parent_cmd(event, "sh");
+    return event;
+}
+
+// First predicate fails (filename != cmd) → NO MATCH
+inline event_t create_fieldref_str_multi_fieldref_no_match_first_fails()
+{
+    auto event = make_exec_event();
+    set_filename(event, "bash");
+    set_cmd(event, "sh");
+    set_parent_filename(event, "sh");
+    set_parent_cmd(event, "sh");
+    return event;
+}
+
+// Second predicate fails (parent_filename != parent_cmd) → NO MATCH
+inline event_t create_fieldref_str_multi_fieldref_no_match_second_fails()
+{
+    auto event = make_exec_event();
+    set_filename(event, "bash");
+    set_cmd(event, "bash");
+    set_parent_filename(event, "sh");
+    set_parent_cmd(event, "bash");
+    return event;
+}
+
+// --- Needle longer than haystack (rules 8001, 8002, 8003) ---
+// filename (5 chars) is shorter than cmd (28 chars) → all comparisons must be FALSE
+inline event_t create_fieldref_str_needle_longer_than_haystack()
+{
+    auto event = make_exec_event();
+    set_filename(event, "short");
+    set_cmd(event, "this_is_a_much_longer_string");
+    return event;
+}
+
+// --- Empty needle: process.cmd is empty (rules 8001-8003, 8009-8011) ---
+// All string comparisons must return FALSE when the needle length is 0
+inline event_t create_fieldref_str_empty_needle()
+{
+    auto event = make_exec_event();
+    set_filename(event, "bash");
+    event.process.cmd.length = 0;
+    event.process.cmd.value[0] = '\0';
+    set_parent_cmd(event, "hello");
+    return event;
+}
+
+// --- Rule 8009: parent_cmd|fieldref: cmd (exactmatch) - max length tests ---
+
+// Both parent_cmd and cmd are 255 chars of 'a' → MATCH
+inline event_t create_fieldref_str_max_len_exactmatch_match()
+{
+    auto event = make_exec_event();
+    const std::string s(255, 'a');
+    memcpy(event.parent_process.cmd.value, s.c_str(), 255);
+    event.parent_process.cmd.length = 255;
+    memcpy(event.process.cmd.value, s.c_str(), 255);
+    event.process.cmd.length = 255;
+    return event;
+}
+
+// parent_cmd starts with 'b' (first char differs) → NO MATCH
+inline event_t create_fieldref_str_max_len_exactmatch_no_match()
+{
+    auto event = make_exec_event();
+    const std::string needle(255, 'a');
+    std::string haystack = std::string(1, 'b') + std::string(254, 'a');
+    memcpy(event.parent_process.cmd.value, haystack.c_str(), 255);
+    event.parent_process.cmd.length = 255;
+    memcpy(event.process.cmd.value, needle.c_str(), 255);
+    event.process.cmd.length = 255;
+    return event;
+}
+
+// --- Rule 8010: parent_cmd|startswith|fieldref: cmd - max length tests ---
+
+// parent_cmd = 255 chars of 'a', cmd = 128 chars of 'a' → parent starts with cmd → MATCH
+inline event_t create_fieldref_str_max_len_startswith_match()
+{
+    auto event = make_exec_event();
+    const std::string haystack(255, 'a');
+    const std::string needle(128, 'a');
+    memcpy(event.parent_process.cmd.value, haystack.c_str(), 255);
+    event.parent_process.cmd.length = 255;
+    memcpy(event.process.cmd.value, needle.c_str(), 128);
+    event.process.cmd.length = 128;
+    return event;
+}
+
+// parent_cmd starts with 'b', cmd is all 'a' → first char mismatch → NO MATCH
+inline event_t create_fieldref_str_max_len_startswith_no_match()
+{
+    auto event = make_exec_event();
+    const std::string haystack = std::string(1, 'b') + std::string(254, 'a');
+    const std::string needle(128, 'a');
+    memcpy(event.parent_process.cmd.value, haystack.c_str(), 255);
+    event.parent_process.cmd.length = 255;
+    memcpy(event.process.cmd.value, needle.c_str(), 128);
+    event.process.cmd.length = 128;
+    return event;
+}
+
+// --- Rule 8011: parent_cmd|endswith|fieldref: cmd - max length tests ---
+
+// parent_cmd = 255 chars of 'a', cmd = 128 chars of 'a' → parent ends with cmd → MATCH
+inline event_t create_fieldref_str_max_len_endswith_match()
+{
+    auto event = make_exec_event();
+    const std::string haystack(255, 'a');
+    const std::string needle(128, 'a');
+    memcpy(event.parent_process.cmd.value, haystack.c_str(), 255);
+    event.parent_process.cmd.length = 255;
+    memcpy(event.process.cmd.value, needle.c_str(), 128);
+    event.process.cmd.length = 128;
+    return event;
+}
+
+// parent_cmd ends with 'b' (last char differs), cmd is all 'a' → NO MATCH
+inline event_t create_fieldref_str_max_len_endswith_no_match()
+{
+    auto event = make_exec_event();
+    const std::string haystack = std::string(254, 'a') + std::string(1, 'b');
+    const std::string needle(128, 'a');
+    memcpy(event.parent_process.cmd.value, haystack.c_str(), 255);
+    event.parent_process.cmd.length = 255;
+    memcpy(event.process.cmd.value, needle.c_str(), 128);
+    event.process.cmd.length = 128;
+    return event;
+}
+
+// --- Rule 8010/8011 with needle longer than haystack ---
+// parent_cmd = 10 chars, cmd = 20 chars → needle longer → all FALSE
+inline event_t create_fieldref_str_parent_cmd_needle_longer()
+{
+    auto event = make_exec_event();
+    const std::string haystack(10, 'a');
+    const std::string needle(20, 'a');
+    memcpy(event.parent_process.cmd.value, haystack.c_str(), 10);
+    event.parent_process.cmd.length = 10;
+    memcpy(event.process.cmd.value, needle.c_str(), 20);
+    event.process.cmd.length = 20;
     return event;
 }
 

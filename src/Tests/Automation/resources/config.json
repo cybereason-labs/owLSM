@@ -395,6 +395,14 @@
       "90": {
         "value": "hacktool",
         "is_contains": true
+      },
+      "91": {
+        "value": "/tmp/fieldref_chmod_test",
+        "is_contains": false
+      },
+      "92": {
+        "value": "/tmp/fieldref_rename_src",
+        "is_contains": false
       }
     },
     "id_to_predicate": {
@@ -402,1459 +410,1786 @@
         "field": "process.pid",
         "comparison_type": "above",
         "string_idx": -1,
-        "numerical_value": 100
+        "numerical_value": 100,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "1": {
         "field": "process.euid",
         "comparison_type": "above",
         "string_idx": -1,
-        "numerical_value": 999
+        "numerical_value": 999,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "2": {
         "field": "process.file.path",
         "comparison_type": "endswith",
         "string_idx": 0,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "3": {
         "field": "process.cmd",
         "comparison_type": "contains",
         "string_idx": 1,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "4": {
         "field": "process.cmd",
         "comparison_type": "contains",
         "string_idx": 2,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "5": {
         "field": "parent_process.file.path",
         "comparison_type": "contains",
         "string_idx": 3,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "6": {
         "field": "parent_process.euid",
         "comparison_type": "equal",
         "string_idx": -1,
-        "numerical_value": 0
+        "numerical_value": 0,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "7": {
         "field": "parent_process.cmd",
         "comparison_type": "contains",
         "string_idx": 4,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "8": {
         "field": "target.file.path",
         "comparison_type": "startswith",
         "string_idx": 5,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "9": {
         "field": "target.file.filename",
         "comparison_type": "contains",
         "string_idx": 2,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "10": {
         "field": "chmod.requested_mode",
         "comparison_type": "equal_above",
         "string_idx": -1,
-        "numerical_value": 400
+        "numerical_value": 400,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "11": {
         "field": "chmod.requested_mode",
         "comparison_type": "equal_below",
         "string_idx": -1,
-        "numerical_value": 511
+        "numerical_value": 511,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "12": {
         "field": "chmod.requested_mode",
         "comparison_type": "equal",
         "string_idx": -1,
-        "numerical_value": 493
+        "numerical_value": 493,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "13": {
         "field": "target.file.path",
         "comparison_type": "contains",
         "string_idx": 6,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "14": {
         "field": "target.process.file.path",
         "comparison_type": "startswith",
         "string_idx": 7,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "15": {
         "field": "target.process.cmd",
         "comparison_type": "contains",
         "string_idx": 2,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "16": {
         "field": "target.process.cmd",
         "comparison_type": "contains",
         "string_idx": 8,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "17": {
         "field": "target.process.file.path",
         "comparison_type": "contains",
         "string_idx": 9,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "18": {
         "field": "target.process.cmd",
         "comparison_type": "contains",
         "string_idx": 10,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "19": {
         "field": "target.process.cmd",
         "comparison_type": "endswith",
         "string_idx": 8,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "20": {
         "field": "process.file.path",
         "comparison_type": "contains",
         "string_idx": 3,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "21": {
         "field": "process.cmd",
         "comparison_type": "contains",
         "string_idx": 11,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "22": {
         "field": "target.process.cmd",
         "comparison_type": "contains",
         "string_idx": 6,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "23": {
         "field": "process.pid",
         "comparison_type": "equal",
         "string_idx": -1,
-        "numerical_value": 1234
+        "numerical_value": 1234,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "24": {
         "field": "process.ppid",
         "comparison_type": "below",
         "string_idx": -1,
-        "numerical_value": 500
+        "numerical_value": 500,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "25": {
         "field": "process.ruid",
         "comparison_type": "above",
         "string_idx": -1,
-        "numerical_value": 2000
+        "numerical_value": 2000,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "26": {
         "field": "process.rgid",
         "comparison_type": "equal_above",
         "string_idx": -1,
-        "numerical_value": 2000
+        "numerical_value": 2000,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "27": {
         "field": "process.suid",
         "comparison_type": "equal",
         "string_idx": -1,
-        "numerical_value": 0
+        "numerical_value": 0,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "28": {
         "field": "process.ptrace_flags",
         "comparison_type": "equal",
         "string_idx": -1,
-        "numerical_value": 0
+        "numerical_value": 0,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "29": {
         "field": "process.cmd",
         "comparison_type": "startswith",
         "string_idx": 12,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "30": {
         "field": "process.file.path",
         "comparison_type": "contains",
         "string_idx": 13,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "31": {
         "field": "target.file.path",
         "comparison_type": "exactmatch",
         "string_idx": 14,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "32": {
         "field": "target.file.mode",
         "comparison_type": "above",
         "string_idx": -1,
-        "numerical_value": 600
+        "numerical_value": 600,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "33": {
         "field": "chmod.requested_mode",
         "comparison_type": "below",
         "string_idx": -1,
-        "numerical_value": 400
+        "numerical_value": 400,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "34": {
         "field": "process.euid",
         "comparison_type": "below",
         "string_idx": -1,
-        "numerical_value": 5000
+        "numerical_value": 5000,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "35": {
         "field": "process.file.path",
         "comparison_type": "endswith",
         "string_idx": 15,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "36": {
         "field": "process.cmd",
         "comparison_type": "contains",
         "string_idx": 16,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "37": {
         "field": "target.file.path",
         "comparison_type": "endswith",
         "string_idx": 17,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "38": {
         "field": "chmod.requested_mode",
         "comparison_type": "equal",
         "string_idx": -1,
-        "numerical_value": 438
+        "numerical_value": 438,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "39": {
         "field": "process.rgid",
         "comparison_type": "equal_below",
         "string_idx": -1,
-        "numerical_value": 5000
+        "numerical_value": 5000,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "40": {
         "field": "process.file.path",
         "comparison_type": "contains",
         "string_idx": 0,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "41": {
         "field": "process.cmd",
         "comparison_type": "endswith",
         "string_idx": 18,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "42": {
         "field": "parent_process.ptrace_flags",
         "comparison_type": "equal",
         "string_idx": -1,
-        "numerical_value": 0
+        "numerical_value": 0,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "43": {
         "field": "parent_process.suid",
         "comparison_type": "equal",
         "string_idx": -1,
-        "numerical_value": 0
+        "numerical_value": 0,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "44": {
         "field": "parent_process.cmd",
         "comparison_type": "contains",
         "string_idx": 3,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "45": {
         "field": "target.file.path",
         "comparison_type": "endswith",
         "string_idx": 19,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "46": {
         "field": "chmod.requested_mode",
         "comparison_type": "equal",
         "string_idx": -1,
-        "numerical_value": 365
+        "numerical_value": 365,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "47": {
         "field": "process.cmd",
         "comparison_type": "contains",
         "string_idx": 20,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "48": {
         "field": "target.file.path",
         "comparison_type": "endswith",
         "string_idx": 21,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "49": {
         "field": "process.file.path",
         "comparison_type": "startswith",
         "string_idx": 22,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "50": {
         "field": "process.cmd",
         "comparison_type": "contains",
         "string_idx": 23,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "51": {
         "field": "target.file.filename",
         "comparison_type": "contains",
         "string_idx": 8,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "52": {
         "field": "process.file.path",
         "comparison_type": "contains",
         "string_idx": 24,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "53": {
         "field": "parent_process.file.path",
         "comparison_type": "contains",
         "string_idx": 4,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "54": {
         "field": "target.process.file.path",
         "comparison_type": "contains",
         "string_idx": 25,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "55": {
         "field": "target.process.cmd",
         "comparison_type": "endswith",
         "string_idx": 26,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "56": {
         "field": "target.file.path",
         "comparison_type": "contains",
         "string_idx": 27,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "57": {
         "field": "target.file.mode",
         "comparison_type": "equal",
         "string_idx": -1,
-        "numerical_value": 292
+        "numerical_value": 292,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "58": {
         "field": "target.file.type",
         "comparison_type": "equal",
         "string_idx": -1,
-        "numerical_value": 5
+        "numerical_value": 5,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "59": {
         "field": "process.cmd",
         "comparison_type": "contains",
         "string_idx": 3,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "60": {
         "field": "target.file.path",
         "comparison_type": "contains",
         "string_idx": 28,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "61": {
         "field": "target.file.mode",
         "comparison_type": "equal",
         "string_idx": -1,
-        "numerical_value": 511
+        "numerical_value": 511,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "62": {
         "field": "process.file.path",
         "comparison_type": "contains",
         "string_idx": 29,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "63": {
         "field": "process.cmd",
         "comparison_type": "contains",
         "string_idx": 30,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "64": {
         "field": "target.file.path",
         "comparison_type": "contains",
         "string_idx": 30,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "65": {
         "field": "process.file.path",
         "comparison_type": "contains",
         "string_idx": 31,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "66": {
         "field": "process.file.path",
         "comparison_type": "contains",
         "string_idx": 32,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "67": {
         "field": "network.direction",
         "comparison_type": "equal",
         "string_idx": -1,
-        "numerical_value": 2
+        "numerical_value": 2,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "68": {
         "field": "network.destination_port",
         "comparison_type": "equal",
         "string_idx": -1,
-        "numerical_value": 1339
+        "numerical_value": 1339,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "69": {
         "field": "network.destination_ip",
         "comparison_type": "equal",
         "string_idx": -1,
-        "numerical_value": 0
+        "numerical_value": 0,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "70": {
         "field": "process.cmd",
         "comparison_type": "contains",
         "string_idx": 33,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "71": {
         "field": "network.direction",
         "comparison_type": "equal",
         "string_idx": -1,
-        "numerical_value": 1
+        "numerical_value": 1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "72": {
         "field": "network.destination_port",
         "comparison_type": "equal",
         "string_idx": -1,
-        "numerical_value": 1338
+        "numerical_value": 1338,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "73": {
         "field": "network.source_ip",
         "comparison_type": "equal",
         "string_idx": -1,
-        "numerical_value": 1
+        "numerical_value": 1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "74": {
         "field": "network.destination_port",
         "comparison_type": "equal",
         "string_idx": -1,
-        "numerical_value": 8001
+        "numerical_value": 8001,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "75": {
         "field": "process.file.path",
         "comparison_type": "contains",
         "string_idx": 34,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "76": {
         "field": "process.cmd",
         "comparison_type": "contains",
         "string_idx": 35,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "77": {
         "field": "target.file.path",
         "comparison_type": "contains",
         "string_idx": 35,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "78": {
         "field": "process.file.path",
         "comparison_type": "contains",
         "string_idx": 36,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "79": {
         "field": "process.cmd",
         "comparison_type": "contains",
         "string_idx": 37,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "80": {
         "field": "rename.source_file.path",
         "comparison_type": "contains",
         "string_idx": 17,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "81": {
         "field": "rename.destination_file.path",
         "comparison_type": "contains",
         "string_idx": 37,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "82": {
         "field": "target.file.path",
         "comparison_type": "contains",
         "string_idx": 38,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "83": {
         "field": "target.file.path",
         "comparison_type": "endswith",
         "string_idx": 39,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "84": {
         "field": "target.file.filename",
         "comparison_type": "contains",
         "string_idx": 17,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "85": {
         "field": "target.file.path",
         "comparison_type": "endswith",
         "string_idx": 40,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "86": {
         "field": "target.file.type",
         "comparison_type": "equal",
         "string_idx": -1,
-        "numerical_value": 1
+        "numerical_value": 1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "87": {
         "field": "target.file.path",
         "comparison_type": "contains",
         "string_idx": 41,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "88": {
         "field": "chmod.requested_mode",
         "comparison_type": "equal",
         "string_idx": -1,
-        "numerical_value": 448
+        "numerical_value": 448,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "89": {
         "field": "target.file.path",
         "comparison_type": "contains",
         "string_idx": 42,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "90": {
         "field": "target.file.path",
         "comparison_type": "exactmatch",
         "string_idx": 43,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "91": {
         "field": "process.cmd",
         "comparison_type": "contains",
         "string_idx": 44,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "92": {
         "field": "target.file.path",
         "comparison_type": "startswith",
         "string_idx": 45,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "93": {
         "field": "process.file.filename",
         "comparison_type": "endswith",
         "string_idx": 46,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "94": {
         "field": "target.file.path",
         "comparison_type": "endswith",
         "string_idx": 47,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "95": {
         "field": "parent_process.cmd",
         "comparison_type": "contains",
         "string_idx": 48,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "96": {
         "field": "parent_process.file.filename",
         "comparison_type": "contains",
         "string_idx": 48,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "97": {
         "field": "parent_process.file.path",
         "comparison_type": "contains",
         "string_idx": 48,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "98": {
         "field": "parent_process.shell_command",
         "comparison_type": "contains",
         "string_idx": 48,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "99": {
         "field": "process.cmd",
         "comparison_type": "contains",
         "string_idx": 48,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "100": {
         "field": "process.file.filename",
         "comparison_type": "contains",
         "string_idx": 48,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "101": {
         "field": "process.file.path",
         "comparison_type": "contains",
         "string_idx": 48,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "102": {
         "field": "process.shell_command",
         "comparison_type": "contains",
         "string_idx": 48,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "103": {
         "field": "target.file.filename",
         "comparison_type": "contains",
         "string_idx": 48,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "104": {
         "field": "target.file.path",
         "comparison_type": "contains",
         "string_idx": 48,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "105": {
         "field": "parent_process.cmd",
         "comparison_type": "startswith",
         "string_idx": 49,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "106": {
         "field": "parent_process.cmd",
         "comparison_type": "endswith",
         "string_idx": 50,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "107": {
         "field": "parent_process.file.filename",
         "comparison_type": "startswith",
         "string_idx": 49,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "108": {
         "field": "parent_process.file.filename",
         "comparison_type": "endswith",
         "string_idx": 50,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "109": {
         "field": "parent_process.file.path",
         "comparison_type": "startswith",
         "string_idx": 49,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "110": {
         "field": "parent_process.file.path",
         "comparison_type": "endswith",
         "string_idx": 50,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "111": {
         "field": "parent_process.shell_command",
         "comparison_type": "startswith",
         "string_idx": 49,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "112": {
         "field": "parent_process.shell_command",
         "comparison_type": "endswith",
         "string_idx": 50,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "113": {
         "field": "process.cmd",
         "comparison_type": "startswith",
         "string_idx": 49,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "114": {
         "field": "process.cmd",
         "comparison_type": "endswith",
         "string_idx": 50,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "115": {
         "field": "process.file.filename",
         "comparison_type": "startswith",
         "string_idx": 49,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "116": {
         "field": "process.file.filename",
         "comparison_type": "endswith",
         "string_idx": 50,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "117": {
         "field": "process.file.path",
         "comparison_type": "startswith",
         "string_idx": 49,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "118": {
         "field": "process.file.path",
         "comparison_type": "endswith",
         "string_idx": 50,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "119": {
         "field": "process.shell_command",
         "comparison_type": "startswith",
         "string_idx": 49,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "120": {
         "field": "process.shell_command",
         "comparison_type": "endswith",
         "string_idx": 50,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "121": {
         "field": "target.file.filename",
         "comparison_type": "startswith",
         "string_idx": 49,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "122": {
         "field": "target.file.filename",
         "comparison_type": "endswith",
         "string_idx": 50,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "123": {
         "field": "target.file.path",
         "comparison_type": "startswith",
         "string_idx": 49,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "124": {
         "field": "target.file.path",
         "comparison_type": "endswith",
         "string_idx": 50,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "125": {
         "field": "parent_process.cmd",
         "comparison_type": "exactmatch",
         "string_idx": 0,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "126": {
         "field": "parent_process.file.filename",
         "comparison_type": "exactmatch",
         "string_idx": 0,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "127": {
         "field": "parent_process.file.path",
         "comparison_type": "exactmatch",
         "string_idx": 0,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "128": {
         "field": "parent_process.shell_command",
         "comparison_type": "exactmatch",
         "string_idx": 0,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "129": {
         "field": "process.cmd",
         "comparison_type": "exactmatch",
         "string_idx": 0,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "130": {
         "field": "process.file.filename",
         "comparison_type": "exactmatch",
         "string_idx": 0,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "131": {
         "field": "process.file.path",
         "comparison_type": "exactmatch",
         "string_idx": 0,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "132": {
         "field": "process.shell_command",
         "comparison_type": "exactmatch",
         "string_idx": 0,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "133": {
         "field": "target.file.filename",
         "comparison_type": "exactmatch",
         "string_idx": 0,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "134": {
         "field": "target.file.path",
         "comparison_type": "exactmatch",
         "string_idx": 0,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "135": {
         "field": "parent_process.cmd",
         "comparison_type": "startswith",
         "string_idx": 51,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "136": {
         "field": "parent_process.file.filename",
         "comparison_type": "startswith",
         "string_idx": 51,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "137": {
         "field": "parent_process.file.path",
         "comparison_type": "startswith",
         "string_idx": 51,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "138": {
         "field": "parent_process.shell_command",
         "comparison_type": "startswith",
         "string_idx": 51,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "139": {
         "field": "process.cmd",
         "comparison_type": "startswith",
         "string_idx": 51,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "140": {
         "field": "process.file.filename",
         "comparison_type": "startswith",
         "string_idx": 51,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "141": {
         "field": "process.file.path",
         "comparison_type": "startswith",
         "string_idx": 51,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "142": {
         "field": "process.shell_command",
         "comparison_type": "startswith",
         "string_idx": 51,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "143": {
         "field": "target.file.filename",
         "comparison_type": "startswith",
         "string_idx": 51,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "144": {
         "field": "target.file.path",
         "comparison_type": "startswith",
         "string_idx": 51,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "145": {
         "field": "parent_process.cmd",
         "comparison_type": "endswith",
         "string_idx": 52,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "146": {
         "field": "parent_process.file.filename",
         "comparison_type": "endswith",
         "string_idx": 52,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "147": {
         "field": "parent_process.file.path",
         "comparison_type": "endswith",
         "string_idx": 52,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "148": {
         "field": "parent_process.shell_command",
         "comparison_type": "endswith",
         "string_idx": 52,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "149": {
         "field": "process.cmd",
         "comparison_type": "endswith",
         "string_idx": 52,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "150": {
         "field": "process.file.filename",
         "comparison_type": "endswith",
         "string_idx": 52,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "151": {
         "field": "process.file.path",
         "comparison_type": "endswith",
         "string_idx": 52,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "152": {
         "field": "process.shell_command",
         "comparison_type": "endswith",
         "string_idx": 52,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "153": {
         "field": "target.file.filename",
         "comparison_type": "endswith",
         "string_idx": 52,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "154": {
         "field": "target.file.path",
         "comparison_type": "endswith",
         "string_idx": 52,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "155": {
         "field": "parent_process.cmd",
         "comparison_type": "contains",
         "string_idx": 53,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "156": {
         "field": "parent_process.file.filename",
         "comparison_type": "contains",
         "string_idx": 53,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "157": {
         "field": "parent_process.file.path",
         "comparison_type": "contains",
         "string_idx": 53,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "158": {
         "field": "parent_process.shell_command",
         "comparison_type": "contains",
         "string_idx": 53,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "159": {
         "field": "process.cmd",
         "comparison_type": "contains",
         "string_idx": 53,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "160": {
         "field": "process.file.filename",
         "comparison_type": "contains",
         "string_idx": 53,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "161": {
         "field": "process.file.path",
         "comparison_type": "contains",
         "string_idx": 53,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "162": {
         "field": "process.shell_command",
         "comparison_type": "contains",
         "string_idx": 53,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "163": {
         "field": "target.file.filename",
         "comparison_type": "contains",
         "string_idx": 53,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "164": {
         "field": "target.file.path",
         "comparison_type": "contains",
         "string_idx": 53,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "165": {
         "field": "parent_process.cmd",
         "comparison_type": "contains",
         "string_idx": 54,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "166": {
         "field": "parent_process.file.filename",
         "comparison_type": "contains",
         "string_idx": 54,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "167": {
         "field": "parent_process.file.path",
         "comparison_type": "contains",
         "string_idx": 54,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "168": {
         "field": "parent_process.shell_command",
         "comparison_type": "contains",
         "string_idx": 54,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "169": {
         "field": "process.cmd",
         "comparison_type": "contains",
         "string_idx": 54,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "170": {
         "field": "process.file.filename",
         "comparison_type": "contains",
         "string_idx": 54,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "171": {
         "field": "process.file.path",
         "comparison_type": "contains",
         "string_idx": 54,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "172": {
         "field": "process.shell_command",
         "comparison_type": "contains",
         "string_idx": 54,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "173": {
         "field": "target.file.filename",
         "comparison_type": "contains",
         "string_idx": 54,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "174": {
         "field": "target.file.path",
         "comparison_type": "contains",
         "string_idx": 54,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "175": {
         "field": "rename.destination_file.filename",
         "comparison_type": "contains",
         "string_idx": 53,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "176": {
         "field": "rename.destination_file.path",
         "comparison_type": "contains",
         "string_idx": 53,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "177": {
         "field": "rename.source_file.filename",
         "comparison_type": "contains",
         "string_idx": 53,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "178": {
         "field": "rename.source_file.path",
         "comparison_type": "contains",
         "string_idx": 53,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "179": {
         "field": "rename.destination_file.filename",
         "comparison_type": "contains",
         "string_idx": 54,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "180": {
         "field": "rename.destination_file.path",
         "comparison_type": "contains",
         "string_idx": 54,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "181": {
         "field": "rename.source_file.filename",
         "comparison_type": "contains",
         "string_idx": 54,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "182": {
         "field": "rename.source_file.path",
         "comparison_type": "contains",
         "string_idx": 54,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "183": {
         "field": "target.process.cmd",
         "comparison_type": "contains",
         "string_idx": 53,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "184": {
         "field": "target.process.file.filename",
         "comparison_type": "contains",
         "string_idx": 53,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "185": {
         "field": "target.process.file.path",
         "comparison_type": "contains",
         "string_idx": 53,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "186": {
         "field": "target.process.shell_command",
         "comparison_type": "contains",
         "string_idx": 53,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "187": {
         "field": "target.process.cmd",
         "comparison_type": "contains",
         "string_idx": 54,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "188": {
         "field": "target.process.file.filename",
         "comparison_type": "contains",
         "string_idx": 54,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "189": {
         "field": "target.process.file.path",
         "comparison_type": "contains",
         "string_idx": 54,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "190": {
         "field": "target.process.shell_command",
         "comparison_type": "contains",
         "string_idx": 54,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "191": {
         "field": "target.file.path",
         "comparison_type": "endswith",
         "string_idx": 55,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "192": {
         "field": "target.file.path",
         "comparison_type": "contains",
         "string_idx": 56,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "193": {
         "field": "target.file.path",
         "comparison_type": "contains",
         "string_idx": 57,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "194": {
         "field": "target.file.path",
         "comparison_type": "contains",
         "string_idx": 58,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "195": {
         "field": "process.shell_command",
         "comparison_type": "contains",
         "string_idx": 59,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "196": {
         "field": "parent_process.shell_command",
         "comparison_type": "contains",
         "string_idx": 59,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "197": {
         "field": "target.file.path",
         "comparison_type": "exactmatch",
         "string_idx": 60,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "198": {
         "field": "target.file.path",
         "comparison_type": "startswith",
         "string_idx": 61,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "199": {
         "field": "process.file.path",
         "comparison_type": "contains",
         "string_idx": 62,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "200": {
         "field": "process.file.path",
         "comparison_type": "contains",
         "string_idx": 7,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "201": {
         "field": "process.file.path",
         "comparison_type": "startswith",
         "string_idx": 63,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "202": {
         "field": "process.file.path",
         "comparison_type": "endswith",
         "string_idx": 64,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "203": {
         "field": "process.file.path",
         "comparison_type": "contains",
         "string_idx": 65,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "204": {
         "field": "process.file.path",
         "comparison_type": "contains",
         "string_idx": 66,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "205": {
         "field": "process.file.path",
         "comparison_type": "contains",
         "string_idx": 67,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "206": {
         "field": "process.file.path",
         "comparison_type": "contains",
         "string_idx": 68,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "207": {
         "field": "process.file.path",
         "comparison_type": "exactmatch",
         "string_idx": 69,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "208": {
         "field": "process.file.filename",
         "comparison_type": "contains",
         "string_idx": 70,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "209": {
         "field": "process.file.filename",
         "comparison_type": "contains",
         "string_idx": 46,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "210": {
         "field": "process.file.filename",
         "comparison_type": "contains",
         "string_idx": 68,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "211": {
         "field": "process.file.filename",
         "comparison_type": "startswith",
         "string_idx": 71,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "212": {
         "field": "process.file.filename",
         "comparison_type": "endswith",
         "string_idx": 72,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "213": {
         "field": "process.file.filename",
         "comparison_type": "contains",
         "string_idx": 73,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "214": {
         "field": "process.file.filename",
         "comparison_type": "contains",
         "string_idx": 74,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "215": {
         "field": "process.cmd",
         "comparison_type": "contains",
         "string_idx": 0,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "216": {
         "field": "process.cmd",
         "comparison_type": "contains",
         "string_idx": 75,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "217": {
         "field": "process.cmd",
         "comparison_type": "contains",
         "string_idx": 76,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "218": {
         "field": "process.cmd",
         "comparison_type": "contains",
         "string_idx": 77,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "219": {
         "field": "process.cmd",
         "comparison_type": "contains",
         "string_idx": 71,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "220": {
         "field": "process.cmd",
         "comparison_type": "contains",
         "string_idx": 78,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "221": {
         "field": "process.cmd",
         "comparison_type": "contains",
         "string_idx": 79,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "222": {
         "field": "process.cmd",
         "comparison_type": "contains",
         "string_idx": 8,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "223": {
         "field": "target.file.path",
         "comparison_type": "contains",
         "string_idx": 75,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "224": {
         "field": "target.file.path",
         "comparison_type": "contains",
         "string_idx": 2,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "225": {
         "field": "target.file.path",
         "comparison_type": "contains",
         "string_idx": 76,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "226": {
         "field": "target.file.path",
         "comparison_type": "contains",
         "string_idx": 8,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "227": {
         "field": "target.file.path",
         "comparison_type": "contains",
         "string_idx": 80,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "228": {
         "field": "target.file.path",
         "comparison_type": "contains",
         "string_idx": 81,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "229": {
         "field": "target.file.path",
         "comparison_type": "contains",
         "string_idx": 82,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "230": {
         "field": "process.euid",
         "comparison_type": "equal",
         "string_idx": -1,
-        "numerical_value": 0
+        "numerical_value": 0,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "231": {
         "field": "process.ruid",
         "comparison_type": "equal",
         "string_idx": -1,
-        "numerical_value": 0
+        "numerical_value": 0,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "232": {
         "field": "process.egid",
         "comparison_type": "equal",
         "string_idx": -1,
-        "numerical_value": 0
+        "numerical_value": 0,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "233": {
         "field": "process.rgid",
         "comparison_type": "equal",
         "string_idx": -1,
-        "numerical_value": 0
+        "numerical_value": 0,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "234": {
         "field": "process.pid",
         "comparison_type": "above",
         "string_idx": -1,
-        "numerical_value": 1
+        "numerical_value": 1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "235": {
         "field": "target.file.path",
         "comparison_type": "contains",
         "string_idx": 83,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "236": {
         "field": "target.file.path",
         "comparison_type": "contains",
         "string_idx": 84,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "237": {
         "field": "target.file.path",
         "comparison_type": "contains",
         "string_idx": 85,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "238": {
         "field": "target.file.path",
         "comparison_type": "contains",
         "string_idx": 86,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "239": {
         "field": "process.file.filename",
         "comparison_type": "contains",
         "string_idx": 87,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "240": {
         "field": "process.file.filename",
         "comparison_type": "contains",
         "string_idx": 88,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "241": {
         "field": "process.file.filename",
         "comparison_type": "contains",
         "string_idx": 89,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       },
       "242": {
         "field": "process.file.filename",
         "comparison_type": "contains",
         "string_idx": 90,
-        "numerical_value": -1
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
+      },
+      "243": {
+        "field": "process.file.path",
+        "comparison_type": "endswith",
+        "string_idx": -1,
+        "numerical_value": -1,
+        "fieldref": "PROCESS_FILE_FILENAME"
+      },
+      "244": {
+        "field": "process.cmd",
+        "comparison_type": "startswith",
+        "string_idx": -1,
+        "numerical_value": -1,
+        "fieldref": "PROCESS_FILE_PATH"
+      },
+      "245": {
+        "field": "target.file.path",
+        "comparison_type": "endswith",
+        "string_idx": -1,
+        "numerical_value": -1,
+        "fieldref": "TARGET_FILE_FILENAME"
+      },
+      "246": {
+        "field": "chmod.requested_mode",
+        "comparison_type": "above",
+        "string_idx": -1,
+        "numerical_value": -1,
+        "fieldref": "TARGET_FILE_MODE"
+      },
+      "247": {
+        "field": "target.file.owner.uid",
+        "comparison_type": "equal_below",
+        "string_idx": -1,
+        "numerical_value": -1,
+        "fieldref": "CHMOD_REQUESTED_MODE"
+      },
+      "248": {
+        "field": "target.file.owner.gid",
+        "comparison_type": "equal",
+        "string_idx": -1,
+        "numerical_value": -1,
+        "fieldref": "TARGET_FILE_OWNER_UID"
+      },
+      "249": {
+        "field": "target.file.path",
+        "comparison_type": "exactmatch",
+        "string_idx": 91,
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
+      },
+      "250": {
+        "field": "rename.source_file.path",
+        "comparison_type": "endswith",
+        "string_idx": -1,
+        "numerical_value": -1,
+        "fieldref": "RENAME_SOURCE_FILE_FILENAME"
+      },
+      "251": {
+        "field": "rename.destination_file.path",
+        "comparison_type": "endswith",
+        "string_idx": -1,
+        "numerical_value": -1,
+        "fieldref": "RENAME_DESTINATION_FILE_FILENAME"
+      },
+      "252": {
+        "field": "rename.source_file.mode",
+        "comparison_type": "below",
+        "string_idx": -1,
+        "numerical_value": -1,
+        "fieldref": "RENAME_DESTINATION_FILE_MODE"
+      },
+      "253": {
+        "field": "rename.destination_file.owner.uid",
+        "comparison_type": "equal_below",
+        "string_idx": -1,
+        "numerical_value": -1,
+        "fieldref": "RENAME_SOURCE_FILE_MODE"
+      },
+      "254": {
+        "field": "rename.source_file.path",
+        "comparison_type": "exactmatch",
+        "string_idx": 92,
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
       }
     },
     "id_to_ip": {
@@ -4872,6 +5207,104 @@
           },
           {
             "operator_type": "OPERATOR_AND"
+          },
+          {
+            "operator_type": "OPERATOR_AND"
+          },
+          {
+            "operator_type": "OPERATOR_AND"
+          },
+          {
+            "operator_type": "OPERATOR_AND"
+          },
+          {
+            "operator_type": "OPERATOR_AND"
+          }
+        ]
+      },
+      {
+        "id": 37,
+        "description": "Fieldref automation test - CHMOD with 3 string and 3 numeric fieldrefs",
+        "action": "BLOCK_EVENT",
+        "applied_events": [
+          "CHMOD"
+        ],
+        "tokens": [
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 243
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 244
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 245
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 246
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 247
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 248
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 249
+          },
+          {
+            "operator_type": "OPERATOR_AND"
+          },
+          {
+            "operator_type": "OPERATOR_AND"
+          },
+          {
+            "operator_type": "OPERATOR_AND"
+          },
+          {
+            "operator_type": "OPERATOR_AND"
+          },
+          {
+            "operator_type": "OPERATOR_AND"
+          },
+          {
+            "operator_type": "OPERATOR_AND"
+          }
+        ]
+      },
+      {
+        "id": 38,
+        "description": "Fieldref automation test - RENAME with 2 string and 2 numeric fieldrefs using source/destination fields",
+        "action": "BLOCK_EVENT",
+        "applied_events": [
+          "RENAME"
+        ],
+        "tokens": [
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 250
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 251
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 252
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 253
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 254
           },
           {
             "operator_type": "OPERATOR_AND"
