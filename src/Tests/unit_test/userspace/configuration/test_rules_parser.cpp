@@ -18,7 +18,8 @@ constexpr std::string_view MINIMAL_RULES_JSON = R"({
       "field": "target.file.path",
       "comparison_type": "contains",
       "string_idx": 0,
-      "numerical_value": -1
+      "numerical_value": -1,
+      "fieldref": "FIELD_TYPE_NONE"
     }
   },
   "rules": [
@@ -53,19 +54,22 @@ constexpr std::string_view COMPLEX_RULES_JSON = R"({
       "field": "target.file.path",
       "comparison_type": "contains",
       "string_idx": 0,
-      "numerical_value": -1
+      "numerical_value": -1,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "1": {
       "field": "process.file.filename",
       "comparison_type": "endswith",
       "string_idx": 1,
-      "numerical_value": -1
+      "numerical_value": -1,
+      "fieldref": "FIELD_TYPE_NONE"
     },
     "2": {
       "field": "process.pid",
       "comparison_type": "equal",
       "string_idx": -1,
-      "numerical_value": 1000
+      "numerical_value": 1000,
+      "fieldref": "FIELD_TYPE_NONE"
     }
   },
   "rules": [
@@ -122,6 +126,7 @@ TEST_F(RulesParserNewTest, parse_minimal_rules_config)
         EXPECT_EQ(config.id_to_predicate[0].comparison_type, COMPARISON_TYPE_CONTAINS);
         EXPECT_EQ(config.id_to_predicate[0].string_idx, 0);
         EXPECT_EQ(config.id_to_predicate[0].numerical_value, -1);
+        EXPECT_EQ(config.id_to_predicate[0].fieldref, FIELD_TYPE_NONE);
         
         // Check rules
         EXPECT_EQ(config.rules.size(), 1);
@@ -156,11 +161,14 @@ TEST_F(RulesParserNewTest, parse_complex_rules_config)
         // Check id_to_predicate
         EXPECT_EQ(config.id_to_predicate.size(), 3);
         EXPECT_EQ(config.id_to_predicate[0].field, TARGET_FILE_PATH);
+        EXPECT_EQ(config.id_to_predicate[0].fieldref, FIELD_TYPE_NONE);
         EXPECT_EQ(config.id_to_predicate[1].field, PROCESS_FILE_FILENAME);
+        EXPECT_EQ(config.id_to_predicate[1].fieldref, FIELD_TYPE_NONE);
         EXPECT_EQ(config.id_to_predicate[2].field, PROCESS_PID);
         EXPECT_EQ(config.id_to_predicate[2].comparison_type, COMPARISON_TYPE_EQUAL);
         EXPECT_EQ(config.id_to_predicate[2].string_idx, -1);
         EXPECT_EQ(config.id_to_predicate[2].numerical_value, 1000);
+        EXPECT_EQ(config.id_to_predicate[2].fieldref, FIELD_TYPE_NONE);
         
         // Check rules
         EXPECT_EQ(config.rules.size(), 1);
@@ -204,7 +212,8 @@ TEST_F(RulesParserNewTest, parse_field_id_transformation)
                 "field": "process.file.owner.uid",
                 "comparison_type": "equal",
                 "string_idx": -1,
-                "numerical_value": 0
+                "numerical_value": 0,
+                "fieldref": "FIELD_TYPE_NONE"
             }
         },
         "rules": []
@@ -225,7 +234,8 @@ TEST_F(RulesParserNewTest, parse_comparison_type_transformation)
                 "field": "process.pid",
                 "comparison_type": "equal_above",
                 "string_idx": -1,
-                "numerical_value": 100
+                "numerical_value": 100,
+                "fieldref": "FIELD_TYPE_NONE"
             }
         },
         "rules": []
@@ -246,7 +256,8 @@ TEST_F(RulesParserNewTest, invalid_field_throws_exception)
                 "field": "invalid.field.name",
                 "comparison_type": "equal",
                 "string_idx": -1,
-                "numerical_value": 0
+                "numerical_value": 0,
+                "fieldref": "FIELD_TYPE_NONE"
             }
         },
         "rules": []
@@ -265,7 +276,8 @@ TEST_F(RulesParserNewTest, invalid_comparison_type_throws_exception)
                 "field": "process.pid",
                 "comparison_type": "invalid_comparison",
                 "string_idx": -1,
-                "numerical_value": 0
+                "numerical_value": 0,
+                "fieldref": "FIELD_TYPE_NONE"
             }
         },
         "rules": []

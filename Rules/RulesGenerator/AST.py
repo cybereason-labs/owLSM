@@ -20,6 +20,10 @@ from sigma_rule_loader import (
     IP_FIELDS,
     EVENT_ALLOWED_TARGET_FIELDS,
     detection_has_keywords,
+    NUMERIC_MODIFIER_TO_OPERATION,
+    ALLOWED_NUMERIC_MODIFIERS,
+    ALLOWED_FIELDREF_STRING_MODIFIERS,
+    STRING_MODIFIER_TO_COMPARISON,
 )
 from constants import (
     MAX_NEEDLE_LENGTH,
@@ -56,21 +60,28 @@ class Predicate:
     comparison_type: str
     string_idx: int = -1
     numerical_value: int = -1
+    fieldref: str = "FIELD_TYPE_NONE"
     
     def __post_init__(self):
         is_string = self.string_idx != -1
         is_numeric = self.numerical_value != -1
+        is_fieldref = self.fieldref != "FIELD_TYPE_NONE"
         
-        if is_string and is_numeric:
-            raise ValueError(f"Predicate cannot be both string (string_idx={self.string_idx}) and numeric (numerical_value={self.numerical_value})")
-        if not is_string and not is_numeric:
-            raise ValueError("Predicate must be either string (string_idx != -1) or numeric (numerical_value != -1)")
+        active_count = sum([is_string, is_numeric, is_fieldref])
+        if active_count != 1:
+            raise ValueError(
+                f"Predicate must have exactly one value source set. Got: "
+                f"string_idx={self.string_idx}, numerical_value={self.numerical_value}, fieldref={self.fieldref}"
+            )
     
     def is_string_predicate(self) -> bool:
         return self.string_idx != -1
     
     def is_numeric_predicate(self) -> bool:
         return self.numerical_value != -1
+    
+    def is_fieldref_predicate(self) -> bool:
+        return self.fieldref != "FIELD_TYPE_NONE"
 
 
 @dataclass
@@ -169,10 +180,12 @@ class OwlsmBackend(Backend):
     name = "owlsm"
     formats = {"default": "Default output format"}
     
-    def __init__(self, ctx: ParsedRulesContext, event_type: Optional[str] = None, **kwargs):
+    def __init__(self, ctx: ParsedRulesContext, event_type: Optional[str] = None,
+                 fieldref_comparisons: Optional[Dict[tuple, str]] = None, **kwargs):
         super().__init__(processing_pipeline=None, **kwargs)
         self.ctx = ctx
         self.event_type = event_type
+        self.fieldref_comparisons = fieldref_comparisons or {}
     
     def finalize_query(self, rule, query, index, state, output_format):
         return query
@@ -374,8 +387,32 @@ class OwlsmBackend(Backend):
     def convert_condition_as_in_expression(self, cond, state):
         self._unsupported("as_in_expression")
     
-    def convert_condition_field_eq_field(self, cond, state):
-        self._unsupported("field_eq_field")
+    def convert_condition_field_eq_field(self, cond, state) -> ConditionExpr:
+        field = cond.field
+        ref_value = cond.value
+        ref_field = ref_value.field
+
+        field_type = ALL_FIELD_TYPES.get(field, "string")
+
+        if (field, ref_field) in self.fieldref_comparisons:
+            comparison = self.fieldref_comparisons[(field, ref_field)]
+        elif ref_value.starts_with:
+            comparison = COMPARISON_TYPE_STARTS_WITH
+        elif ref_value.ends_with:
+            comparison = COMPARISON_TYPE_ENDS_WITH
+        elif field_type == "string":
+            comparison = COMPARISON_TYPE_EXACT_MATCH
+        else:
+            comparison = COMPARISON_TYPE_EQUAL
+
+        fieldref_enum_name = ref_field.upper().replace(".", "_")
+        pred = Predicate(
+            field=field,
+            comparison_type=comparison,
+            fieldref=fieldref_enum_name
+        )
+        pred_idx = self.ctx.get_or_add_predicate(pred)
+        return ConditionExpr(operator_type="PRED", predicate_idx=pred_idx)
     
     def convert_condition_field_eq_query_expr(self, cond, state):
         self._unsupported("field_eq_query_expr")
@@ -487,6 +524,12 @@ class OwlsmBackend(Backend):
     def convert_correlation_value_sum_rule(self, rule, output_format, state):
         self._unsupported("correlation_value_sum_rule")
     
+    def convert_correlation_extended_temporal_rule(self, rule, output_format, state):
+        self._unsupported("correlation_extended_temporal_rule")
+    
+    def convert_correlation_extended_temporal_ordered_rule(self, rule, output_format, state):
+        self._unsupported("correlation_extended_temporal_ordered_rule")
+    
 
 
 def preprocess_neq_modifier(detection: Dict[str, Any]) -> Dict[str, Any]:
@@ -579,6 +622,85 @@ def preprocess_neq_modifier(detection: Dict[str, Any]) -> Dict[str, Any]:
         new_detection["condition"] = condition
 
     return new_detection
+
+
+
+
+def _preprocess_fieldref_in_dict(sel_dict: dict, fieldref_comparisons: dict) -> dict:
+    """Strip numeric and string modifiers from fieldref fields in a single selection dict.
+    pySigma's SigmaFieldReference rejects values with wildcards (introduced by startswith/endswith)
+    and is incompatible with numeric comparison modifiers, so we strip all such modifiers,
+    record the comparison type, and pass only bare |fieldref to pySigma."""
+    new_sel = {}
+    for field_key, value in sel_dict.items():
+        parts = field_key.split("|")
+        modifiers_lower = [p.lower() for p in parts[1:]]
+
+        if "fieldref" not in modifiers_lower:
+            new_sel[field_key] = value
+            continue
+
+        extra = [m for m in modifiers_lower if m not in ("fieldref", "neq")]
+        has_numeric = bool(set(extra) & ALLOWED_NUMERIC_MODIFIERS)
+        has_string = bool(set(extra) & ALLOWED_FIELDREF_STRING_MODIFIERS)
+
+        if not extra or (not has_numeric and not has_string):
+            new_sel[field_key] = value
+            continue
+
+        field_name = parts[0]
+        mod = extra[0]
+
+        if mod in ALLOWED_NUMERIC_MODIFIERS:
+            comparison = NUMERIC_MODIFIER_TO_OPERATION[mod]
+        else:
+            comparison = STRING_MODIFIER_TO_COMPARISON[mod]
+
+        key = (field_name, value)
+        if key in fieldref_comparisons:
+            raise Exception(
+                f"Duplicate fieldref: field '{field_name}' references '{value}' with multiple "
+                f"numeric modifiers or string modifiers in the same selection. Only one comparison per "
+                f"(field, target) pair is allowed.")
+        fieldref_comparisons[key] = comparison
+
+        stripped_key = field_name + "|fieldref"
+        if stripped_key in new_sel:
+            raise Exception(
+                f"Duplicate fieldref: field '{field_name}' uses 'fieldref' with multiple "
+                f"modifiers in the same selection. Only one comparison per "
+                f"field is allowed.")
+        new_sel[stripped_key] = value
+
+    return new_sel
+
+
+def preprocess_fieldref_modifier(detection: Dict[str, Any]) -> tuple:
+    """Strip numeric modifiers from |fieldref fields before pySigma sees them.
+    Returns (new_detection, fieldref_comparisons).
+    Must run AFTER preprocess_neq_modifier."""
+    fieldref_comparisons: Dict[tuple, str] = {}
+    new_detection: Dict[str, Any] = {}
+
+    for sel_name, sel_value in detection.items():
+        if sel_name == "condition":
+            new_detection[sel_name] = sel_value
+            continue
+
+        if isinstance(sel_value, dict):
+            new_detection[sel_name] = _preprocess_fieldref_in_dict(sel_value, fieldref_comparisons)
+        elif isinstance(sel_value, list):
+            new_list = []
+            for item in sel_value:
+                if isinstance(item, dict):
+                    new_list.append(_preprocess_fieldref_in_dict(item, fieldref_comparisons))
+                else:
+                    new_list.append(item)
+            new_detection[sel_name] = new_list
+        else:
+            new_detection[sel_name] = sel_value
+
+    return new_detection, fieldref_comparisons
 
 
 def create_pysigma_rule(rule_id: int, description: str, detection: Dict[str, Any]) -> PySigmaRule:
@@ -682,8 +804,9 @@ def expand_x_of_conditions(detection: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def _convert_single_rule(rule: SigmaRule, pysigma_rule: PySigmaRule, ctx: ParsedRulesContext, 
-                         applied_events: List[str], event_type: Optional[str] = None) -> ParsedRule:
-    backend = OwlsmBackend(ctx, event_type=event_type)
+                         applied_events: List[str], event_type: Optional[str] = None,
+                         fieldref_comparisons: Optional[Dict[tuple, str]] = None) -> ParsedRule:
+    backend = OwlsmBackend(ctx, event_type=event_type, fieldref_comparisons=fieldref_comparisons)
     results = backend.convert_rule(pysigma_rule)
     
     if not results:
@@ -704,13 +827,16 @@ def _convert_single_rule(rule: SigmaRule, pysigma_rule: PySigmaRule, ctx: Parsed
 
 def parse_rule_with_pysigma(rule: SigmaRule, ctx: ParsedRulesContext) -> List[ParsedRule]:
     neq_processed = preprocess_neq_modifier(rule.detection)
-    expanded_detection = expand_x_of_conditions(neq_processed)
+    fieldref_processed, fieldref_comparisons = preprocess_fieldref_modifier(neq_processed)
+    expanded_detection = expand_x_of_conditions(fieldref_processed)
     pysigma_rule = create_pysigma_rule(rule.id, rule.description, expanded_detection)
     
     if detection_has_keywords(rule.detection):
-        return [_convert_single_rule(rule, pysigma_rule, ctx, [event_type], event_type) for event_type in rule.events]
+        return [_convert_single_rule(rule, pysigma_rule, ctx, [event_type], event_type,
+                                     fieldref_comparisons) for event_type in rule.events]
     else:
-        return [_convert_single_rule(rule, pysigma_rule, ctx, rule.events)]
+        return [_convert_single_rule(rule, pysigma_rule, ctx, rule.events,
+                                     fieldref_comparisons=fieldref_comparisons)]
 
 
 def parse_rules(rules: List[SigmaRule]) -> ParsedRulesContext:

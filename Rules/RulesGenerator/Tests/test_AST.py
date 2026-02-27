@@ -93,12 +93,298 @@ class TestPredValidation:
         assert pred.is_numeric_predicate() == True
     
     def test_both_string_and_numeric_raises(self):
-        with pytest.raises(ValueError, match="(?i)cannot be both"):
+        with pytest.raises(ValueError, match="exactly one value source"):
             Predicate(field="Test", comparison_type="equal", string_idx=5, numerical_value=1000)
     
     def test_neither_string_nor_numeric_raises(self):
-        with pytest.raises(ValueError, match="(?i)must be either"):
+        with pytest.raises(ValueError, match="exactly one value source"):
             Predicate(field="Test", comparison_type="equal")
+    
+    def test_fieldref_pred(self):
+        pred = Predicate(field="process.cmd", comparison_type="exactmatch", fieldref="PARENT_PROCESS_CMD")
+        assert pred.is_string_predicate() == False
+        assert pred.is_numeric_predicate() == False
+        assert pred.is_fieldref_predicate() == True
+    
+    def test_fieldref_with_string_raises(self):
+        with pytest.raises(ValueError, match="exactly one value source"):
+            Predicate(field="process.cmd", comparison_type="exactmatch", string_idx=5, fieldref="PARENT_PROCESS_CMD")
+    
+    def test_fieldref_with_numeric_raises(self):
+        with pytest.raises(ValueError, match="exactly one value source"):
+            Predicate(field="process.pid", comparison_type="equal", numerical_value=100, fieldref="PARENT_PROCESS_PID")
+
+
+class TestFieldrefParsing:
+    """Tests for fieldref modifier processing through the AST pipeline."""
+
+    def test_fieldref_string_creates_predicate(self):
+        rule = SigmaRule(
+            id=1, description="fieldref string", action="BLOCK_EVENT", events=["CHMOD"],
+            detection={"sel": {"process.file.filename|fieldref": "parent_process.file.filename"}, "condition": "sel"},
+            source_file="test.yml"
+        )
+        ctx = ParsedRulesContext()
+        parsed = parse_rule_with_pysigma(rule, ctx)[0]
+
+        assert parsed.condition_expr.operator_type == "PRED"
+        pred = ctx.id_to_predicate[parsed.condition_expr.predicate_idx]
+        assert pred.field == "process.file.filename"
+        assert pred.comparison_type == "exactmatch"
+        assert pred.fieldref == "PARENT_PROCESS_FILE_FILENAME"
+        assert pred.is_fieldref_predicate()
+        assert pred.string_idx == -1
+        assert pred.numerical_value == -1
+
+    def test_fieldref_numeric_creates_predicate(self):
+        rule = SigmaRule(
+            id=1, description="fieldref numeric", action="BLOCK_EVENT", events=["CHMOD"],
+            detection={"sel": {"process.pid|fieldref": "parent_process.pid"}, "condition": "sel"},
+            source_file="test.yml"
+        )
+        ctx = ParsedRulesContext()
+        parsed = parse_rule_with_pysigma(rule, ctx)[0]
+
+        pred = ctx.id_to_predicate[parsed.condition_expr.predicate_idx]
+        assert pred.field == "process.pid"
+        assert pred.comparison_type == "equal"
+        assert pred.fieldref == "PARENT_PROCESS_PID"
+        assert pred.is_fieldref_predicate()
+
+    def test_fieldref_enum_creates_predicate(self):
+        rule = SigmaRule(
+            id=1, description="fieldref enum", action="BLOCK_EVENT", events=["CHMOD"],
+            detection={"sel": {"process.file.type|fieldref": "parent_process.file.type"}, "condition": "sel"},
+            source_file="test.yml"
+        )
+        ctx = ParsedRulesContext()
+        parsed = parse_rule_with_pysigma(rule, ctx)[0]
+
+        pred = ctx.id_to_predicate[parsed.condition_expr.predicate_idx]
+        assert pred.field == "process.file.type"
+        assert pred.comparison_type == "equal"
+        assert pred.fieldref == "PARENT_PROCESS_FILE_TYPE"
+
+    def test_fieldref_with_startswith(self):
+        rule = SigmaRule(
+            id=1, description="fieldref startswith", action="BLOCK_EVENT", events=["CHMOD"],
+            detection={"sel": {"process.file.path|fieldref|startswith": "parent_process.file.path"}, "condition": "sel"},
+            source_file="test.yml"
+        )
+        ctx = ParsedRulesContext()
+        parsed = parse_rule_with_pysigma(rule, ctx)[0]
+
+        pred = ctx.id_to_predicate[parsed.condition_expr.predicate_idx]
+        assert pred.comparison_type == "startswith"
+        assert pred.fieldref == "PARENT_PROCESS_FILE_PATH"
+
+    def test_fieldref_with_endswith(self):
+        rule = SigmaRule(
+            id=1, description="fieldref endswith", action="BLOCK_EVENT", events=["CHMOD"],
+            detection={"sel": {"process.file.filename|fieldref|endswith": "parent_process.file.filename"}, "condition": "sel"},
+            source_file="test.yml"
+        )
+        ctx = ParsedRulesContext()
+        parsed = parse_rule_with_pysigma(rule, ctx)[0]
+
+        pred = ctx.id_to_predicate[parsed.condition_expr.predicate_idx]
+        assert pred.comparison_type == "endswith"
+        assert pred.fieldref == "PARENT_PROCESS_FILE_FILENAME"
+
+    def test_fieldref_with_gt(self):
+        rule = SigmaRule(
+            id=1, description="fieldref gt", action="BLOCK_EVENT", events=["CHMOD"],
+            detection={"sel": {"process.pid|fieldref|gt": "parent_process.pid"}, "condition": "sel"},
+            source_file="test.yml"
+        )
+        ctx = ParsedRulesContext()
+        parsed = parse_rule_with_pysigma(rule, ctx)[0]
+
+        pred = ctx.id_to_predicate[parsed.condition_expr.predicate_idx]
+        assert pred.comparison_type == "above"
+        assert pred.fieldref == "PARENT_PROCESS_PID"
+
+    def test_fieldref_with_gte(self):
+        rule = SigmaRule(
+            id=1, description="fieldref gte", action="BLOCK_EVENT", events=["CHMOD"],
+            detection={"sel": {"process.euid|fieldref|gte": "parent_process.euid"}, "condition": "sel"},
+            source_file="test.yml"
+        )
+        ctx = ParsedRulesContext()
+        parsed = parse_rule_with_pysigma(rule, ctx)[0]
+
+        pred = ctx.id_to_predicate[parsed.condition_expr.predicate_idx]
+        assert pred.comparison_type == "equal_above"
+        assert pred.fieldref == "PARENT_PROCESS_EUID"
+
+    def test_fieldref_with_lt(self):
+        rule = SigmaRule(
+            id=1, description="fieldref lt", action="BLOCK_EVENT", events=["CHMOD"],
+            detection={"sel": {"process.rgid|fieldref|lt": "parent_process.rgid"}, "condition": "sel"},
+            source_file="test.yml"
+        )
+        ctx = ParsedRulesContext()
+        parsed = parse_rule_with_pysigma(rule, ctx)[0]
+
+        pred = ctx.id_to_predicate[parsed.condition_expr.predicate_idx]
+        assert pred.comparison_type == "below"
+        assert pred.fieldref == "PARENT_PROCESS_RGID"
+
+    def test_fieldref_with_lte(self):
+        rule = SigmaRule(
+            id=1, description="fieldref lte", action="BLOCK_EVENT", events=["CHMOD"],
+            detection={"sel": {"process.pid|fieldref|lte": "parent_process.pid"}, "condition": "sel"},
+            source_file="test.yml"
+        )
+        ctx = ParsedRulesContext()
+        parsed = parse_rule_with_pysigma(rule, ctx)[0]
+
+        pred = ctx.id_to_predicate[parsed.condition_expr.predicate_idx]
+        assert pred.comparison_type == "equal_below"
+        assert pred.fieldref == "PARENT_PROCESS_PID"
+
+    def test_fieldref_with_neq_creates_not(self):
+        rule = SigmaRule(
+            id=1, description="fieldref neq", action="BLOCK_EVENT", events=["CHMOD"],
+            detection={"sel": {"process.file.filename|neq|fieldref": "parent_process.file.filename"}, "condition": "sel"},
+            source_file="test.yml"
+        )
+        ctx = ParsedRulesContext()
+        parsed = parse_rule_with_pysigma(rule, ctx)[0]
+
+        assert parsed.condition_expr.operator_type == "NOT"
+        child = parsed.condition_expr.children[0]
+        assert child.operator_type == "PRED"
+        pred = ctx.id_to_predicate[child.predicate_idx]
+        assert pred.field == "process.file.filename"
+        assert pred.comparison_type == "exactmatch"
+        assert pred.fieldref == "PARENT_PROCESS_FILE_FILENAME"
+
+    def test_fieldref_gte_reversed_order(self):
+        rule = SigmaRule(
+            id=1, description="fieldref gte reversed", action="BLOCK_EVENT", events=["CHMOD"],
+            detection={"sel": {"process.euid|gte|fieldref": "parent_process.euid"}, "condition": "sel"},
+            source_file="test.yml"
+        )
+        ctx = ParsedRulesContext()
+        parsed = parse_rule_with_pysigma(rule, ctx)[0]
+
+        pred = ctx.id_to_predicate[parsed.condition_expr.predicate_idx]
+        assert pred.field == "process.euid"
+        assert pred.comparison_type == "equal_above"
+        assert pred.fieldref == "PARENT_PROCESS_EUID"
+
+    def test_fieldref_deduplication(self):
+        rule1 = SigmaRule(
+            id=1, description="Rule 1", action="BLOCK_EVENT", events=["CHMOD"],
+            detection={"sel": {"process.pid|fieldref": "parent_process.pid"}, "condition": "sel"},
+            source_file="rule1.yml"
+        )
+        rule2 = SigmaRule(
+            id=2, description="Rule 2", action="BLOCK_EVENT", events=["CHMOD"],
+            detection={"sel": {"process.pid|fieldref": "parent_process.pid"}, "condition": "sel"},
+            source_file="rule2.yml"
+        )
+
+        ctx = parse_rules([rule1, rule2])
+        assert len(ctx.id_to_predicate) == 1
+        assert len(ctx.id_to_string) == 0
+
+    def test_fieldref_mixed_with_normal_fields(self):
+        rule = SigmaRule(
+            id=1, description="mixed fieldref", action="BLOCK_EVENT", events=["CHMOD"],
+            detection={
+                "sel": {
+                    "process.file.filename|fieldref": "parent_process.file.filename",
+                    "process.cmd|contains": "suspicious",
+                },
+                "condition": "sel"
+            },
+            source_file="test.yml"
+        )
+        ctx = ParsedRulesContext()
+        parsed = parse_rule_with_pysigma(rule, ctx)[0]
+
+        assert parsed.condition_expr.operator_type == "AND"
+        assert len(parsed.condition_expr.children) == 2
+        assert len(ctx.id_to_predicate) == 2
+        assert len(ctx.id_to_string) == 1
+
+        fieldref_preds = [p for p in ctx.id_to_predicate.values() if p.is_fieldref_predicate()]
+        string_preds = [p for p in ctx.id_to_predicate.values() if p.is_string_predicate()]
+        assert len(fieldref_preds) == 1
+        assert len(string_preds) == 1
+
+    def test_fieldref_full_pipeline(self):
+        """fieldref goes through the full pipeline: load -> AST -> postfix -> serialize."""
+        import json
+        from postfix import convert_to_postfix
+        from serializer import to_json_string
+
+        rule = SigmaRule(
+            id=1, description="fieldref pipeline", action="BLOCK_EVENT", events=["CHMOD"],
+            detection={
+                "sel": {
+                    "process.pid|fieldref|gte": "parent_process.pid",
+                    "process.file.filename|fieldref": "parent_process.file.filename",
+                },
+                "condition": "sel"
+            },
+            source_file="test.yml"
+        )
+        ctx = parse_rules([rule])
+        postfix_ctx = convert_to_postfix(ctx)
+        json_str = to_json_string(postfix_ctx)
+        data = json.loads(json_str)
+
+        assert len(data["rules"]) == 1
+        assert len(data["id_to_predicate"]) == 2
+        assert len(data["id_to_string"]) == 0
+
+        preds = data["id_to_predicate"]
+        fieldref_values = {p["fieldref"] for p in preds.values()}
+        assert "PARENT_PROCESS_PID" in fieldref_values
+        assert "PARENT_PROCESS_FILE_FILENAME" in fieldref_values
+
+    def test_fieldref_duplicate_numeric_modifier_same_target_rejected(self):
+        rule = SigmaRule(
+            id=1, description="dup fieldref modifier", action="BLOCK_EVENT", events=["CHMOD"],
+            detection={"sel": {
+                "process.pid|fieldref|gte": "parent_process.pid",
+                "process.pid|fieldref|lt": "parent_process.pid",
+            }, "condition": "sel"},
+            source_file="test.yml"
+        )
+        with pytest.raises(Exception, match="[Dd]uplicate fieldref.*multiple.*numeric modifiers or string modifiers"):
+            parse_rule_with_pysigma(rule, ParsedRulesContext())
+
+    def test_fieldref_duplicate_string_modifier_same_target_rejected(self):
+        rule = SigmaRule(
+            id=1, description="dup string fieldref modifier", action="BLOCK_EVENT", events=["CHMOD"],
+            detection={"sel": {
+                "process.file.path|fieldref|startswith": "process.file.filename",
+                "process.file.path|fieldref|endswith": "process.file.filename",
+            }, "condition": "sel"},
+            source_file="test.yml"
+        )
+        with pytest.raises(Exception, match="[Dd]uplicate fieldref.*multiple.*numeric modifiers or string modifiers"):
+            parse_rule_with_pysigma(rule, ParsedRulesContext())
+
+    def test_fieldref_enum_neq_creates_not(self):
+        rule = SigmaRule(
+            id=1, description="fieldref enum neq", action="BLOCK_EVENT", events=["CHMOD"],
+            detection={"sel": {"process.file.type|fieldref|neq": "parent_process.file.type"}, "condition": "sel"},
+            source_file="test.yml"
+        )
+        ctx = ParsedRulesContext()
+        parsed = parse_rule_with_pysigma(rule, ctx)[0]
+
+        assert parsed.condition_expr.operator_type == "NOT"
+        child = parsed.condition_expr.children[0]
+        pred = ctx.id_to_predicate[child.predicate_idx]
+        assert pred.field == "process.file.type"
+        assert pred.comparison_type == "equal"
+        assert pred.fieldref == "PARENT_PROCESS_FILE_TYPE"
 
 
 class TestSimpleRuleParsing:

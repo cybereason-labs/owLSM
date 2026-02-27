@@ -58,6 +58,7 @@ class TestBasicSerialization:
         assert pred["field"] == "process.file.filename"
         assert pred["comparison_type"] == "exactmatch"
         assert "string_idx" in pred
+        assert pred["fieldref"] == "FIELD_TYPE_NONE"
     
     def test_numeric_pred_serialization(self):
         rule = SigmaRule(
@@ -76,6 +77,59 @@ class TestBasicSerialization:
         assert pred["numerical_value"] == 1000
         # -1 indicates no string_idx for numeric predicates
         assert pred["string_idx"] == -1
+        assert pred["fieldref"] == "FIELD_TYPE_NONE"
+
+
+class TestFieldrefSerialization:
+    """Tests for fieldref predicate serialization."""
+
+    def test_fieldref_pred_serialization(self):
+        rule = SigmaRule(
+            id=1, description="fieldref test", action="BLOCK_EVENT", events=["CHMOD"],
+            detection={"sel": {"process.pid|fieldref": "parent_process.pid"}, "condition": "sel"},
+            source_file="test.yml"
+        )
+
+        ast_ctx = parse_rules([rule])
+        postfix_ctx = convert_to_postfix(ast_ctx)
+        data = serialize_context(postfix_ctx)
+
+        pred = data["id_to_predicate"]["0"]
+        assert pred["field"] == "process.pid"
+        assert pred["comparison_type"] == "equal"
+        assert pred["fieldref"] == "PARENT_PROCESS_PID"
+        assert pred["string_idx"] == -1
+        assert pred["numerical_value"] == -1
+
+    def test_fieldref_string_with_startswith(self):
+        rule = SigmaRule(
+            id=1, description="fieldref startswith", action="BLOCK_EVENT", events=["CHMOD"],
+            detection={"sel": {"process.file.path|fieldref|startswith": "parent_process.file.path"}, "condition": "sel"},
+            source_file="test.yml"
+        )
+
+        ast_ctx = parse_rules([rule])
+        postfix_ctx = convert_to_postfix(ast_ctx)
+        data = serialize_context(postfix_ctx)
+
+        pred = data["id_to_predicate"]["0"]
+        assert pred["comparison_type"] == "startswith"
+        assert pred["fieldref"] == "PARENT_PROCESS_FILE_PATH"
+
+    def test_fieldref_numeric_with_gte(self):
+        rule = SigmaRule(
+            id=1, description="fieldref gte", action="BLOCK_EVENT", events=["CHMOD"],
+            detection={"sel": {"process.euid|fieldref|gte": "parent_process.euid"}, "condition": "sel"},
+            source_file="test.yml"
+        )
+
+        ast_ctx = parse_rules([rule])
+        postfix_ctx = convert_to_postfix(ast_ctx)
+        data = serialize_context(postfix_ctx)
+
+        pred = data["id_to_predicate"]["0"]
+        assert pred["comparison_type"] == "equal_above"
+        assert pred["fieldref"] == "PARENT_PROCESS_EUID"
 
 
 class TestRuleSerialization:

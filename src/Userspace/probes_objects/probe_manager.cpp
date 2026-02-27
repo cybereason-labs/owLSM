@@ -68,6 +68,8 @@ namespace owlsm
         {
             probe->bpfAttach();
         }
+
+        LOG_INFO("Attached all probes");
     }
 
     void ProbeManager::bpfDetach()

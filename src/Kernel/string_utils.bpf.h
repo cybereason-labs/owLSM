@@ -2,24 +2,22 @@
 #include "kmp_dfa.bpf.h"
 #include "common_maps.bpf.h"
 #include "preprocessor_definitions/defs.bpf.h"
+#include "allocators.bpf.h"
 
 statfunc struct string_utils_ctx* string_utils_setup(const char *haystack, const char *needle, unsigned char haystack_length, unsigned char needle_length, unsigned haystack_max_length)
 {
-    int key = 0;
-    struct string_utils_ctx *sctx = bpf_map_lookup_elem(&heap_string_utils_ctx, &key);
-    if (!sctx)
-    {
-        return NULL;
-    }
-    if(bpf_probe_read_kernel(sctx, sizeof(*sctx), &string_utils_ctx_empty) != SUCCESS)
+    struct string_utils_ctx *sctx = allocate_empty_string_utils_ctx();
+    if(!sctx)
     {
         return NULL;
     }
     
     sctx->haystack_max_length = haystack_max_length;
     sctx->haystack_length = haystack_length;
+    barrier_var(haystack_max_length);
     if(bpf_probe_read_kernel(sctx->haystack, haystack_max_length, haystack) != SUCCESS)
     {
+        REPORT_ERROR(GENERIC_ERROR, "bpf_probe_read_kernel failed");
         return NULL;
     }
 
@@ -27,6 +25,7 @@ statfunc struct string_utils_ctx* string_utils_setup(const char *haystack, const
     sctx->needle_length = needle_length;    
     if(bpf_probe_read_kernel(sctx->needle, sctx->needle_max_length, needle) != SUCCESS)
     {
+        REPORT_ERROR(GENERIC_ERROR, "bpf_probe_read_kernel failed");
         return NULL;
     }
 
@@ -49,7 +48,7 @@ statfunc int is_needle_in_haystack_from_index(const struct string_utils_ctx *sct
         }
 
 
-        if (sctx->haystack[LIMIT_PATH_SIZE(index + k)] != sctx->needle[LIMIT_NEEDLE_STR_SIZE(k)])
+        if (sctx->haystack[LIMIT_PATH_SIZE(index + k)] != sctx->needle[LIMIT_PATH_SIZE(k)])
         {
             return FALSE;
         }              
@@ -97,7 +96,7 @@ statfunc int starts_with(const struct string_utils_ctx *sctx)
             break;
         }
 
-        if (sctx->haystack[LIMIT_PATH_SIZE(i)] != sctx->needle[LIMIT_NEEDLE_STR_SIZE(i)])
+        if (sctx->haystack[LIMIT_PATH_SIZE(i)] != sctx->needle[LIMIT_PATH_SIZE(i)])
         {
             return FALSE;
         }

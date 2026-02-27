@@ -1,5 +1,6 @@
 #include "shared_unit_tests_structs_definitions.h"
 #include "event_and_rule_matcher.bpf.h"
+#include "tail_calls_manager.bpf.h"
 
 // Test structure to pass event and rule to test program
 struct event_and_rule_matcher_test
@@ -27,8 +28,9 @@ int test_event_and_rule_matcher_test_program(struct __sk_buff *skb)
         bpf_printk("test_event_and_rule_matcher_test_program: map lookup failed\n");
         return 0;
     }
+    store_currently_handled_event(&t->event);
 
-    t->actual_result = event_rule_matcher(&t->rule, &t->event);
+    t->actual_result = evaluate_rule_against_event(&t->rule, &t->event);
     bpf_printk("test_event_and_rule_matcher_test_program: actual_result: %d\n", t->actual_result);
     return 0;
 }

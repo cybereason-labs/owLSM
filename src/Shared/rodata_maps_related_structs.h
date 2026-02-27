@@ -15,7 +15,12 @@ struct string_utils_ctx
     char haystack[PATH_MAX];
     unsigned char needle_max_length;
     unsigned char needle_length;
-    char needle[MAX_RULE_STR_LENGTH];
+    char needle[PATH_MAX];
     enum comparison_type comparison_type;
     int idx_to_DFA;
+};
+
+struct eval_stack {
+    struct token_t tokens[MAX_TOKENS_PER_RULE];
+    unsigned char stack_pointer;
 };

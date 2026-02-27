@@ -8,6 +8,7 @@ from typing import List, Union
 from Utils.logger_utils import logger
 from state_db.process_db import process_db
 from globals.system_related_globals import system_globals
+from globals.global_strings import global_strings
 
 def spawn_persistent_shell(shell_path: str) -> tuple:
     try:
@@ -210,9 +211,43 @@ def stop_owlsm_process():
             
     system_globals.OWLSM_PROCESS_OBJECT = None
 
+def wait_for_owlsm_initialization(proc):
+    log_path = system_globals.OWLSM_LOGGER_LOG
+    timeout = system_globals.OWLSM_SETUP_TIME_IN_SECONDS
+    start_time = time.time()
+
+    while time.time() - start_time < timeout:
+        if proc.poll() is not None:
+            logger.log_error(f"owLSM process exited prematurely with code {proc.returncode}")
+            assert False, f"owLSM process exited prematurely with code {proc.returncode}"
+
+        try:
+            if log_path.exists():
+                with open(log_path, 'r') as f:
+                    if global_strings.OWLSM_INIT_COMPLETE_MESSAGE in f.read():
+                        elapsed = time.time() - start_time
+                        logger.log_info(f"owLSM initialization confirmed after {elapsed:.1f}s")
+                        return
+        except Exception as e:
+            logger.log_error(f"Failed to read owLSM log at {log_path}: {e}")
+
+        time.sleep(1)
+
+    logger.log_error(f"owLSM failed to initialize within {timeout}s")
+    proc.kill()
+    assert False, f"owLSM failed to initialize within {timeout}s"
+
 def start_owlsm_process(command: str):
+    if system_globals.OWLSM_LOGGER_LOG.exists():
+        open(system_globals.OWLSM_LOGGER_LOG, 'w').close()
+
     system_globals.OWLSM_OUTPUT_LOG_FD = open(system_globals.OWLSM_OUTPUT_LOG, 'w')
-    system_globals.OWLSM_PROCESS_OBJECT = ensure_async_command_runs_for_at_least_seconds(
-        command, system_globals.OWLSM_SETUP_TIME_IN_SECONDS, system_globals.OWLSM_OUTPUT_LOG_FD, system_globals.OWLSM_OUTPUT_LOG_FD)
-    logger.log_info(f"owLSM installation attempt completed")
-    process_db.remove(system_globals.OWLSM_PROCESS_OBJECT.pid)
+    proc = run_command_async(command, system_globals.OWLSM_OUTPUT_LOG_FD, system_globals.OWLSM_OUTPUT_LOG_FD)
+    if proc is None:
+        assert False, f"Failed to start owLSM process: {command}"
+
+    wait_for_owlsm_initialization(proc)
+
+    system_globals.OWLSM_PROCESS_OBJECT = proc
+    process_db.remove(proc.pid)
+    logger.log_info("owLSM startup completed successfully")

@@ -106,3 +106,20 @@ statfunc struct event_t* allocate_event_with_basic_stats()
 
     return event;
 }
+
+statfunc struct string_utils_ctx* allocate_empty_string_utils_ctx()
+{
+    int key = 0;
+    struct string_utils_ctx *sctx = bpf_map_lookup_elem(&heap_string_utils_ctx, &key);
+    if (!sctx)
+    {
+        REPORT_ERROR(GENERIC_ERROR, "bpf_map_lookup_elem failed");
+        return NULL;
+    }
+    if(bpf_probe_read_kernel(sctx, sizeof(*sctx), &string_utils_ctx_empty) != SUCCESS)
+    {
+        REPORT_ERROR(GENERIC_ERROR, "bpf_probe_read_kernel failed");
+        return NULL;
+    }
+    return sctx;
+}

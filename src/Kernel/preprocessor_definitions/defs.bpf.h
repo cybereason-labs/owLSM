@@ -5,7 +5,6 @@
 #define statfunc static __attribute__((always_inline))
           
 #define LIMIT_PATH_SIZE(x)           ((x) & (PATH_MAX - 1)) 
-#define LIMIT_NEEDLE_STR_SIZE(x)       ((x) & (MAX_NEEDLE_LENGTH - 1))
 
 #define ALLOW 0
 #define DENY -1

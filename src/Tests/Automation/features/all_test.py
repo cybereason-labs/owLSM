@@ -269,3 +269,11 @@ def test_shell_monitoring_disabled():
 @scenario('shell_commands.feature', 'shell_command_blocked_write')
 def test_shell_command_blocked_write():
     pass
+
+@scenario('fieldref.feature', 'chmod_blocked_with_multiple_numeric_and_string_fieldrefs')
+def test_chmod_blocked_with_multiple_numeric_and_string_fieldrefs():
+    pass
+
+@scenario('fieldref.feature', 'rename_blocked_with_multiple_numeric_and_string_fieldrefs')
+def test_rename_blocked_with_multiple_numeric_and_string_fieldrefs():
+    pass

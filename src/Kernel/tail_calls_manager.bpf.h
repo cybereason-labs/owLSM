@@ -259,12 +259,6 @@ statfunc int store_currently_handled_event(struct event_t* e)
     return SUCCESS;
 }
 
-statfunc struct event_t* get_currently_handled_event()
-{
-    u32 key = 0;
-    return bpf_map_lookup_elem(&currently_handled_event, &key);
-}
-
 statfunc void submit_event_to_userspace(struct event_t* event)
 {
     struct event_t *event_to_send = allocate_empty_event();

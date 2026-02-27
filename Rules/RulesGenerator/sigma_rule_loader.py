@@ -34,7 +34,7 @@ CHMOD_SPECIFIC_FIELDS = _filter_fields("chmod.")
 RENAME_SPECIFIC_FIELDS = _filter_fields("rename.")
 NETWORK_SPECIFIC_FIELDS = _filter_fields("network.")
 
-ALLOWED_FIELDS: Set[str] = set(ALL_FIELD_TYPES.keys())
+ALLOWED_FIELDS: Set[str] = {f for f, t in ALL_FIELD_TYPES.items() if t != "none"}
 STRING_FIELDS: Set[str] = {f for f, t in ALL_FIELD_TYPES.items() if t == "string"}
 NUMERIC_FIELDS: Set[str] = {f for f, t in ALL_FIELD_TYPES.items() if t == "numeric"}
 ENUM_FIELDS: Set[str] = {f for f, t in ALL_FIELD_TYPES.items() if t == "enum"}
@@ -106,6 +106,7 @@ class FieldModifiers:
     field_name: str
     field_type: str
     comparison: str
+    is_fieldref: bool = False
     
     
 @dataclass
@@ -128,6 +129,14 @@ NUMERIC_MODIFIER_TO_OPERATION = {
 }
 
 
+ALLOWED_FIELDREF_STRING_MODIFIERS: Set[str] = {"startswith", "endswith"}
+
+STRING_MODIFIER_TO_COMPARISON = {
+    "startswith": COMPARISON_TYPE_STARTS_WITH,
+    "endswith": COMPARISON_TYPE_ENDS_WITH,
+}
+
+
 def parse_field_key(field_key: str) -> FieldModifiers:
     parts = field_key.split("|")
     field_name = parts[0]
@@ -145,11 +154,25 @@ def parse_field_key(field_key: str) -> FieldModifiers:
     
     has_quantifier = False
     has_modifier = False
+    has_fieldref = False
     
     for modifier in parts[1:]:
         modifier_lower = modifier.lower()
         
-        if modifier_lower == "all":
+        if modifier_lower == "fieldref":
+            if has_fieldref:
+                raise Exception(f"Duplicate 'fieldref' modifier in field key '{field_key}'.")
+            if is_ip_field:
+                raise Exception(
+                    f"The 'fieldref' modifier cannot be used with IP fields. "
+                    f"Field '{field_name}' is an IP field.")
+            has_fieldref = True
+            continue
+        
+        elif modifier_lower == "all":
+            if has_fieldref:
+                raise Exception(
+                    f"The 'all' modifier cannot be combined with 'fieldref' in field key '{field_key}'.")
             if has_quantifier:
                 raise Exception(f"Multiple quantifiers in field key '{field_key}'. Only one 'all' quantifier is allowed.")
             has_quantifier = True
@@ -162,6 +185,9 @@ def parse_field_key(field_key: str) -> FieldModifiers:
             has_quantifier = True
         
         elif modifier_lower == "cidr":
+            if has_fieldref:
+                raise Exception(
+                    f"The 'cidr' modifier cannot be combined with 'fieldref' in field key '{field_key}'.")
             if not is_ip_field:
                 raise Exception(f"Modifier 'cidr' can only be used with IP fields. Field '{field_name}' is not an IP field. Valid IP fields: {sorted(IP_FIELDS)}")
             if has_modifier:
@@ -172,6 +198,9 @@ def parse_field_key(field_key: str) -> FieldModifiers:
             if modifier_lower in ALLOWED_STRING_MODIFIERS:
                 if has_modifier:
                     raise Exception(f"Multiple modifiers in field key '{field_key}'. Only one modifier is allowed.")
+                if has_fieldref and modifier_lower not in ALLOWED_FIELDREF_STRING_MODIFIERS:
+                    raise Exception(
+                        f"The '{modifier_lower}' modifier cannot be combined with 'fieldref' in field key '{field_key}'.")
                 has_modifier = True
                 if modifier_lower == "contains":
                     comparison = COMPARISON_TYPE_CONTAINS
@@ -184,6 +213,10 @@ def parse_field_key(field_key: str) -> FieldModifiers:
                 raise Exception(f"Invalid modifier '{modifier}' for string field '{field_name}'. Allowed modifiers: {allowed}")
         
         elif field_type in ("numeric", "enum"):
+            if has_fieldref and field_type == "enum":
+                raise Exception(
+                    f"Enum fields with 'fieldref' do not support additional modifiers besides 'neq'. "
+                    f"Field: '{field_key}'.")
             if modifier_lower in ALLOWED_NUMERIC_MODIFIERS:
                 if has_modifier:
                     raise Exception(f"Multiple modifiers in field key '{field_key}'. Only one modifier is allowed.")
@@ -195,7 +228,7 @@ def parse_field_key(field_key: str) -> FieldModifiers:
         else:
             raise Exception(f"Invalid modifier '{modifier}'. Allowed modifiers: {ALLOWED_MODIFIERS}")
     
-    return FieldModifiers(field_name, field_type, comparison)
+    return FieldModifiers(field_name, field_type, comparison, has_fieldref)
 
 
 def get_unescaped_wildcard_positions(value: str) -> list:
@@ -312,6 +345,31 @@ def validate_selection_item(item: Dict[str, Any], selection_name: str, rule_file
                 f"field '{field_key}': the 'neq' modifier only supports a single scalar value "
                 f"(string or number). Got {type(values).__name__}."
             )
+        
+        if field_info.is_fieldref:
+            if not isinstance(values, str):
+                raise Exception(
+                    f"Validation error in '{rule_file}': In selection '{selection_name}', "
+                    f"field '{field_key}': the 'fieldref' modifier requires a single field name string. "
+                    f"Got {type(values).__name__}.")
+            if values not in ALLOWED_FIELDS:
+                raise Exception(
+                    f"Validation error in '{rule_file}': In selection '{selection_name}', "
+                    f"field '{field_key}': fieldref target '{values}' is not a valid field. "
+                    f"Allowed fields: {sorted(ALLOWED_FIELDS)}")
+            if values in IP_FIELDS:
+                raise Exception(
+                    f"Validation error in '{rule_file}': In selection '{selection_name}', "
+                    f"field '{field_key}': fieldref cannot reference IP fields. "
+                    f"'{values}' is an IP field.")
+            target_type = ALL_FIELD_TYPES[values]
+            if target_type != field_info.field_type:
+                raise Exception(
+                    f"Validation error in '{rule_file}': In selection '{selection_name}', "
+                    f"field '{field_key}': fieldref type mismatch. "
+                    f"Field '{field_info.field_name}' is '{field_info.field_type}' "
+                    f"but target '{values}' is '{target_type}'.")
+            continue
         
         field_type = field_info.field_type
         

@@ -639,3 +639,462 @@ TEST_F(BpfTestBase, NETWORK_DestIP_IPv6_Mask0_Match)
     auto rule = get_rule_by_id(organized_rules[event.type], 6106);
     EXPECT_TRUE(execute_matcher_test(skel, event, *rule));
 }
+
+// ============================================================================
+// FIELDREF NUMERIC TESTS
+// ============================================================================
+
+TEST_F(BpfTestBase, Fieldref_Equal_Match)
+{
+    auto event = test_data::create_fieldref_equal_match();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_NUMERIC_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 7001);
+    EXPECT_TRUE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, Fieldref_Equal_NoMatch)
+{
+    auto event = test_data::create_fieldref_equal_no_match();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_NUMERIC_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 7001);
+    EXPECT_FALSE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, Fieldref_Gte_Match_Greater)
+{
+    auto event = test_data::create_fieldref_gte_match_greater();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_NUMERIC_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 7002);
+    EXPECT_TRUE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, Fieldref_Gte_Match_Equal)
+{
+    auto event = test_data::create_fieldref_gte_match_equal();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_NUMERIC_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 7002);
+    EXPECT_TRUE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, Fieldref_Gte_NoMatch)
+{
+    auto event = test_data::create_fieldref_gte_no_match();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_NUMERIC_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 7002);
+    EXPECT_FALSE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, Fieldref_Gt_Match)
+{
+    auto event = test_data::create_fieldref_gt_match();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_NUMERIC_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 7004);
+    EXPECT_TRUE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, Fieldref_Gt_NoMatch_Equal)
+{
+    auto event = test_data::create_fieldref_gt_no_match_equal();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_NUMERIC_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 7004);
+    EXPECT_FALSE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, Fieldref_Gt_NoMatch_Less)
+{
+    auto event = test_data::create_fieldref_gt_no_match_less();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_NUMERIC_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 7004);
+    EXPECT_FALSE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, Fieldref_Lte_Match_Less)
+{
+    auto event = test_data::create_fieldref_lte_match_less();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_NUMERIC_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 7003);
+    EXPECT_TRUE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, Fieldref_Lte_Match_Equal)
+{
+    auto event = test_data::create_fieldref_lte_match_equal();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_NUMERIC_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 7003);
+    EXPECT_TRUE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, Fieldref_Lte_NoMatch)
+{
+    auto event = test_data::create_fieldref_lte_no_match();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_NUMERIC_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 7003);
+    EXPECT_FALSE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, Fieldref_Lt_Match)
+{
+    auto event = test_data::create_fieldref_lt_match();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_NUMERIC_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 7005);
+    EXPECT_TRUE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, Fieldref_Lt_NoMatch_Equal)
+{
+    auto event = test_data::create_fieldref_lt_no_match_equal();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_NUMERIC_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 7005);
+    EXPECT_FALSE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, Fieldref_Lt_NoMatch_Greater)
+{
+    auto event = test_data::create_fieldref_lt_no_match_greater();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_NUMERIC_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 7005);
+    EXPECT_FALSE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, Fieldref_Neq_Match)
+{
+    auto event = test_data::create_fieldref_neq_match();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_NUMERIC_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 7006);
+    EXPECT_TRUE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, Fieldref_Neq_NoMatch)
+{
+    auto event = test_data::create_fieldref_neq_no_match();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_NUMERIC_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 7006);
+    EXPECT_FALSE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, Fieldref_MultipleFieldrefs_Match)
+{
+    auto event = test_data::create_fieldref_multi_match();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_NUMERIC_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 7007);
+    EXPECT_TRUE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, Fieldref_MultipleFieldrefs_NoMatch_OneFails)
+{
+    auto event = test_data::create_fieldref_multi_no_match_one_fails();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_NUMERIC_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 7007);
+    EXPECT_FALSE(execute_matcher_test(skel, event, *rule));
+}
+
+// ============================================================================
+// FIELDREF STRING TESTS
+// ============================================================================
+
+// --- Rule 8001: process.file.filename exactmatch process.cmd ---
+
+TEST_F(BpfTestBase, FieldrefStr_FilenameCmd_Exactmatch_Match)
+{
+    auto event = test_data::create_fieldref_str_filename_cmd_exactmatch_match();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8001);
+    EXPECT_TRUE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, FieldrefStr_FilenameCmd_Exactmatch_NoMatch)
+{
+    auto event = test_data::create_fieldref_str_filename_cmd_exactmatch_no_match();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8001);
+    EXPECT_FALSE(execute_matcher_test(skel, event, *rule));
+}
+
+// --- Rule 8002: process.file.filename startswith process.cmd ---
+
+TEST_F(BpfTestBase, FieldrefStr_FilenameCmd_Startswith_Match)
+{
+    auto event = test_data::create_fieldref_str_filename_cmd_startswith_match();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8002);
+    EXPECT_TRUE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, FieldrefStr_FilenameCmd_Startswith_NoMatch)
+{
+    auto event = test_data::create_fieldref_str_filename_cmd_startswith_no_match();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8002);
+    EXPECT_FALSE(execute_matcher_test(skel, event, *rule));
+}
+
+// --- Rule 8003: process.file.filename endswith process.cmd ---
+
+TEST_F(BpfTestBase, FieldrefStr_FilenameCmd_Endswith_Match)
+{
+    auto event = test_data::create_fieldref_str_filename_cmd_endswith_match();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8003);
+    EXPECT_TRUE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, FieldrefStr_FilenameCmd_Endswith_NoMatch)
+{
+    auto event = test_data::create_fieldref_str_filename_cmd_endswith_no_match();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8003);
+    EXPECT_FALSE(execute_matcher_test(skel, event, *rule));
+}
+
+// --- Rule 8004: process.cmd exactmatch process.file.filename ---
+
+TEST_F(BpfTestBase, FieldrefStr_CmdFilename_Exactmatch_Match)
+{
+    auto event = test_data::create_fieldref_str_cmd_filename_exactmatch_match();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8004);
+    EXPECT_TRUE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, FieldrefStr_CmdFilename_Exactmatch_NoMatch)
+{
+    auto event = test_data::create_fieldref_str_cmd_filename_exactmatch_no_match();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8004);
+    EXPECT_FALSE(execute_matcher_test(skel, event, *rule));
+}
+
+// --- Rule 8005: process.cmd startswith process.file.filename ---
+
+TEST_F(BpfTestBase, FieldrefStr_CmdFilename_Startswith_Match)
+{
+    auto event = test_data::create_fieldref_str_cmd_filename_startswith_match();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8005);
+    EXPECT_TRUE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, FieldrefStr_CmdFilename_Startswith_NoMatch)
+{
+    auto event = test_data::create_fieldref_str_cmd_filename_startswith_no_match();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8005);
+    EXPECT_FALSE(execute_matcher_test(skel, event, *rule));
+}
+
+// --- Rule 8006: process.cmd endswith process.file.filename ---
+
+TEST_F(BpfTestBase, FieldrefStr_CmdFilename_Endswith_Match)
+{
+    auto event = test_data::create_fieldref_str_cmd_filename_endswith_match();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8006);
+    EXPECT_TRUE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, FieldrefStr_CmdFilename_Endswith_NoMatch)
+{
+    auto event = test_data::create_fieldref_str_cmd_filename_endswith_no_match();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8006);
+    EXPECT_FALSE(execute_matcher_test(skel, event, *rule));
+}
+
+// --- Rule 8007: process.file.filename neq process.cmd (NOT exactmatch) ---
+
+TEST_F(BpfTestBase, FieldrefStr_FilenameCmd_Neq_Match)
+{
+    auto event = test_data::create_fieldref_str_filename_cmd_neq_match();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8007);
+    EXPECT_TRUE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, FieldrefStr_FilenameCmd_Neq_NoMatch)
+{
+    auto event = test_data::create_fieldref_str_filename_cmd_neq_no_match();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8007);
+    EXPECT_FALSE(execute_matcher_test(skel, event, *rule));
+}
+
+// --- Rule 8008: multiple fieldrefs (filename==cmd AND parent_filename==parent_cmd) ---
+
+TEST_F(BpfTestBase, FieldrefStr_MultipleFieldrefs_Match)
+{
+    auto event = test_data::create_fieldref_str_multi_fieldref_match();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8008);
+    EXPECT_TRUE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, FieldrefStr_MultipleFieldrefs_NoMatch_FirstFails)
+{
+    auto event = test_data::create_fieldref_str_multi_fieldref_no_match_first_fails();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8008);
+    EXPECT_FALSE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, FieldrefStr_MultipleFieldrefs_NoMatch_SecondFails)
+{
+    auto event = test_data::create_fieldref_str_multi_fieldref_no_match_second_fails();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8008);
+    EXPECT_FALSE(execute_matcher_test(skel, event, *rule));
+}
+
+// --- Needle longer than haystack: filename shorter than cmd → always FALSE ---
+
+TEST_F(BpfTestBase, FieldrefStr_NeedleLongerThanHaystack_Exactmatch_NoMatch)
+{
+    auto event = test_data::create_fieldref_str_needle_longer_than_haystack();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8001);
+    EXPECT_FALSE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, FieldrefStr_NeedleLongerThanHaystack_Startswith_NoMatch)
+{
+    auto event = test_data::create_fieldref_str_needle_longer_than_haystack();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8002);
+    EXPECT_FALSE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, FieldrefStr_NeedleLongerThanHaystack_Endswith_NoMatch)
+{
+    auto event = test_data::create_fieldref_str_needle_longer_than_haystack();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8003);
+    EXPECT_FALSE(execute_matcher_test(skel, event, *rule));
+}
+
+// --- Empty needle (cmd.length == 0): all comparisons must return FALSE ---
+
+TEST_F(BpfTestBase, FieldrefStr_EmptyNeedle_FilenameCmd_Exactmatch_NoMatch)
+{
+    auto event = test_data::create_fieldref_str_empty_needle();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8001);
+    EXPECT_FALSE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, FieldrefStr_EmptyNeedle_FilenameCmd_Startswith_NoMatch)
+{
+    auto event = test_data::create_fieldref_str_empty_needle();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8002);
+    EXPECT_FALSE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, FieldrefStr_EmptyNeedle_FilenameCmd_Endswith_NoMatch)
+{
+    auto event = test_data::create_fieldref_str_empty_needle();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8003);
+    EXPECT_FALSE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, FieldrefStr_EmptyNeedle_ParentCmdCmd_Exactmatch_NoMatch)
+{
+    auto event = test_data::create_fieldref_str_empty_needle();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8009);
+    EXPECT_FALSE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, FieldrefStr_EmptyNeedle_ParentCmdCmd_Startswith_NoMatch)
+{
+    auto event = test_data::create_fieldref_str_empty_needle();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8010);
+    EXPECT_FALSE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, FieldrefStr_EmptyNeedle_ParentCmdCmd_Endswith_NoMatch)
+{
+    auto event = test_data::create_fieldref_str_empty_needle();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8011);
+    EXPECT_FALSE(execute_matcher_test(skel, event, *rule));
+}
+
+// --- Rule 8009: parent_cmd exactmatch cmd - max length (255 chars) ---
+
+TEST_F(BpfTestBase, FieldrefStr_MaxLen_Exactmatch_Match)
+{
+    auto event = test_data::create_fieldref_str_max_len_exactmatch_match();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8009);
+    EXPECT_TRUE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, FieldrefStr_MaxLen_Exactmatch_NoMatch_FirstCharDiffers)
+{
+    auto event = test_data::create_fieldref_str_max_len_exactmatch_no_match();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8009);
+    EXPECT_FALSE(execute_matcher_test(skel, event, *rule));
+}
+
+// --- Rule 8010: parent_cmd startswith cmd - max length ---
+
+TEST_F(BpfTestBase, FieldrefStr_MaxLen_Startswith_Match)
+{
+    auto event = test_data::create_fieldref_str_max_len_startswith_match();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8010);
+    EXPECT_TRUE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, FieldrefStr_MaxLen_Startswith_NoMatch_FirstCharDiffers)
+{
+    auto event = test_data::create_fieldref_str_max_len_startswith_no_match();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8010);
+    EXPECT_FALSE(execute_matcher_test(skel, event, *rule));
+}
+
+// --- Rule 8011: parent_cmd endswith cmd - max length ---
+
+TEST_F(BpfTestBase, FieldrefStr_MaxLen_Endswith_Match)
+{
+    auto event = test_data::create_fieldref_str_max_len_endswith_match();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8011);
+    EXPECT_TRUE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, FieldrefStr_MaxLen_Endswith_NoMatch_LastCharDiffers)
+{
+    auto event = test_data::create_fieldref_str_max_len_endswith_no_match();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8011);
+    EXPECT_FALSE(execute_matcher_test(skel, event, *rule));
+}
+
+// parent_cmd (10 chars) shorter than cmd needle (20 chars) → all FALSE
+TEST_F(BpfTestBase, FieldrefStr_ParentCmdNeedleLonger_Exactmatch_NoMatch)
+{
+    auto event = test_data::create_fieldref_str_parent_cmd_needle_longer();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8009);
+    EXPECT_FALSE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, FieldrefStr_ParentCmdNeedleLonger_Startswith_NoMatch)
+{
+    auto event = test_data::create_fieldref_str_parent_cmd_needle_longer();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8010);
+    EXPECT_FALSE(execute_matcher_test(skel, event, *rule));
+}
+
+TEST_F(BpfTestBase, FieldrefStr_ParentCmdNeedleLonger_Endswith_NoMatch)
+{
+    auto event = test_data::create_fieldref_str_parent_cmd_needle_longer();
+    auto organized_rules = MapPopulatorTest::populate_maps_from_json(test_data::FIELDREF_STRING_JSON);
+    auto rule = get_rule_by_id(organized_rules[event.type], 8011);
+    EXPECT_FALSE(execute_matcher_test(skel, event, *rule));
+}

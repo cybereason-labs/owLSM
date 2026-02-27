@@ -95,7 +95,7 @@ TEST_F(ConfigParserTest, default_values_are_set)
     EXPECT_TRUE(config.features.shell_commands_monitoring.enabled);
     EXPECT_EQ(config.userspace.max_events_queue_size, 10000);
     EXPECT_EQ(config.userspace.output_type, owlsm::config::OutputType::JSON);
-    EXPECT_EQ(config.userspace.log_level, LOG_LEVEL_ERROR);
+    EXPECT_EQ(config.userspace.log_level, LOG_LEVEL_INFO);
     EXPECT_EQ(config.kernel.log_level, LOG_LEVEL_ERROR);
     EXPECT_TRUE(config.rules_config.rules.empty());
 }
@@ -134,16 +134,19 @@ TEST_F(ConfigParserTest, real_config_is_parsed_correctly)
     EXPECT_EQ(config.rules_config.id_to_predicate[0].comparison_type, COMPARISON_TYPE_CONTAINS);
     EXPECT_EQ(config.rules_config.id_to_predicate[0].string_idx, 0);
     EXPECT_EQ(config.rules_config.id_to_predicate[0].numerical_value, -1);
+    EXPECT_EQ(config.rules_config.id_to_predicate[0].fieldref, FIELD_TYPE_NONE);
     
     EXPECT_EQ(config.rules_config.id_to_predicate[1].field, PROCESS_FILE_FILENAME);
     EXPECT_EQ(config.rules_config.id_to_predicate[1].comparison_type, COMPARISON_TYPE_ENDS_WITH);
     EXPECT_EQ(config.rules_config.id_to_predicate[1].string_idx, 1);
     EXPECT_EQ(config.rules_config.id_to_predicate[1].numerical_value, -1);
+    EXPECT_EQ(config.rules_config.id_to_predicate[1].fieldref, FIELD_TYPE_NONE);
     
     EXPECT_EQ(config.rules_config.id_to_predicate[2].field, PROCESS_PID);
     EXPECT_EQ(config.rules_config.id_to_predicate[2].comparison_type, COMPARISON_TYPE_EQUAL);
     EXPECT_EQ(config.rules_config.id_to_predicate[2].string_idx, -1);
     EXPECT_EQ(config.rules_config.id_to_predicate[2].numerical_value, 1000);
+    EXPECT_EQ(config.rules_config.id_to_predicate[2].fieldref, FIELD_TYPE_NONE);
 
     // Check id_to_ip (empty in REAL_JSON_5)
     EXPECT_EQ(config.rules_config.id_to_ip.size(), 0);
