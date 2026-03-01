@@ -14,7 +14,7 @@ def parse_arguments():
         epilog="""
 Examples:
   %(prog)s -d /path/to/rules/directory -c base_config.json -o output_config.json
-  %(prog)s --rules_directory ./sigma_rules --config_file config.json --output final.json
+  %(prog)s -d ./sigma_rules -c config.json -o final.json -p placeholders.yml
         """
     )
     
@@ -35,11 +35,17 @@ Examples:
         required=True,
         help='Path to output configuration file (JSON)'
     )
+
+    parser.add_argument(
+        '-p', '--placeholders',
+        default=None,
+        help='YAML file with placeholder values for the |expand modifier'
+    )
     
     return parser.parse_args()
 
 
-def generate_rules_json(rules_directory, output_path):
+def generate_rules_json(rules_directory, output_path, placeholder_file=None):
     print(f"Generating rules from directory: {rules_directory}")
     script_dir = Path(__file__).parent
     main_py = script_dir / 'main.py'
@@ -47,9 +53,13 @@ def generate_rules_json(rules_directory, output_path):
     if not main_py.exists():
         raise FileNotFoundError(f"main.py not found at {main_py}")
 
+    cmd = [sys.executable, str(main_py), rules_directory, output_path]
+    if placeholder_file:
+        cmd.extend(['-p', placeholder_file])
+
     try:
         result = subprocess.run(
-            [sys.executable, str(main_py), rules_directory, output_path],
+            cmd,
             capture_output=True,
             text=True,
             check=True)
@@ -117,7 +127,7 @@ def main():
         print("=" * 70)
         
         rules_json_path = Path(args.rules_directory).parent / 'rules.json'
-        generate_rules_json(args.rules_directory, str(rules_json_path))
+        generate_rules_json(args.rules_directory, str(rules_json_path), args.placeholders)
         print()
         
         print("=" * 70)

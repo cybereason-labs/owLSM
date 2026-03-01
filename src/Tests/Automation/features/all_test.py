@@ -277,3 +277,11 @@ def test_chmod_blocked_with_multiple_numeric_and_string_fieldrefs():
 @scenario('fieldref.feature', 'rename_blocked_with_multiple_numeric_and_string_fieldrefs')
 def test_rename_blocked_with_multiple_numeric_and_string_fieldrefs():
     pass
+
+@scenario('placeholders.feature', 'placeholder_expand_all_three_fields_match_blocks_chmod')
+def test_placeholder_expand_all_three_fields_match_blocks_chmod():
+    pass
+
+@scenario('placeholders.feature', 'placeholder_expand_two_of_three_fields_match_allows_chmod')
+def test_placeholder_expand_two_of_three_fields_match_allows_chmod():
+    pass

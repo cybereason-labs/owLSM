@@ -403,6 +403,38 @@
       "92": {
         "value": "/tmp/fieldref_rename_src",
         "is_contains": false
+      },
+      "93": {
+        "value": "/usr/bin/",
+        "is_contains": true
+      },
+      "94": {
+        "value": "/usr/sbin/",
+        "is_contains": true
+      },
+      "95": {
+        "value": "/bin/",
+        "is_contains": true
+      },
+      "96": {
+        "value": "/tmp/placeholder_blocked",
+        "is_contains": true
+      },
+      "97": {
+        "value": "/tmp/placeholder_test_alpha",
+        "is_contains": true
+      },
+      "98": {
+        "value": "/tmp/placeholder_test_beta",
+        "is_contains": true
+      },
+      "99": {
+        "value": "/tmp/placeholder_test_gamma",
+        "is_contains": true
+      },
+      "100": {
+        "value": "/tmp/placeholder_test_delta",
+        "is_contains": true
       }
     },
     "id_to_predicate": {
@@ -2188,6 +2220,62 @@
         "field": "rename.source_file.path",
         "comparison_type": "exactmatch",
         "string_idx": 92,
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
+      },
+      "255": {
+        "field": "process.file.path",
+        "comparison_type": "contains",
+        "string_idx": 93,
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
+      },
+      "256": {
+        "field": "process.file.path",
+        "comparison_type": "contains",
+        "string_idx": 94,
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
+      },
+      "257": {
+        "field": "process.file.path",
+        "comparison_type": "contains",
+        "string_idx": 95,
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
+      },
+      "258": {
+        "field": "target.file.path",
+        "comparison_type": "contains",
+        "string_idx": 96,
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
+      },
+      "259": {
+        "field": "target.file.path",
+        "comparison_type": "contains",
+        "string_idx": 97,
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
+      },
+      "260": {
+        "field": "target.file.path",
+        "comparison_type": "contains",
+        "string_idx": 98,
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
+      },
+      "261": {
+        "field": "target.file.path",
+        "comparison_type": "contains",
+        "string_idx": 99,
+        "numerical_value": -1,
+        "fieldref": "FIELD_TYPE_NONE"
+      },
+      "262": {
+        "field": "target.file.path",
+        "comparison_type": "contains",
+        "string_idx": 100,
         "numerical_value": -1,
         "fieldref": "FIELD_TYPE_NONE"
       }
@@ -5311,6 +5399,79 @@
           },
           {
             "operator_type": "OPERATOR_AND"
+          },
+          {
+            "operator_type": "OPERATOR_AND"
+          },
+          {
+            "operator_type": "OPERATOR_AND"
+          }
+        ]
+      },
+      {
+        "id": 50,
+        "description": "Block file ops matching all three placeholder conditions",
+        "action": "BLOCK_EVENT",
+        "applied_events": [
+          "CHMOD",
+          "CHOWN",
+          "WRITE",
+          "READ"
+        ],
+        "tokens": [
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 130
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 255
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 256
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 257
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 258
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 259
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 260
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 261
+          },
+          {
+            "operator_type": "OPERATOR_PREDICATE",
+            "predicate_idx": 262
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
+          },
+          {
+            "operator_type": "OPERATOR_OR"
           },
           {
             "operator_type": "OPERATOR_AND"

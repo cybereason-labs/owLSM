@@ -3,6 +3,7 @@ import re
 from typing import Dict, List, Set, Any, Optional
 from dataclasses import dataclass
 import yaml
+from placeholder_expander import expand_detection_placeholders
 from constants import (
     FILE_TYPE_ENUM,
     CONNECTION_DIRECTION_ENUM,
@@ -670,11 +671,17 @@ def load_rule_file(file_path: str) -> Dict[str, Any]:
         raise Exception(f"Parse error in '{file_path}': IO error: {e}")
 
 
-def load_sigma_rules(directory: str) -> List[SigmaRule]:
+def load_sigma_rules(directory: str, placeholders: Optional[Dict[str, List]] = None,
+                     placeholder_file: Optional[str] = None) -> List[SigmaRule]:
     if not os.path.isdir(directory):
         raise Exception(f"Directory does not exist: {directory}")
     
     yml_files = find_yml_files(directory)
+
+    if placeholder_file:
+        placeholder_abs = os.path.abspath(placeholder_file)
+        yml_files = [f for f in yml_files if os.path.abspath(f) != placeholder_abs]
+
     if not yml_files:
         raise Exception(f"No .yml files found in {directory}")
     
@@ -683,6 +690,11 @@ def load_sigma_rules(directory: str) -> List[SigmaRule]:
     
     for file_path in yml_files:
         rule_data = load_rule_file(file_path)
+
+        if "detection" in rule_data:
+            rule_data["detection"] = expand_detection_placeholders(
+                rule_data["detection"], placeholders, file_path)
+
         rule = validate_rule(rule_data, file_path)
         
         if rule.id in id_to_file:
