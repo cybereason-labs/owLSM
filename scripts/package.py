@@ -29,6 +29,7 @@ RULES_GENERATOR_FILES = [
     "constants.py",
     "create_config.py",
     "main.py",
+    "placeholder_expander.py",
     "postfix.py",
     "requirements.txt",
     "serializer.py",

@@ -28,3 +28,4 @@ src/Tests/Automation/owlsm/*
 .env.local
 .env.*.local
 *.pem
+docs/GithubPages/_site/*

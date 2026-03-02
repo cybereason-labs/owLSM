@@ -3,6 +3,7 @@
   <br><br>
   🛡️ <i>Transform linux protection with real prevention capabilities</i> 🛡️
   <br><br>
+  <a href="https://cybereason-public.github.io/owLSM/"><img src="https://img.shields.io/badge/Docs-GitHub%20Pages-blue?style=flat-square&logo=github" alt="Docs"></a>
   <a href="https://discord.gg/gQk5Jxd6vs"><img src="https://img.shields.io/discord/1467824033188941952?label=Discord&logo=discord&style=flat-square" alt="Discord"></a>
   <a href="AGENTS.md"><img src="https://img.shields.io/badge/AI%20Agents-Friendly-blueviolet?style=flat-square" alt="Agent Friendly"></a>
 </p>
@@ -46,14 +47,16 @@ Do this outside the docker
 cd build/owlsm/bin
 
 # run without config 
-./owlsm 
+sudo ./owlsm 
 
 # run with config 
-./owlsm -c /config/path.json
+sudo ./owlsm -c /config/path.json
 
 # run with config and excluded pid's (usually we want to exclude parent processes)
-./owlsm -c /path/to/config.json -e 123 -e 456
+sudo ./owlsm -c /path/to/config.json -e 123 -e 456
 ```
+
+> **Note:** owLSM Startup takes **10–50 seconds** depending on the system. This is the eBPF verifier validating all programs before they are loaded into the kernel. Once complete, owLSM is fully active.
 
 ## Config and rules
 See [Rules/README.md](Rules/README.md)
@@ -64,7 +67,7 @@ See [Rules/README.md](Rules/README.md)
 cd build/unit_tests/bin
 
 # Run the unit tests
-./unit_tests
+sudo ./unit_tests
 ```
 
 ## Automation Tests (Integration Testing)
@@ -73,6 +76,8 @@ See [src/Tests/Automation/README.md](src/Tests/Automation/README.md) for running
 # Join the community 
 To get involved with the owLSM project visit our [discord](https://discord.gg/gQk5Jxd6vs).  
 If you have any questions please ask them on the discord or open a relevant issue.
+
+📖 Visit the [documentation](https://cybereason-public.github.io/owLSM/) for everything you need — how to use the project, write rules, understand the architecture, and more.
 
 ## Contributers 
 We're thrilled that you're interested in contributing to owLSM!  

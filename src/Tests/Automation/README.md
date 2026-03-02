@@ -29,12 +29,14 @@ uv pip install -r requirements.txt
 
 Run all the tests 
 ```bash
+# Run as root
 export AUTOMATION_ROOT_DIR=$(pwd)
 PYTHONPATH=$AUTOMATION_ROOT_DIR pytest features/ -v -s
 ```
 
 Run a single test
 ```bash
+# Run as root
 export AUTOMATION_ROOT_DIR=$(pwd)
 PYTHONPATH=$AUTOMATION_ROOT_DIR pytest features/all_test.py::test_name -v -s
 ```
