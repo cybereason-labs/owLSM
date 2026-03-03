@@ -1,9 +1,9 @@
 name: Build Artifact Full Lifecycle
 
 on:
-  pull_request:
+  pull_request_review:
     types:
-      - opened
+      - submitted
     branches:
       - 'main'
   workflow_dispatch:
@@ -48,6 +48,9 @@ env:
 jobs:
   build:
     name: Build Artifact
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      github.event.review.state == 'approved'
     runs-on: ["OCI", "owLSM"]
     steps:
       - name: Checkout repository
@@ -182,13 +185,13 @@ jobs:
   automation-tests-runners:
     name: Create runners and run automation tests
     needs: [build]
-    if: github.event_name == 'pull_request' || inputs.run_automation_tests == true
+    if: github.event_name == 'pull_request_review' || inputs.run_automation_tests == true
     uses: ./.github/workflows/automation-tests-runners.yml
     with:
       artifact-name: ${{ needs.build.outputs.artifact_name }}
       automation-tests-command-args: ${{ inputs.automation-tests-command-args || 'features/ --junitxml=$AUTOMATION_ROOT_DIR/results.xml -v -s' }}
-      destroy_runners: ${{ inputs.destroy_runners == '' && true || inputs.destroy_runners }}
-      ephemeral_runners: ${{ inputs.ephemeral_runners == '' && true || inputs.ephemeral_runners }}
+      destroy_runners: ${{ github.event_name != 'workflow_dispatch' || inputs.destroy_runners }}
+      ephemeral_runners: ${{ github.event_name != 'workflow_dispatch' || inputs.ephemeral_runners }}
     secrets:
       GH_RUNNER_PAT: ${{ secrets.GH_RUNNER_PAT }}
       SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
