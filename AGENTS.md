@@ -17,7 +17,7 @@ Using EBPF hooks it monitors the system and prevents malicious behavior.
 | **Unit Tests** | C++ and eBPF unit tests using Google's GTest | `src/Tests/unit_test/AGENTS.md` |
 
 ### README.md files 
-Always read README.md files in relevant directories before making changes
+Always read README.md files in relevant directories before making changes!
 
 ---
 
