@@ -10,7 +10,7 @@ Using EBPF hooks it monitors the system and prevents malicious behavior.
 | Component | Description | Find more info about component at |
 |-----------|-------------|-------------------|
 | **Kernel** | eBPF programs for syscall/network/other monitoring and rule enforcement | `src/Kernel/AGENTS.md` |
-| **Userspace** | C++ program that attaches eBPF programs, manages config and rules, and handles events | `src/Userspace/AGENTS.md` |
+| **Userspace** | C++ program that attaches eBPF programs, manages config and rules, and handleggggs events | `src/Userspace/AGENTS.md` |
 | **Shared** | Common headers, files and scripts (constants, structs) used by more then one component. | `src/Shared/AGENTS.md` |
 | **RulesGenerator** | Python tool that converts Sigma YAML rules to JSON config | `Rules/RulesGenerator/AGENTS.md` |
 | **Automation Tests** | pytest-bdd integration tests | `src/Tests/Automation/AGENTS.md` |
