@@ -126,10 +126,14 @@ jobs:
       # =====================================================================
       # Upload Results
       # =====================================================================
+      - name: Rename results file
+        if: always()
+        run: mv ${{ env.AUTOMATION_ROOT_DIR }}/results.xml ${{ env.AUTOMATION_ROOT_DIR }}/results-${{ inputs.runner-label }}.xml
+
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: automation-test-results-${{ inputs.runner-label }}
-          path: ${{ env.AUTOMATION_ROOT_DIR }}/results.xml
+          path: ${{ env.AUTOMATION_ROOT_DIR }}/results-${{ inputs.runner-label }}.xml
           retention-days: 30

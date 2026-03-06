@@ -65,6 +65,8 @@ env:
   TF_VAR_run_id: ${{ github.run_id }}
   TF_VAR_ephemeral_runner: ${{ inputs.ephemeral_runners == '' && 'true' || inputs.ephemeral_runners }}
   TF_WORKING_DIR: terraform
+  ALLOWED_FAILED_TESTS: 0
+  ALLOWED_SKIPPED_TESTS: 0
 
 jobs:
   provision-runners:
@@ -73,6 +75,7 @@ jobs:
     outputs:
       runners_ready: ${{ steps.apply.outputs.runners_ready }}
       runner_labels: ${{ steps.runner_count.outputs.labels }}
+      runner_count: ${{ steps.runner_count.outputs.count }}
 
     steps:
       # =====================================================================
@@ -188,12 +191,75 @@ jobs:
       GH_RUNNER_PAT: ${{ secrets.GH_RUNNER_PAT }}
 
   # =====================================================================
+  # Aggregate Test Results from All Runners
+  # =====================================================================
+
+  aggregate-results:
+    name: Aggregate Test Results
+    needs: [provision-runners, run-automation-tests]
+    if: always() && needs.provision-runners.outputs.runners_ready == 'true'
+    runs-on: ["OCI", "owLSM"]
+    env:
+      RESULTS_DIR: all-results
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download all test result artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ${{ env.RESULTS_DIR }}
+          pattern: automation-test-results-*
+          merge-multiple: true
+
+      - name: List downloaded results
+        run: ls -la ${{ env.RESULTS_DIR }}/
+
+      - name: Run aggregation script
+        run: |
+          cd scripts/aggregate_automation_results
+          uv venv venv --clear
+          source venv/bin/activate
+          uv pip install -r requirements.txt
+          python3 aggregate_results.py \
+            ${{ github.workspace }}/${{ env.RESULTS_DIR }} \
+            ${{ needs.provision-runners.outputs.runner_count }} \
+            ${{ github.workspace }}/aggregated-results/aggregated_results.json
+
+      - name: Validate test results
+        run: |
+          FAILED=$(jq '.total_number_of_failed_tests' aggregated-results/aggregated_results.json)
+          SKIPPED=$(jq '.total_number_of_skipped_tests' aggregated-results/aggregated_results.json)
+          echo "Failed tests: $FAILED (allowed: ${{ env.ALLOWED_FAILED_TESTS }})"
+          echo "Skipped tests: $SKIPPED (allowed: ${{ env.ALLOWED_SKIPPED_TESTS }})"
+          if [ "$FAILED" -gt "${{ env.ALLOWED_FAILED_TESTS }}" ] || [ "$SKIPPED" -gt "${{ env.ALLOWED_SKIPPED_TESTS }}" ]; then
+            echo "::error::Test thresholds exceeded — failed: $FAILED, skipped: $SKIPPED"
+            exit 1
+          fi
+
+      - name: Upload aggregated results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aggregated-test-results
+          path: aggregated-results/aggregated_results.json
+          retention-days: 30
+      
+      - name: Cleanup workspace
+        if: always()
+        run: |
+          cd ${{ github.workspace }}
+          sudo git clean -ffdx
+          echo "==> Cleanup completed!"
+
+  # =====================================================================
   # Destroy Ephemeral Runners via Terraform
   # =====================================================================
 
   destroy-runners:
     name: Destroy OCI Runner VMs
-    needs: [provision-runners, run-automation-tests]
+    needs: [provision-runners, run-automation-tests, aggregate-results]
     if: always() && inputs.destroy_runners == true
     uses: ./.github/workflows/destroy-runners.yml
     secrets:
